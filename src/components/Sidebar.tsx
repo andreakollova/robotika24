@@ -17,10 +17,10 @@ export default function Sidebar({ articles }: { articles: Article[] }) {
       {/* Tab header */}
       <div className="flex border-b border-gray-200">
         <div className="flex-1 px-4 py-3 text-sm font-bold text-[#0c1a26] border-b-2 border-[#cb1e26] bg-white">
-          Najcitanejsie
+          Najčítanejšie
         </div>
         <div className="flex-1 px-4 py-3 text-sm font-bold text-gray-400 bg-gray-50">
-          Najnovsie
+          Najnovšie
         </div>
       </div>
 

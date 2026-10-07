@@ -61,7 +61,7 @@ export default async function Home() {
 
         {/* Divider */}
         <div style={{ borderBottom: '2px solid #cb1e26', marginBottom: 24 }}>
-          <h2 style={{ fontSize: 18, fontWeight: 700, color: '#0c1a26', paddingBottom: 8 }}>Najnovsie spravy</h2>
+          <h2 style={{ fontSize: 18, fontWeight: 700, color: '#0c1a26', paddingBottom: 8 }}>Najnovšie správy</h2>
         </div>
 
         {/* Article grid */}

@@ -129,7 +129,10 @@ function extractTextFromHtml(html) {
 async function translateToSlovak(title, excerpt, content) {
   const prompt = `Preloz nasledujuci clanok z anglictiny do slovenciny. Nepreloz len doslovne, ale prepis ho tak, aby to znelo ako profesionalny slovensky technologicky clanok. Zachovaj odborne terminy kde je to potrebne (napr. nazvy spolocnosti, produktov, technologii). Pouzivaj spravnu slovensku gramatiku a diakritiku.
 
-DOLEZITE: Nikdy nepouzivaj dlhe pomlcky (em-dash — ani en-dash –). Vzdy pouzivaj iba kratku pomlcku - (hyphen-minus).
+KRITICKE PRAVIDLA:
+- Nikdy nepouzivaj dlhe pomlcky (em-dash — ani en-dash –). Vzdy pouzivaj iba kratku pomlcku - (hyphen-minus).
+- VZDY SKONTROLUJ SPRAVNE SKLONOVANIE - prikladom: "robotická ruka" (NIE "robotický ruka"), "čínska robotická ruka" (NIE "čínsky robotický ruka"). Pridevne mena musia suhlasit s podstatnym menom v rode, cisle a pade.
+- Pis profesionalnou, gramaticky bezchybnou slovencinou. Kazdu vetu skontroluj ci dava zmysel.
 
 Vrat odpoved v tomto JSON formate (bez markdown blokov):
 {"title": "prelozeny nadpis", "excerpt": "kratky popis 1-2 vety", "content": "plny preklad clanku"}

@@ -32,7 +32,7 @@ export default async function CategoryPage({ params }: { params: Promise<{ slug:
     .limit(5);
 
   return (
-    <div className="max-w-7xl mx-auto px-4 pt-6">
+    <div style={{ maxWidth: 1280, margin: '0 auto', padding: '24px 20px 0' }}>
       <div className="border-b-2 border-[#cb1e26] mb-6">
         <h1 className="text-2xl font-bold text-[#0c1a26] pb-2">{category.name}</h1>
       </div>

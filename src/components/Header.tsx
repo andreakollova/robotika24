@@ -5,17 +5,53 @@ import Image from 'next/image';
 import Link from 'next/link';
 
 const categories = [
-  { name: 'Novinky', slug: '/', isHome: true },
-  { name: 'Technologie', slug: '/kategoria/technologie' },
+  { name: 'Novinky', slug: '/' },
+  { name: 'Technológie', slug: '/kategoria/technologie' },
   { name: 'Development', slug: '/kategoria/vyvoj' },
   { name: 'Roboty', slug: '/kategoria/roboty' },
   { name: 'Projekty', slug: '/projekty' },
   { name: 'App', slug: '/app' },
 ];
 
+function SearchIcon() {
+  return (
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
+      <circle cx="11" cy="11" r="8" />
+      <path d="m21 21-4.35-4.35" />
+    </svg>
+  );
+}
+
+function LangSelector() {
+  const [open, setOpen] = useState(false);
+  return (
+    <div style={{ position: 'relative' }}>
+      <button
+        onClick={() => setOpen(!open)}
+        style={{ display: 'flex', alignItems: 'center', gap: 4, padding: '4px 8px', border: '1px solid #e5e7eb', borderRadius: 4, cursor: 'pointer', background: '#fff', fontSize: 13 }}
+      >
+        🇸🇰 <span style={{ fontSize: 11, color: '#6b7280' }}>SK</span>
+        <svg width="10" height="10" viewBox="0 0 10 10" fill="#9ca3af"><path d="M2 4l3 3 3-3" /></svg>
+      </button>
+      {open && (
+        <div style={{ position: 'absolute', top: '100%', right: 0, marginTop: 4, background: '#fff', border: '1px solid #e5e7eb', borderRadius: 4, boxShadow: '0 4px 12px rgba(0,0,0,0.1)', zIndex: 100, minWidth: 100 }}>
+          <div style={{ padding: '8px 12px', fontSize: 13, fontWeight: 600, display: 'flex', alignItems: 'center', gap: 6, color: '#0c1a26', borderBottom: '1px solid #f3f4f6' }}>
+            🇸🇰 Slovensky
+          </div>
+          <div style={{ padding: '8px 12px', fontSize: 13, display: 'flex', alignItems: 'center', gap: 6, color: '#9ca3af', cursor: 'default' }}>
+            🇨🇿 Česky
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
+
 export default function Header() {
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [latestTitle, setLatestTitle] = useState('');
+  const [searchOpen, setSearchOpen] = useState(false);
 
   useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 140);
@@ -23,135 +59,113 @@ export default function Header() {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
+  useEffect(() => {
+    fetch('/api/latest-title')
+      .then(r => r.json())
+      .then(d => { if (d.title) setLatestTitle(d.title); })
+      .catch(() => {});
+  }, []);
+
   return (
     <>
+      {/* Top announcement bar */}
+      {latestTitle && (
+        <div style={{ backgroundColor: '#0c1a26', padding: '8px 20px' }}>
+          <div style={{ maxWidth: 1280, margin: '0 auto', display: 'flex', alignItems: 'center', gap: 12 }}>
+            <span style={{ backgroundColor: '#cb1e26', color: '#fff', fontSize: 11, fontWeight: 700, padding: '2px 8px', borderRadius: 3, whiteSpace: 'nowrap' as const, textTransform: 'uppercase' as const, flexShrink: 0 }}>
+              Najnovšie
+            </span>
+            <p style={{ color: '#e5e7eb', fontSize: 13, fontWeight: 500, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' as const, margin: 0 }}>
+              {latestTitle}
+            </p>
+          </div>
+        </div>
+      )}
+
       {/* Main white navbar */}
       <header style={{ backgroundColor: '#fff', borderBottom: '1px solid #e5e7eb' }}>
-        <div style={{ maxWidth: 1280, margin: '0 auto', padding: '0 20px' }}>
-          {/* Top row: logo */}
-          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '16px 0' }}>
-            <Link href="/">
-              <Image
-                src="/logo.png"
-                alt="robotika24"
-                width={280}
-                height={56}
-                style={{ height: 56, width: 'auto' }}
-                priority
-              />
-            </Link>
+        <div style={{ maxWidth: 1280, margin: '0 auto', padding: '0 20px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', height: 64 }}>
+          {/* Logo */}
+          <Link href="/" style={{ flexShrink: 0 }}>
+            <Image src="/logo.png" alt="robotika24" width={220} height={44} style={{ height: 40, width: 'auto' }} priority />
+          </Link>
 
-            {/* Mobile menu button */}
-            <button
-              className="md:hidden"
-              style={{ color: '#0c1a26', padding: 8 }}
-              onClick={() => setMobileOpen(!mobileOpen)}
-            >
-              <svg width="28" height="28" fill="none" stroke="currentColor" strokeWidth="2">
-                {mobileOpen ? (
-                  <path d="M6 6l16 16M6 22L22 6" />
-                ) : (
-                  <path d="M4 14h20M4 7h20M4 21h20" />
-                )}
-              </svg>
-            </button>
-          </div>
-
-          {/* Nav row: categories */}
-          <nav className="hidden md:flex" style={{ borderTop: '1px solid #f3f4f6', gap: 0 }}>
+          {/* Nav + actions */}
+          <div className="hidden md:flex" style={{ alignItems: 'center', gap: 0 }}>
             {categories.map((cat) => (
-              <Link
-                key={cat.slug}
-                href={cat.slug}
-                style={{
-                  padding: '12px 20px',
-                  fontSize: 13,
-                  fontWeight: 700,
-                  color: '#0c1a26',
-                  textTransform: 'uppercase' as const,
-                  letterSpacing: '0.05em',
-                  borderBottom: '2px solid transparent',
-                  textDecoration: 'none',
-                  whiteSpace: 'nowrap' as const,
-                }}
-                className="hover:text-[#cb1e26] hover:border-b-[#cb1e26] transition-colors"
-              >
+              <Link key={cat.slug} href={cat.slug} style={{ padding: '8px 14px', fontSize: 13, fontWeight: 700, textTransform: 'uppercase' as const, letterSpacing: '0.04em', textDecoration: 'none', whiteSpace: 'nowrap' as const }} className="text-[#0c1a26] hover:text-[#cb1e26] transition-colors">
                 {cat.name}
               </Link>
             ))}
-          </nav>
 
-          {/* Mobile menu */}
-          {mobileOpen && (
-            <div className="md:hidden" style={{ borderTop: '1px solid #f3f4f6', padding: '8px 0' }}>
-              {categories.map((cat) => (
-                <Link
-                  key={cat.slug}
-                  href={cat.slug}
-                  style={{
-                    display: 'block',
-                    padding: '12px 16px',
-                    fontSize: 14,
-                    fontWeight: 700,
-                    color: '#0c1a26',
-                    textTransform: 'uppercase' as const,
-                  }}
-                  onClick={() => setMobileOpen(false)}
-                >
-                  {cat.name}
-                </Link>
-              ))}
+            <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginLeft: 16 }}>
+              {/* Search */}
+              <button onClick={() => setSearchOpen(!searchOpen)} style={{ color: '#6b7280', cursor: 'pointer', background: 'none', border: 'none', padding: 4 }} className="hover:text-[#cb1e26] transition-colors">
+                <SearchIcon />
+              </button>
+
+              {/* Language */}
+              <LangSelector />
+
+              {/* Subscribe button */}
+              <Link href="/odber" style={{ padding: '8px 20px', fontSize: 13, fontWeight: 700, color: '#fff', backgroundColor: '#cb1e26', borderRadius: 4, textDecoration: 'none', whiteSpace: 'nowrap' as const }} className="hover:bg-[#e0242d] transition-colors">
+                Odoberať
+              </Link>
             </div>
-          )}
+          </div>
+
+          {/* Mobile button */}
+          <button className="md:hidden" style={{ color: '#0c1a26', padding: 8, background: 'none', border: 'none', cursor: 'pointer' }} onClick={() => setMobileOpen(!mobileOpen)}>
+            <svg width="28" height="28" fill="none" stroke="currentColor" strokeWidth="2">
+              {mobileOpen ? <path d="M6 6l16 16M6 22L22 6" /> : <path d="M4 14h20M4 7h20M4 21h20" />}
+            </svg>
+          </button>
         </div>
+
+        {/* Search bar */}
+        {searchOpen && (
+          <div style={{ borderTop: '1px solid #f3f4f6', padding: '12px 20px', maxWidth: 1280, margin: '0 auto' }}>
+            <form action="/hladanie" method="GET" style={{ display: 'flex', gap: 8 }}>
+              <input name="q" type="text" placeholder="Hľadať články..." style={{ flex: 1, padding: '10px 16px', border: '1px solid #e5e7eb', borderRadius: 4, fontSize: 14, outline: 'none' }} autoFocus />
+              <button type="submit" style={{ padding: '10px 20px', backgroundColor: '#cb1e26', color: '#fff', border: 'none', borderRadius: 4, fontWeight: 700, fontSize: 13, cursor: 'pointer' }}>
+                Hľadať
+              </button>
+            </form>
+          </div>
+        )}
+
+        {/* Mobile menu */}
+        {mobileOpen && (
+          <div className="md:hidden" style={{ borderTop: '1px solid #f3f4f6', padding: '8px 0' }}>
+            {categories.map((cat) => (
+              <Link key={cat.slug} href={cat.slug} style={{ display: 'block', padding: '12px 20px', fontSize: 14, fontWeight: 700, color: '#0c1a26', textTransform: 'uppercase' as const, textDecoration: 'none' }} onClick={() => setMobileOpen(false)}>
+                {cat.name}
+              </Link>
+            ))}
+          </div>
+        )}
       </header>
 
-      {/* Sticky dark navbar on scroll */}
-      <div
-        style={{
-          position: 'fixed',
-          top: 0,
-          left: 0,
-          right: 0,
-          zIndex: 60,
-          backgroundColor: '#0c1a26',
-          boxShadow: '0 4px 6px -1px rgba(0,0,0,0.3)',
-          transform: scrolled ? 'translateY(0)' : 'translateY(-100%)',
-          transition: 'transform 0.3s ease',
-        }}
-      >
-        <div style={{ maxWidth: 1280, margin: '0 auto', padding: '0 20px' }}>
-          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', height: 56 }}>
-            <Link href="/">
-              <Image
-                src="/logo-dark.png"
-                alt="robotika24"
-                width={200}
-                height={40}
-                style={{ height: 36, width: 'auto' }}
-              />
+      {/* Sticky dark navbar */}
+      <div style={{
+        position: 'fixed', top: 0, left: 0, right: 0, zIndex: 60,
+        backgroundColor: '#0c1a26', boxShadow: '0 4px 6px -1px rgba(0,0,0,0.3)',
+        transform: scrolled ? 'translateY(0)' : 'translateY(-100%)',
+        transition: 'transform 0.3s ease',
+      }}>
+        <div style={{ maxWidth: 1280, margin: '0 auto', padding: '0 20px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', height: 64 }}>
+          <Link href="/" style={{ flexShrink: 0 }}>
+            <Image src="/logo-dark.png" alt="robotika24" width={220} height={44} style={{ height: 40, width: 'auto' }} />
+          </Link>
+          <div className="hidden md:flex" style={{ alignItems: 'center', gap: 0 }}>
+            {categories.map((cat) => (
+              <Link key={cat.slug} href={cat.slug} style={{ padding: '8px 14px', fontSize: 13, fontWeight: 700, color: '#d1d5db', textTransform: 'uppercase' as const, letterSpacing: '0.04em', textDecoration: 'none', whiteSpace: 'nowrap' as const }} className="hover:text-white transition-colors">
+                {cat.name}
+              </Link>
+            ))}
+            <Link href="/odber" style={{ marginLeft: 16, padding: '8px 20px', fontSize: 13, fontWeight: 700, color: '#fff', backgroundColor: '#cb1e26', borderRadius: 4, textDecoration: 'none' }} className="hover:bg-[#e0242d] transition-colors">
+              Odoberať
             </Link>
-            <nav className="hidden md:flex" style={{ display: 'flex', gap: 0 }}>
-              {categories.map((cat) => (
-                <Link
-                  key={cat.slug}
-                  href={cat.slug}
-                  style={{
-                    padding: '8px 16px',
-                    fontSize: 12,
-                    fontWeight: 700,
-                    color: '#d1d5db',
-                    textTransform: 'uppercase' as const,
-                    letterSpacing: '0.05em',
-                    textDecoration: 'none',
-                    whiteSpace: 'nowrap' as const,
-                  }}
-                  className="hover:text-white transition-colors"
-                >
-                  {cat.name}
-                </Link>
-              ))}
-            </nav>
           </div>
         </div>
       </div>

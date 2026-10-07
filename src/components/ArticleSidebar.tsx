@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import type { Article } from '@/lib/supabase';
+import AdBlock from '@/components/AdBlock';
 
 function timeAgo(dateStr: string) {
   const diff = Date.now() - new Date(dateStr).getTime();
@@ -15,13 +16,8 @@ export default function ArticleSidebar({ articles }: { articles: Article[] }) {
   return (
     <div>
       {/* Ad block top */}
-      <div style={{ border: '1px solid #e5e7eb', borderRadius: 8, overflow: 'hidden', backgroundColor: '#f9fafb', textAlign: 'center' as const, marginBottom: 24 }}>
-        <div style={{ padding: '30px 20px' }}>
-          <div style={{ width: '100%', maxWidth: 300, height: 250, margin: '0 auto', backgroundColor: '#e5e7eb', borderRadius: 4, display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#9ca3af', fontSize: 13, fontWeight: 600 }}>
-            REKLAMA 300x250
-          </div>
-        </div>
-        <p style={{ fontSize: 10, color: '#d1d5db', padding: '0 0 8px', textTransform: 'uppercase' as const, letterSpacing: '0.1em' }}>Inzercia</p>
+      <div style={{ marginBottom: 24 }}>
+        <AdBlock format="rectangle" />
       </div>
 
       {/* Related articles */}
@@ -54,14 +50,7 @@ export default function ArticleSidebar({ articles }: { articles: Article[] }) {
       </div>
 
       {/* Ad block bottom */}
-      <div style={{ border: '1px solid #e5e7eb', borderRadius: 8, overflow: 'hidden', backgroundColor: '#f9fafb', textAlign: 'center' as const }}>
-        <div style={{ padding: '30px 20px' }}>
-          <div style={{ width: '100%', maxWidth: 300, height: 600, margin: '0 auto', backgroundColor: '#e5e7eb', borderRadius: 4, display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#9ca3af', fontSize: 13, fontWeight: 600 }}>
-            REKLAMA 300x600
-          </div>
-        </div>
-        <p style={{ fontSize: 10, color: '#d1d5db', padding: '0 0 8px', textTransform: 'uppercase' as const, letterSpacing: '0.1em' }}>Inzercia</p>
-      </div>
+      <AdBlock format="vertical" />
     </div>
   );
 }

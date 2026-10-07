@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import type { Article } from '@/lib/supabase';
+import AdBlock from '@/components/AdBlock';
 
 function timeAgo(dateStr: string) {
   const diff = Date.now() - new Date(dateStr).getTime();
@@ -71,15 +72,8 @@ export default function Sidebar({ articles, latestArticles }: { articles: Articl
       </aside>
 
       {/* Ad block */}
-      <div id="ad-sidebar" style={{ marginTop: 20, border: '1px solid #e5e7eb', borderRadius: 8, overflow: 'hidden', backgroundColor: '#f9fafb', textAlign: 'center' as const }}>
-        <div style={{ padding: '40px 20px' }}>
-          <div style={{ width: '100%', maxWidth: 300, height: 250, margin: '0 auto', backgroundColor: '#e5e7eb', borderRadius: 4, display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#9ca3af', fontSize: 13, fontWeight: 600 }}>
-            REKLAMA 300x250
-          </div>
-        </div>
-        <p style={{ fontSize: 10, color: '#d1d5db', padding: '0 0 8px', textTransform: 'uppercase' as const, letterSpacing: '0.1em' }}>
-          Inzercia
-        </p>
+      <div style={{ marginTop: 20 }}>
+        <AdBlock format="rectangle" />
       </div>
     </div>
   );

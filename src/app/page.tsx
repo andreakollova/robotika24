@@ -26,8 +26,8 @@ async function getArticles() {
   return {
     announcement: articles.slice(0, 4),
     hero: articles[0],
-    heroSide: articles.slice(1, 3),
-    grid: articles.slice(3),
+    heroSide: articles[1],
+    grid: articles.slice(2),
     popular: (popular || []) as Article[],
   };
 }
@@ -37,28 +37,22 @@ export default async function Home() {
 
   return (
     <>
-      {/* Dark announcement bar with latest articles */}
       <AnnouncementBar articles={announcement} />
 
-      <div className="max-w-[1280px] mx-auto px-4 mt-6">
-        {/* Hero section: big article + 2 side articles */}
+      <div style={{ maxWidth: 1280, margin: '0 auto', padding: '24px 20px 0' }}>
+        {/* Hero section */}
         {hero && (
-          <section className="mb-8">
-            <div className="grid grid-cols-1 lg:grid-cols-12 gap-5">
-              {/* Big hero */}
-              <div className="lg:col-span-5">
+          <section style={{ marginBottom: 32 }}>
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr', gap: 20 }} className="lg:!grid-cols-[5fr_4fr_3fr]">
+              <div>
                 <ArticleCard article={hero} size="hero" />
               </div>
-
-              {/* Main large article - center */}
-              {heroSide[0] && (
-                <div className="lg:col-span-4">
-                  <ArticleCard article={heroSide[0]} size="hero" />
+              {heroSide && (
+                <div>
+                  <ArticleCard article={heroSide} size="hero" />
                 </div>
               )}
-
-              {/* Sidebar popular */}
-              <div className="lg:col-span-3">
+              <div>
                 <Sidebar articles={popular} />
               </div>
             </div>
@@ -66,12 +60,12 @@ export default async function Home() {
         )}
 
         {/* Divider */}
-        <div className="border-b-2 border-[#cb1e26] mb-6">
-          <h2 className="text-lg font-bold text-[#0c1a26] pb-2">Najnovsie spravy</h2>
+        <div style={{ borderBottom: '2px solid #cb1e26', marginBottom: 24 }}>
+          <h2 style={{ fontSize: 18, fontWeight: 700, color: '#0c1a26', paddingBottom: 8 }}>Najnovsie spravy</h2>
         </div>
 
-        {/* Article grid - 3 columns like SportNet */}
-        <section className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-x-6 gap-y-8 mb-12">
+        {/* Article grid */}
+        <section style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '32px 24px', marginBottom: 48 }} className="max-sm:!grid-cols-1 max-lg:!grid-cols-2">
           {grid.map((article) => (
             <ArticleCard key={article.id} article={article} />
           ))}

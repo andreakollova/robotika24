@@ -26,24 +26,25 @@ export default function Header() {
   return (
     <>
       {/* Main white navbar */}
-      <header className="bg-white border-b border-gray-100">
-        <div className="max-w-[1280px] mx-auto px-4">
+      <header style={{ backgroundColor: '#fff', borderBottom: '1px solid #e5e7eb' }}>
+        <div style={{ maxWidth: 1280, margin: '0 auto', padding: '0 20px' }}>
           {/* Top row: logo */}
-          <div className="flex items-center justify-between py-4">
-            <Link href="/" className="flex items-center">
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '16px 0' }}>
+            <Link href="/">
               <Image
                 src="/logo.png"
                 alt="robotika24"
                 width={280}
                 height={56}
-                className="h-12 md:h-14 w-auto"
+                style={{ height: 56, width: 'auto' }}
                 priority
               />
             </Link>
 
             {/* Mobile menu button */}
             <button
-              className="md:hidden text-[#0c1a26] p-2"
+              className="md:hidden"
+              style={{ color: '#0c1a26', padding: 8 }}
               onClick={() => setMobileOpen(!mobileOpen)}
             >
               <svg width="28" height="28" fill="none" stroke="currentColor" strokeWidth="2">
@@ -57,12 +58,23 @@ export default function Header() {
           </div>
 
           {/* Nav row: categories */}
-          <nav className="hidden md:flex items-center gap-0 -mb-px border-t border-gray-100">
+          <nav className="hidden md:flex" style={{ borderTop: '1px solid #f3f4f6', gap: 0 }}>
             {categories.map((cat) => (
               <Link
                 key={cat.slug}
                 href={cat.slug}
-                className="px-5 py-3 text-[13px] font-bold text-[#0c1a26] hover:text-[#cb1e26] transition-colors uppercase tracking-wide border-b-2 border-transparent hover:border-[#cb1e26]"
+                style={{
+                  padding: '12px 20px',
+                  fontSize: 13,
+                  fontWeight: 700,
+                  color: '#0c1a26',
+                  textTransform: 'uppercase' as const,
+                  letterSpacing: '0.05em',
+                  borderBottom: '2px solid transparent',
+                  textDecoration: 'none',
+                  whiteSpace: 'nowrap' as const,
+                }}
+                className="hover:text-[#cb1e26] hover:border-b-[#cb1e26] transition-colors"
               >
                 {cat.name}
               </Link>
@@ -71,12 +83,19 @@ export default function Header() {
 
           {/* Mobile menu */}
           {mobileOpen && (
-            <div className="md:hidden border-t border-gray-100 py-2">
+            <div className="md:hidden" style={{ borderTop: '1px solid #f3f4f6', padding: '8px 0' }}>
               {categories.map((cat) => (
                 <Link
                   key={cat.slug}
                   href={cat.slug}
-                  className="block px-4 py-3 text-sm font-bold text-[#0c1a26] hover:bg-gray-50 uppercase"
+                  style={{
+                    display: 'block',
+                    padding: '12px 16px',
+                    fontSize: 14,
+                    fontWeight: 700,
+                    color: '#0c1a26',
+                    textTransform: 'uppercase' as const,
+                  }}
                   onClick={() => setMobileOpen(false)}
                 >
                   {cat.name}
@@ -89,27 +108,45 @@ export default function Header() {
 
       {/* Sticky dark navbar on scroll */}
       <div
-        className={`fixed top-0 left-0 right-0 z-[60] bg-[#0c1a26] shadow-lg transition-transform duration-300 ${
-          scrolled ? 'translate-y-0' : '-translate-y-full'
-        }`}
+        style={{
+          position: 'fixed',
+          top: 0,
+          left: 0,
+          right: 0,
+          zIndex: 60,
+          backgroundColor: '#0c1a26',
+          boxShadow: '0 4px 6px -1px rgba(0,0,0,0.3)',
+          transform: scrolled ? 'translateY(0)' : 'translateY(-100%)',
+          transition: 'transform 0.3s ease',
+        }}
       >
-        <div className="max-w-[1280px] mx-auto px-4">
-          <div className="flex items-center justify-between h-14">
+        <div style={{ maxWidth: 1280, margin: '0 auto', padding: '0 20px' }}>
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', height: 56 }}>
             <Link href="/">
               <Image
                 src="/logo-dark.png"
                 alt="robotika24"
                 width={200}
                 height={40}
-                className="h-9 w-auto"
+                style={{ height: 36, width: 'auto' }}
               />
             </Link>
-            <nav className="hidden md:flex items-center gap-0">
+            <nav className="hidden md:flex" style={{ display: 'flex', gap: 0 }}>
               {categories.map((cat) => (
                 <Link
                   key={cat.slug}
                   href={cat.slug}
-                  className="px-4 py-2 text-[12px] font-bold text-gray-300 hover:text-white transition-colors uppercase tracking-wide"
+                  style={{
+                    padding: '8px 16px',
+                    fontSize: 12,
+                    fontWeight: 700,
+                    color: '#d1d5db',
+                    textTransform: 'uppercase' as const,
+                    letterSpacing: '0.05em',
+                    textDecoration: 'none',
+                    whiteSpace: 'nowrap' as const,
+                  }}
+                  className="hover:text-white transition-colors"
                 >
                   {cat.name}
                 </Link>

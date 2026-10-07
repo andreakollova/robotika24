@@ -45,7 +45,7 @@ export default async function ArticlePage({ params }: { params: Promise<{ slug: 
           {categoryName && (
             <Link
               href={`/kategoria/${a.categories?.slug}`}
-              className="inline-block bg-[#cb1e26] text-white text-xs font-bold uppercase px-2 py-1 rounded mb-4"
+              style={{ display: 'inline-block', backgroundColor: '#cb1e26', color: '#ffffff', fontSize: 11, fontWeight: 700, textTransform: 'uppercase', padding: '4px 10px', borderRadius: 4, marginBottom: 16, textDecoration: 'none', letterSpacing: '0.05em' }}
             >
               {categoryName}
             </Link>

@@ -35,7 +35,7 @@ export default function ArticleCard({
           <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent" />
           <div className="absolute bottom-0 left-0 right-0 p-5 md:p-8">
             {categoryName && (
-              <span className="inline-block bg-[#cb1e26] text-white text-[10px] font-bold uppercase px-2 py-0.5 rounded mb-2 tracking-wider">
+              <span style={{ display: 'inline-block', backgroundColor: '#cb1e26', color: '#ffffff', fontSize: 10, fontWeight: 700, textTransform: 'uppercase', padding: '3px 8px', borderRadius: 3, marginBottom: 8, letterSpacing: '0.06em' }}>
                 {categoryName}
               </span>
             )}

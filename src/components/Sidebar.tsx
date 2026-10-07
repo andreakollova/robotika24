@@ -73,13 +73,14 @@ export default function Sidebar({ articles, latestArticles }: { articles: Articl
         </div>
       </aside>
 
-      {/* Ad block */}
+      <div style={{ marginTop: 20 }}>
+        <FundingWidget />
+      </div>
+      <AIModelsWidget />
+
       <div style={{ marginTop: 20 }}>
         <AdBlock format="rectangle" />
       </div>
-
-      <FundingWidget />
-      <AIModelsWidget />
     </div>
   );
 }

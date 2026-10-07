@@ -45,14 +45,6 @@ export default async function CategoryPage({ params }: { params: Promise<{ slug:
 
   return (
     <div style={{ maxWidth: 1280, margin: '0 auto', padding: '24px 20px 0' }}>
-      <style>{`
-        .cat-grid { display: grid; grid-template-columns: 1fr; gap: 32px; }
-        @media (min-width: 1024px) { .cat-grid { grid-template-columns: 1fr 320px; } }
-        .cat-articles { display: grid; grid-template-columns: 1fr; gap: 24px; }
-        @media (min-width: 640px) { .cat-articles { grid-template-columns: repeat(2, 1fr); } }
-        @media (min-width: 1024px) { .cat-articles { grid-template-columns: repeat(2, 1fr); } }
-      `}</style>
-
       <div style={{ borderBottom: '2px solid #cb1e26', marginBottom: 24 }}>
         <h1 style={{ fontSize: 24, fontWeight: 700, color: '#0c1a26', paddingBottom: 8 }}>{category.name}</h1>
       </div>

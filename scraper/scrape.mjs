@@ -29,7 +29,7 @@ const supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
 const openai = new OpenAI({ apiKey: OPENAI_KEY });
 
 // How many articles to scrape per source (set to 3 for testing)
-const ARTICLES_PER_SOURCE = 3;
+const ARTICLES_PER_SOURCE = 10;
 
 // Delay between requests to be respectful to sources (ms)
 const DELAY_BETWEEN_FEEDS = 3000;
@@ -279,15 +279,12 @@ async function main() {
       'Interesting Engineering',
       ARTICLES_PER_SOURCE * 3
     );
-    // Filter for AI/robotics articles
+    // Only take AI & Robotics articles (strict filter)
     const filtered = ieItems.filter(item => {
       const cats = item.categories.map(c => c.toLowerCase()).join(' ');
-      const title = item.title.toLowerCase();
-      return cats.includes('robot') || cats.includes('ai') || cats.includes('artificial') ||
-        title.includes('robot') || title.includes('ai ') || title.includes('drone') ||
-        title.includes('autonomous') || title.includes('humanoid');
+      return cats.includes('ai and robotics') || cats.includes('robotics');
     });
-    allItems.push(...(filtered.length > 0 ? filtered : ieItems.slice(0, ARTICLES_PER_SOURCE)));
+    allItems.push(...filtered);
   } catch (err) {
     console.error('Error fetching Interesting Engineering:', err.message);
   }
@@ -350,7 +347,7 @@ async function main() {
       image_url: imageUrl,
       video_url: videoUrl,
       category_id: categoryId,
-      author: Math.random() > 0.5 ? 'Martin Kováč' : 'Simona Hrušková',
+      author: inserted % 3 === 2 ? 'Simona Hrušková' : 'Martin Kováč',
       source_url: item.link,
       source_name: item.sourceName,
       original_author: item.author,

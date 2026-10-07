@@ -20,7 +20,7 @@ export default function Footer() {
           {/* Brand + socials */}
           <div>
             <Image src="/logo-dark.png" alt="robotika24" width={220} height={44} style={{ height: 40, width: 'auto', marginBottom: 16 }} />
-            <p style={{ color: '#9ca3af', fontSize: 14, lineHeight: 1.7, marginBottom: 20 }}>
+            <p style={{ color: '#d1d5db', fontSize: 14, lineHeight: 1.7, marginBottom: 20 }}>
               Spravodajský portál o robotike, umelej inteligencii a moderných technológiách.
               Denne prinášame najnovšie správy zo sveta robotov.
             </p>
@@ -61,7 +61,7 @@ export default function Footer() {
             </h3>
             <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
               {navLinks.map((link) => (
-                <Link key={link.href} href={link.href} style={{ fontSize: 14, color: '#9ca3af', textDecoration: 'none', padding: '4px 0' }} className="hover:text-[#cb1e26] transition-colors">
+                <Link key={link.href} href={link.href} style={{ fontSize: 14, color: '#d1d5db', textDecoration: 'none', padding: '4px 0' }} className="hover:text-[#cb1e26] transition-colors">
                   {link.name}
                 </Link>
               ))}
@@ -74,9 +74,9 @@ export default function Footer() {
               Informácie
             </h3>
             <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
-              <p style={{ fontSize: 14, color: '#9ca3af', padding: '4px 0' }}>O nás</p>
-              <p style={{ fontSize: 14, color: '#9ca3af', padding: '4px 0' }}>Kontakt</p>
-              <p style={{ fontSize: 14, color: '#9ca3af', padding: '4px 0' }}>Ochrana súkromia</p>
+              <p style={{ fontSize: 14, color: '#d1d5db', padding: '4px 0' }}>O nás</p>
+              <p style={{ fontSize: 14, color: '#d1d5db', padding: '4px 0' }}>Kontakt</p>
+              <p style={{ fontSize: 14, color: '#d1d5db', padding: '4px 0' }}>Ochrana súkromia</p>
             </div>
           </div>
         </div>
@@ -88,7 +88,7 @@ export default function Footer() {
           </p>
           <p style={{ color: '#6b7280', fontSize: 12 }}>
             Vývoj a dizajn{' '}
-            <a href="https://drixton.com" target="_blank" rel="noopener noreferrer" style={{ color: '#9ca3af', fontWeight: 600 }} className="hover:text-white transition-colors">
+            <a href="https://drixton.com" target="_blank" rel="noopener noreferrer" style={{ color: '#d1d5db', fontWeight: 600 }} className="hover:text-white transition-colors">
               DRIXTON s.r.o.
             </a>
           </p>

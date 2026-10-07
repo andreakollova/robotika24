@@ -33,24 +33,26 @@ function BellIcon() {
 
 function FlagSK() {
   return (
-    <svg width="24" height="16" viewBox="0 0 900 600" style={{ borderRadius: 2, display: 'block' }}>
-      <rect width="900" height="600" fill="#fff" />
-      <rect width="900" height="400" y="200" fill="#0b4ea2" />
-      <rect width="900" height="200" y="400" fill="#ee1c25" />
-      <rect width="900" height="200" fill="#fff" />
-      <path d="M 180 100 v 400 c 0 80 120 120 180 160 c 60 -40 180 -80 180 -160 v -400 z" fill="#ee1c25" stroke="#fff" strokeWidth="20" />
-      <path d="M 240 320 h 240 M 240 260 h 240 M 360 180 v 240" stroke="#fff" strokeWidth="20" fill="none" />
-      <path d="M 280 380 q 80 60 180 0" fill="none" stroke="#0b4ea2" strokeWidth="30" />
+    <svg width="24" height="16" viewBox="0 0 640 480" style={{ borderRadius: 2, display: 'block', border: '1px solid #e5e7eb' }}>
+      <rect width="640" height="160" fill="#fff" />
+      <rect width="640" height="160" y="160" fill="#0b4ea2" />
+      <rect width="640" height="160" y="320" fill="#ee1c25" />
+      <g transform="translate(108,72) scale(0.38)">
+        <path d="M0 0h320v480H0z" fill="#ee1c25" />
+        <path d="M60 360c0-80 40-120 100-160C220 240 260 280 260 360V60H60z" fill="#fff" />
+        <path d="M100 280h120M100 240h120M160 160v160" stroke="#0b4ea2" strokeWidth="16" fill="none" />
+        <path d="M100 340q60 40 120 0" fill="none" stroke="#0b4ea2" strokeWidth="20" />
+      </g>
     </svg>
   );
 }
 
 function FlagCZ() {
   return (
-    <svg width="24" height="16" viewBox="0 0 900 600" style={{ borderRadius: 2, display: 'block' }}>
-      <rect width="900" height="300" fill="#fff" />
-      <rect width="900" height="300" y="300" fill="#d7141a" />
-      <polygon points="0,0 450,300 0,600" fill="#11457e" />
+    <svg width="24" height="16" viewBox="0 0 640 480" style={{ borderRadius: 2, display: 'block', border: '1px solid #e5e7eb' }}>
+      <rect width="640" height="240" fill="#fff" />
+      <rect width="640" height="240" y="240" fill="#d7141a" />
+      <polygon points="0,0 320,240 0,480" fill="#11457e" />
     </svg>
   );
 }
@@ -66,12 +68,12 @@ function LangSelector() {
         <FlagSK />
       </button>
       {open && (
-        <div style={{ position: 'absolute', top: '100%', right: 0, marginTop: 4, background: '#fff', border: '1px solid #e5e7eb', borderRadius: 4, boxShadow: '0 4px 12px rgba(0,0,0,0.1)', zIndex: 100, overflow: 'hidden' }}>
+        <div style={{ position: 'absolute', top: '100%', right: 0, marginTop: 4, background: '#fff', border: '1px solid #e5e7eb', borderRadius: 0, boxShadow: '0 4px 12px rgba(0,0,0,0.1)', zIndex: 100, overflow: 'hidden' }}>
           <div style={{ padding: '10px 14px', display: 'flex', alignItems: 'center', gap: 8, color: '#0c1a26', fontWeight: 600, fontSize: 13, borderBottom: '1px solid #f3f4f6', cursor: 'default' }}>
-            <FlagSK /> Slovensky
+            <FlagSK /> Slovensko
           </div>
           <div style={{ padding: '10px 14px', display: 'flex', alignItems: 'center', gap: 8, color: '#9ca3af', fontSize: 13, cursor: 'default' }}>
-            <FlagCZ /> Česky
+            <FlagCZ /> Česko
           </div>
         </div>
       )}
@@ -81,12 +83,12 @@ function LangSelector() {
 
 function PulsingDot() {
   return (
-    <span style={{ position: 'relative', display: 'inline-flex', width: 10, height: 10, flexShrink: 0 }}>
+    <span style={{ position: 'relative', display: 'inline-flex', width: 7, height: 7, flexShrink: 0 }}>
       <span style={{
         position: 'absolute', inset: 0, borderRadius: '50%', backgroundColor: '#22c55e', opacity: 0.75,
         animation: 'ping 1.5s cubic-bezier(0, 0, 0.2, 1) infinite',
       }} />
-      <span style={{ position: 'relative', display: 'inline-flex', width: 10, height: 10, borderRadius: '50%', backgroundColor: '#22c55e' }} />
+      <span style={{ position: 'relative', display: 'inline-flex', width: 7, height: 7, borderRadius: '50%', backgroundColor: '#22c55e' }} />
       <style>{`@keyframes ping { 75%, 100% { transform: scale(2); opacity: 0; } }`}</style>
     </span>
   );
@@ -115,7 +117,7 @@ export default function Header() {
     <Link href="/odber" style={{
       display: 'inline-flex', alignItems: 'center', gap: 6,
       padding: '9px 22px', fontSize: 13, fontWeight: 700, color: '#fff',
-      backgroundColor: '#cb1e26', borderRadius: 4, textDecoration: 'none',
+      backgroundColor: '#cb1e26', borderRadius: 24, textDecoration: 'none',
       whiteSpace: 'nowrap' as const,
     }} className="hover:bg-[#e0242d] transition-colors">
       <BellIcon />

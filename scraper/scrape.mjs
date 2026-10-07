@@ -129,6 +129,8 @@ function extractTextFromHtml(html) {
 async function translateToSlovak(title, excerpt, content) {
   const prompt = `Preloz nasledujuci clanok z anglictiny do slovenciny. Nepreloz len doslovne, ale prepis ho tak, aby to znelo ako profesionalny slovensky technologicky clanok. Zachovaj odborne terminy kde je to potrebne (napr. nazvy spolocnosti, produktov, technologii). Pouzivaj spravnu slovensku gramatiku a diakritiku.
 
+DOLEZITE: Nikdy nepouzivaj dlhe pomlcky (em-dash — ani en-dash –). Vzdy pouzivaj iba kratku pomlcku - (hyphen-minus).
+
 Vrat odpoved v tomto JSON formate (bez markdown blokov):
 {"title": "prelozeny nadpis", "excerpt": "kratky popis 1-2 vety", "content": "plny preklad clanku"}
 
@@ -152,7 +154,12 @@ ${content}`;
   // Try to parse JSON - handle markdown code blocks
   const cleaned = text.replace(/```json\s*/g, '').replace(/```\s*/g, '');
   try {
-    return JSON.parse(cleaned);
+    const parsed = JSON.parse(cleaned);
+    // Always replace em-dash and en-dash with short dash
+    parsed.title = parsed.title.replace(/[—–]/g, '-');
+    parsed.excerpt = parsed.excerpt.replace(/[—–]/g, '-');
+    parsed.content = parsed.content.replace(/[—–]/g, '-');
+    return parsed;
   } catch {
     console.error('Failed to parse translation JSON:', text.substring(0, 200));
     return { title, excerpt, content };

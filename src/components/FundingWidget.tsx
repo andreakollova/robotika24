@@ -1,12 +1,22 @@
 const companies = [
-  { name: 'Figure', raised: '$1.9B', logo: 'https://logo.clearbit.com/figure.ai' },
-  { name: 'Neura Robotics', raised: '$1.7B', logo: 'https://logo.clearbit.com/neurarobotics.com' },
-  { name: 'XPeng Robotics', raised: '$1.0B', logo: 'https://logo.clearbit.com/xpeng.com' },
-  { name: 'Galbot', raised: '$964M', logo: 'https://logo.clearbit.com/galbot.com' },
-  { name: 'Apptronik', raised: '$950M', logo: 'https://logo.clearbit.com/apptronik.com' },
-  { name: 'Rhoda', raised: '$680M', logo: 'https://logo.clearbit.com/rhoda.ai' },
-  { name: 'Agility', raised: '$570M', logo: 'https://logo.clearbit.com/agilityrobotics.com' },
+  { name: 'Figure', raised: '$1.9B', domain: 'figure.ai' },
+  { name: 'Neura Robotics', raised: '$1.7B', domain: 'neurarobotics.com' },
+  { name: 'XPeng Robotics', raised: '$1.0B', domain: 'xpeng.com' },
+  { name: 'Galbot', raised: '$964M', domain: 'galbot.com' },
+  { name: 'Apptronik', raised: '$950M', domain: 'apptronik.com' },
+  { name: 'Rhoda', raised: '$680M', domain: 'rhodarobotics.com' },
+  { name: 'Agility', raised: '$570M', domain: 'agilityrobotics.com' },
 ];
+
+function Logo({ domain, name }: { domain: string; name: string }) {
+  return (
+    <img
+      src={`https://www.google.com/s2/favicons?domain=${domain}&sz=64`}
+      alt={name}
+      style={{ width: 28, height: 28, borderRadius: 6, objectFit: 'contain', flexShrink: 0, backgroundColor: '#f3f4f6' }}
+    />
+  );
+}
 
 export default function FundingWidget() {
   return (
@@ -25,29 +35,16 @@ export default function FundingWidget() {
 
       <div style={{ padding: '4px 16px 12px' }}>
         {companies.map((c) => (
-          <div key={c.name} style={{ display: 'flex', alignItems: 'center', gap: 10, padding: '9px 0', borderBottom: '1px solid #f3f4f6' }}>
-            <img
-              src={c.logo}
-              alt={c.name}
-              style={{ width: 24, height: 24, borderRadius: 4, objectFit: 'contain', backgroundColor: '#f9fafb', flexShrink: 0 }}
-              onError={(e) => { (e.target as HTMLImageElement).style.display = 'none'; }}
-            />
-            <span style={{ fontSize: 13, fontWeight: 600, color: '#0c1a26', flex: 1 }}>
-              {c.name}
-            </span>
-            <span style={{ fontSize: 13, fontWeight: 700, color: '#374151', flexShrink: 0 }}>
-              {c.raised}
-            </span>
+          <div key={c.name} style={{ display: 'flex', alignItems: 'center', gap: 12, padding: '10px 0', borderBottom: '1px solid #f3f4f6' }}>
+            <Logo domain={c.domain} name={c.name} />
+            <span style={{ fontSize: 14, fontWeight: 600, color: '#0c1a26', flex: 1 }}>{c.name}</span>
+            <span style={{ fontSize: 13, fontWeight: 700, color: '#374151', flexShrink: 0 }}>{c.raised}</span>
           </div>
         ))}
       </div>
 
-      <a
-        href="https://dealroom.co/resources/humanoid-robotics/"
-        target="_blank"
-        rel="noopener noreferrer"
-        style={{ display: 'block', padding: '10px 16px', borderTop: '1px solid #e5e7eb', fontSize: 11, color: '#9ca3af', textDecoration: 'none', textAlign: 'center' }}
-      >
+      <a href="https://dealroom.co/resources/humanoid-robotics/" target="_blank" rel="noopener noreferrer"
+        style={{ display: 'block', padding: '10px 16px', borderTop: '1px solid #e5e7eb', fontSize: 11, color: '#9ca3af', textDecoration: 'none', textAlign: 'center' }}>
         Zdroj: dealroom.co - Humanoid sector
       </a>
     </div>

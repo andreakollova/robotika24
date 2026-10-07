@@ -61,6 +61,30 @@ const CATEGORY_MAP = {
   ],
 };
 
+// Subcategory mapping from RSS categories
+const SUBCATEGORY_MAP = {
+  'batteries': 'Batérie', 'power supplies': 'Batérie',
+  'cameras': 'Kamery', 'imaging': 'Kamery', 'vision': 'Kamery',
+  'controllers': 'Kontroléry',
+  'grippers': 'Úchopové efektory', 'end effectors': 'Úchopové efektory',
+  'microprocessors': 'Mikroprocesory', 'socs': 'Mikroprocesory',
+  'motion control': 'Riadenie pohybu', 'actuators': 'Riadenie pohybu', 'motors': 'Riadenie pohybu',
+  'sensors': 'Senzory', 'sensing': 'Senzory',
+  'soft robotics': 'Mäkká robotika',
+  'software': 'Softvér', 'simulation': 'Simulácia',
+  'artificial intelligence': 'AI a kognícia', 'cognition': 'AI a kognícia',
+  'haptics': 'Haptika',
+  'mobility': 'Mobilita a navigácia', 'navigation': 'Mobilita a navigácia',
+  'research': 'Výskum a vývoj',
+  'agv': 'AGV', 'amr': 'AMR', 'autonomous mobile': 'AMR',
+  'consumer': 'Spotrebiteľská robotika',
+  'collaborative': 'Kolaboratívne roboty', 'cobot': 'Kolaboratívne roboty',
+  'uav': 'Drony', 'drone': 'Drony',
+  'humanoid': 'Humanoidy',
+  'industrial': 'Priemyselné roboty',
+  'self-driving': 'Autonómne vozidlá', 'autonomous vehicle': 'Autonómne vozidlá',
+};
+
 function matchCategory(articleCategories) {
   const joined = articleCategories.map(c => c.toLowerCase()).join(' ');
   let bestMatch = 'roboty';
@@ -73,6 +97,14 @@ function matchCategory(articleCategories) {
     }
   }
   return bestMatch;
+}
+
+function matchSubcategory(articleCategories) {
+  const joined = articleCategories.map(c => c.toLowerCase()).join(' ');
+  for (const [keyword, subcat] of Object.entries(SUBCATEGORY_MAP)) {
+    if (joined.includes(keyword)) return subcat;
+  }
+  return null;
 }
 
 function slugify(text) {
@@ -315,9 +347,10 @@ async function main() {
       continue;
     }
 
-    // Determine category
+    // Determine category and subcategory
     const catSlug = matchCategory(item.categories);
     const categoryId = categoryIds[catSlug];
+    const subcategory = matchSubcategory(item.categories);
 
     // Respectful delay between processing articles
     await sleep(DELAY_BETWEEN_ARTICLES);
@@ -352,6 +385,7 @@ async function main() {
       source_name: item.sourceName,
       original_author: item.author,
       original_date: item.pubDate,
+      subcategory,
       is_featured: inserted < 3,
       is_published: true,
       published_at: new Date(item.pubDate).toISOString(),

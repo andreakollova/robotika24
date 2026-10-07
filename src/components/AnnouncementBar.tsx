@@ -27,7 +27,7 @@ export default function AnnouncementBar({ articles }: { articles: Article[] }) {
                   fontSize: 12,
                   fontWeight: 500,
                   color: '#e5e7eb',
-                  maxWidth: 220,
+                  maxWidth: 180,
                   lineHeight: '1.3',
                   overflow: 'hidden',
                   display: '-webkit-box',

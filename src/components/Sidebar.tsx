@@ -4,6 +4,8 @@ import { useState } from 'react';
 import Link from 'next/link';
 import type { Article } from '@/lib/supabase';
 import AdBlock from '@/components/AdBlock';
+import FundingWidget from '@/components/FundingWidget';
+import AIModelsWidget from '@/components/AIModelsWidget';
 
 function timeAgo(dateStr: string) {
   const diff = Date.now() - new Date(dateStr).getTime();
@@ -75,6 +77,9 @@ export default function Sidebar({ articles, latestArticles }: { articles: Articl
       <div style={{ marginTop: 20 }}>
         <AdBlock format="rectangle" />
       </div>
+
+      <FundingWidget />
+      <AIModelsWidget />
     </div>
   );
 }

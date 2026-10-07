@@ -31,7 +31,7 @@ export default function OdberPage() {
   return (
     <div style={{ maxWidth: 600, margin: '0 auto', padding: '48px 20px 80px' }}>
       <div style={{ textAlign: 'center', marginBottom: 40 }}>
-        <div style={{ fontSize: 48, marginBottom: 16 }}>🤖</div>
+        <img src="/mascot-small.png" alt="robotika24" style={{ width: 120, height: 120, margin: '0 auto 16px', display: 'block' }} />
         <h1 style={{ fontSize: 28, fontWeight: 700, color: '#0c1a26', marginBottom: 12 }}>
           Odoberajte novinky zo sveta robotiky
         </h1>

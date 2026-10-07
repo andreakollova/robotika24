@@ -21,6 +21,7 @@ const categories = [
     slug: '/kategoria/roboty',
     subs: ['AGV', 'AMR', 'Spotrebiteľská robotika', 'Kolaboratívne roboty', 'Drony', 'Humanoidy', 'Priemyselné roboty', 'Autonómne vozidlá'],
   },
+  { name: 'Eshop', slug: '/eshop', subs: [] },
   { name: 'Projekty', slug: '/projekty', subs: [] },
   { name: 'App', slug: '/app', subs: [] },
 ];

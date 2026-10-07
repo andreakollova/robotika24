@@ -79,6 +79,18 @@ a {
   }
 }
 
+/* Eshop product grid */
+.product-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 32px;
+}
+@media (min-width: 768px) {
+  .product-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
 /* Category page grids */
 .cat-grid {
   display: grid;

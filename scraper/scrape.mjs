@@ -287,6 +287,7 @@ async function main() {
 
   let inserted = 0;
   let skipped = 0;
+  const insertedArticles = [];
 
   for (const item of allItems) {
     // Check if already scraped
@@ -354,7 +355,27 @@ async function main() {
       console.error(`  DB error: ${error.message}`);
     } else {
       console.log(`  OK: ${translated.title.substring(0, 60)}...`);
+      insertedArticles.push(translated.title);
       inserted++;
+    }
+  }
+
+  // Send Slack notification
+  const slackWebhook = process.env.SLACK_WEBHOOK_URL;
+  if (slackWebhook && insertedArticles.length > 0) {
+    const articleList = insertedArticles.map((t, i) => `${i + 1}. ${t}`).join('\n');
+    const slackMsg = {
+      text: `*robotika24 - Nove clanky (${new Date().toLocaleDateString('sk-SK')})*\n\nPridanych: ${inserted} clankov\n\n${articleList}\n\nhttps://robotika24.vercel.app`,
+    };
+    try {
+      await fetch(slackWebhook, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(slackMsg),
+      });
+      console.log('Slack notification sent!');
+    } catch (err) {
+      console.error('Slack error:', err.message);
     }
   }
 

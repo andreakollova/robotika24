@@ -53,15 +53,11 @@ export default async function Home() {
       <div style={{ maxWidth: 1280, margin: '0 auto', padding: '24px 20px 0' }}>
         {hero && (
           <section style={{ marginBottom: 32 }}>
-            <div className="hero-grid">
-              <div>
+            <div className="hero-layout">
+              <div className="hero-cards">
                 <ArticleCard article={hero} size="hero" />
+                {heroSide && <ArticleCard article={heroSide} size="hero" />}
               </div>
-              {heroSide && (
-                <div>
-                  <ArticleCard article={heroSide} size="hero" />
-                </div>
-              )}
               <div>
                 <Sidebar articles={popular} latestArticles={latest} />
               </div>

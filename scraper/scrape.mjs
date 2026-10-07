@@ -344,7 +344,7 @@ async function main() {
       image_url: imageUrl,
       video_url: videoUrl,
       category_id: categoryId,
-      author: 'Martin Kováč',
+      author: Math.random() > 0.5 ? 'Martin Kováč' : 'Simona Hrušková',
       source_url: item.link,
       source_name: item.sourceName,
       original_author: item.author,

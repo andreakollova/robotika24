@@ -2,7 +2,7 @@ import { supabase } from '@/lib/supabase';
 import type { Article } from '@/lib/supabase';
 import { notFound } from 'next/navigation';
 import Link from 'next/link';
-import Sidebar from '@/components/Sidebar';
+import ArticleSidebar from '@/components/ArticleSidebar';
 import ShareLinks from '@/components/ShareLinks';
 import AboutAuthor from '@/components/AboutAuthor';
 
@@ -159,11 +159,11 @@ export default async function ArticlePage({ params }: { params: Promise<{ slug: 
             <ShareLinks url={articleUrl} title={a.title} />
           </div>
 
-          <AboutAuthor />
+          <AboutAuthor authorName={a.author} />
         </article>
 
         <div>
-          <Sidebar articles={(related || []) as Article[]} />
+          <ArticleSidebar articles={(related || []) as Article[]} />
         </div>
       </div>
     </div>

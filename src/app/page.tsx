@@ -29,21 +29,30 @@ async function getArticles() {
     heroSide: articles[1],
     grid: articles.slice(2),
     popular: (popular || []) as Article[],
+    latest: articles.slice(0, 5),
   };
 }
 
 export default async function Home() {
-  const { announcement, hero, heroSide, grid, popular } = await getArticles();
+  const { announcement, hero, heroSide, grid, popular, latest } = await getArticles();
 
   return (
     <>
+      <style>{`
+        .hero-grid { display: grid; grid-template-columns: 1fr; gap: 20px; }
+        @media (min-width: 1024px) { .hero-grid { grid-template-columns: 5fr 4fr 3fr; } }
+        .articles-grid { display: grid; grid-template-columns: 1fr; gap: 32px 24px; }
+        @media (min-width: 640px) { .articles-grid { grid-template-columns: repeat(2, 1fr); } }
+        @media (min-width: 1024px) { .articles-grid { grid-template-columns: repeat(3, 1fr); } }
+      `}</style>
+
       <AnnouncementBar articles={announcement} />
 
       <div style={{ maxWidth: 1280, margin: '0 auto', padding: '24px 20px 0' }}>
         {/* Hero section */}
         {hero && (
           <section style={{ marginBottom: 32 }}>
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr', gap: 20 }} className="lg:!grid-cols-[5fr_4fr_3fr]">
+            <div className="hero-grid">
               <div>
                 <ArticleCard article={hero} size="hero" />
               </div>
@@ -53,7 +62,7 @@ export default async function Home() {
                 </div>
               )}
               <div>
-                <Sidebar articles={popular} />
+                <Sidebar articles={popular} latestArticles={latest} />
               </div>
             </div>
           </section>
@@ -65,7 +74,7 @@ export default async function Home() {
         </div>
 
         {/* Article grid */}
-        <section style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '32px 24px', marginBottom: 48 }} className="max-sm:!grid-cols-1 max-lg:!grid-cols-2">
+        <section className="articles-grid" style={{ marginBottom: 48 }}>
           {grid.map((article) => (
             <ArticleCard key={article.id} article={article} />
           ))}

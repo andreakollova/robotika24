@@ -33,27 +33,27 @@ function BellIcon() {
 
 function FlagSK() {
   return (
-    <svg width="24" height="16" viewBox="0 0 640 480" style={{ borderRadius: 2, display: 'block', border: '1px solid #e5e7eb' }}>
-      <rect width="640" height="160" fill="#fff" />
-      <rect width="640" height="160" y="160" fill="#0b4ea2" />
-      <rect width="640" height="160" y="320" fill="#ee1c25" />
-      <g transform="translate(108,72) scale(0.38)">
-        <path d="M0 0h320v480H0z" fill="#ee1c25" />
-        <path d="M60 360c0-80 40-120 100-160C220 240 260 280 260 360V60H60z" fill="#fff" />
-        <path d="M100 280h120M100 240h120M160 160v160" stroke="#0b4ea2" strokeWidth="16" fill="none" />
-        <path d="M100 340q60 40 120 0" fill="none" stroke="#0b4ea2" strokeWidth="20" />
-      </g>
-    </svg>
+    <img
+      src="https://flagcdn.com/w40/sk.png"
+      srcSet="https://flagcdn.com/w80/sk.png 2x"
+      width="28"
+      height="18"
+      alt="SK"
+      style={{ borderRadius: 2, display: 'block', objectFit: 'cover' }}
+    />
   );
 }
 
 function FlagCZ() {
   return (
-    <svg width="24" height="16" viewBox="0 0 640 480" style={{ borderRadius: 2, display: 'block', border: '1px solid #e5e7eb' }}>
-      <rect width="640" height="240" fill="#fff" />
-      <rect width="640" height="240" y="240" fill="#d7141a" />
-      <polygon points="0,0 320,240 0,480" fill="#11457e" />
-    </svg>
+    <img
+      src="https://flagcdn.com/w40/cz.png"
+      srcSet="https://flagcdn.com/w80/cz.png 2x"
+      width="28"
+      height="18"
+      alt="CZ"
+      style={{ borderRadius: 2, display: 'block', objectFit: 'cover' }}
+    />
   );
 }
 
@@ -129,10 +129,10 @@ export default function Header() {
     <>
       {/* Top announcement bar - centered text with pulsing dot */}
       {latestTitle && (
-        <div style={{ backgroundColor: '#0c1a26', padding: '9px 20px' }}>
+        <div style={{ backgroundColor: '#f3f4f6', padding: '9px 20px', borderBottom: '1px solid #e5e7eb' }}>
           <div style={{ maxWidth: 1280, margin: '0 auto', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 10 }}>
             <PulsingDot />
-            <p style={{ color: '#e5e7eb', fontSize: 13, fontWeight: 500, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' as const, margin: 0 }}>
+            <p style={{ color: '#374151', fontSize: 13, fontWeight: 500, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' as const, margin: 0 }}>
               {latestTitle}
             </p>
           </div>
@@ -141,10 +141,10 @@ export default function Header() {
 
       {/* Main white navbar - taller, bigger logo */}
       <header style={{ backgroundColor: '#fff', borderBottom: '1px solid #e5e7eb' }}>
-        <div style={{ maxWidth: 1280, margin: '0 auto', padding: '0 20px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', height: 80 }}>
+        <div style={{ maxWidth: 1280, margin: '0 auto', padding: '0 20px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', height: 88 }}>
           {/* Logo - bigger */}
           <Link href="/" style={{ flexShrink: 0 }}>
-            <Image src="/logo.png" alt="robotika24" width={280} height={56} style={{ height: 52, width: 'auto' }} priority />
+            <Image src="/logo.png" alt="robotika24" width={280} height={56} style={{ height: 60, width: 'auto' }} priority />
           </Link>
 
           {/* Nav + actions */}
@@ -203,9 +203,9 @@ export default function Header() {
         transform: scrolled ? 'translateY(0)' : 'translateY(-100%)',
         transition: 'transform 0.3s ease',
       }}>
-        <div style={{ maxWidth: 1280, margin: '0 auto', padding: '0 20px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', height: 72 }}>
+        <div style={{ maxWidth: 1280, margin: '0 auto', padding: '0 20px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', height: 80 }}>
           <Link href="/" style={{ flexShrink: 0 }}>
-            <Image src="/logo-dark.png" alt="robotika24" width={280} height={56} style={{ height: 48, width: 'auto' }} />
+            <Image src="/logo-dark.png" alt="robotika24" width={280} height={56} style={{ height: 52, width: 'auto' }} />
           </Link>
           <div className="hidden md:flex" style={{ alignItems: 'center', gap: 0 }}>
             {categories.map((cat) => (

@@ -9,7 +9,13 @@ const inter = Inter({ subsets: ["latin", "latin-ext"] });
 export const metadata: Metadata = {
   title: "robotika24 - Spravy zo sveta robotiky a AI",
   description: "Najnovsie spravy o robotike, umelej inteligencii, dronoch a modernych technologiach.",
-  icons: { icon: "/favicon.png" },
+  icons: {
+    icon: [
+      { url: '/favicon-32.png', sizes: '32x32', type: 'image/png' },
+      { url: '/favicon.png', sizes: '1254x1254', type: 'image/png' },
+    ],
+    apple: '/apple-touch-icon.png',
+  },
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

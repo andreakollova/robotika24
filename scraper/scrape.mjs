@@ -131,8 +131,14 @@ async function translateToSlovak(title, excerpt, content) {
 
 KRITICKE PRAVIDLA:
 - Nikdy nepouzivaj dlhe pomlcky (em-dash — ani en-dash –). Vzdy pouzivaj iba kratku pomlcku - (hyphen-minus).
-- VZDY SKONTROLUJ SPRAVNE SKLONOVANIE - prikladom: "robotická ruka" (NIE "robotický ruka"), "čínska robotická ruka" (NIE "čínsky robotický ruka"). Pridevne mena musia suhlasit s podstatnym menom v rode, cisle a pade.
-- Pis profesionalnou, gramaticky bezchybnou slovencinou. Kazdu vetu skontroluj ci dava zmysel.
+- VZDY SKONTROLUJ SPRAVNE SKLONOVANIE. Prídavné mená MUSIA súhlasiť s podstatným menom v rode, čísle a páde. Príklady správneho skloňovania:
+  * "robotická ruka" (ženský rod) - NIE "robotický ruka"
+  * "čínska robotická ruka" - NIE "čínsky robotický ruka"
+  * "autonómne vozidlo" (stredný rod) - NIE "autonómny vozidlo"
+  * "priemyselný robot" (mužský rod) - správne
+  * "nová technológia" (ženský rod) - NIE "nový technológia"
+- Píš profesionálnou, gramaticky bezchybnou slovenčinou. Každú vetu skontroluj, či dáva zmysel.
+- Nadpis musí byť gramaticky perfektný - je to prvé čo čitateľ vidí.
 
 Vrat odpoved v tomto JSON formate (bez markdown blokov):
 {"title": "prelozeny nadpis", "excerpt": "kratky popis 1-2 vety", "content": "plny preklad clanku"}

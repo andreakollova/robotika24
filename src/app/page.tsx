@@ -7,7 +7,6 @@ import AnnouncementBar from '@/components/AnnouncementBar';
 export const revalidate = 60;
 
 async function getArticles() {
-  // Get latest 30 articles
   const { data: all } = await supabase
     .from('articles')
     .select('*, categories(*)')
@@ -15,7 +14,6 @@ async function getArticles() {
     .order('published_at', { ascending: false })
     .limit(30);
 
-  // Get most viewed (for sidebar)
   const { data: popularRaw } = await supabase
     .from('articles')
     .select('*, categories(*)')
@@ -26,38 +24,23 @@ async function getArticles() {
   const articles = (all || []) as Article[];
   const allPopular = (popularRaw || []) as Article[];
 
-  // Distribute articles so none repeats:
-  // - Announcement bar: articles 0-3
-  // - Hero left: article 4
-  // - Hero right: article 5
-  // - Sidebar Najčítanejšie: top 5 by views (excluding hero)
-  // - Sidebar Najnovšie: articles 6-10
-  // - Grid: everything after article 5 that's not in sidebar
+  // Simple split - no overlaps:
+  const announcement = articles.slice(0, 4);       // announcement bar
+  const hero = articles[4] || articles[0];          // big hero left
+  const heroSide = articles[5] || articles[1];      // hero right
+  const heroIds = new Set([hero?.id, heroSide?.id, ...announcement.map(a => a.id)]);
 
-  const announcement = articles.slice(0, 4);
-  const hero = articles[4];
-  const heroSide = articles[5];
-
-  const heroIds = new Set([
-    ...announcement.map(a => a.id),
-    hero?.id,
-    heroSide?.id,
-  ]);
-
-  // Popular: exclude articles already used in hero/announcement
+  // Sidebar: most viewed, skip anything already shown
   const popular = allPopular.filter(a => !heroIds.has(a.id)).slice(0, 5);
-  const sidebarIds = new Set(popular.map(a => a.id));
+  const popularIds = new Set(popular.map(a => a.id));
 
-  // Latest tab: articles not used anywhere else
-  const latestForTab = articles
-    .filter(a => !heroIds.has(a.id) && !sidebarIds.has(a.id))
-    .slice(0, 5);
+  // Latest tab for sidebar
+  const latest = articles.filter(a => !heroIds.has(a.id) && !popularIds.has(a.id)).slice(0, 5);
 
-  // Grid: all remaining articles
-  const usedIds = new Set([...heroIds, ...sidebarIds, ...latestForTab.map(a => a.id)]);
-  const grid = articles.filter(a => !heroIds.has(a.id));
+  // Grid: everything not in hero section (announcement is separate bar so OK to show again in grid)
+  const grid = articles.filter(a => a.id !== hero?.id && a.id !== heroSide?.id).slice(0, 18);
 
-  return { announcement, hero, heroSide, grid, popular, latest: latestForTab };
+  return { announcement, hero, heroSide, grid, popular, latest };
 }
 
 export default async function Home() {

@@ -69,12 +69,12 @@ function LangSelector() {
       </button>
       {open && (
         <div style={{ position: 'absolute', top: '100%', right: 0, marginTop: 4, background: '#fff', border: '1px solid #e5e7eb', borderRadius: 0, boxShadow: '0 4px 12px rgba(0,0,0,0.1)', zIndex: 100, overflow: 'hidden' }}>
-          <div style={{ padding: '10px 14px', display: 'flex', alignItems: 'center', gap: 8, color: '#0c1a26', fontWeight: 600, fontSize: 13, borderBottom: '1px solid #f3f4f6', cursor: 'default' }}>
+          <div style={{ padding: '10px 14px', display: 'flex', alignItems: 'center', gap: 8, color: '#0c1a26', fontWeight: 600, fontSize: 13, borderBottom: '1px solid #f3f4f6', cursor: 'default', backgroundColor: '#f9fafb' }}>
             <FlagSK /> Slovensko
           </div>
-          <div style={{ padding: '10px 14px', display: 'flex', alignItems: 'center', gap: 8, color: '#9ca3af', fontSize: 13, cursor: 'default' }}>
+          <a href="https://robotika24.cz" style={{ padding: '10px 14px', display: 'flex', alignItems: 'center', gap: 8, color: '#6b7280', fontSize: 13, textDecoration: 'none', cursor: 'pointer' }} className="hover:bg-gray-50">
             <FlagCZ /> Česko
-          </div>
+          </a>
         </div>
       )}
     </div>

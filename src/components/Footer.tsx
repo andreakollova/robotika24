@@ -74,9 +74,10 @@ export default function Footer() {
               Informácie
             </h3>
             <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
-              <p style={{ fontSize: 14, color: '#d1d5db', padding: '4px 0' }}>O nás</p>
-              <p style={{ fontSize: 14, color: '#d1d5db', padding: '4px 0' }}>Kontakt</p>
-              <p style={{ fontSize: 14, color: '#d1d5db', padding: '4px 0' }}>Ochrana súkromia</p>
+              <Link href="/o-nas" style={{ fontSize: 14, color: '#d1d5db', padding: '4px 0', textDecoration: 'none' }} className="hover:text-[#cb1e26] transition-colors">O nás</Link>
+              <Link href="/ochrana-sukromia" style={{ fontSize: 14, color: '#d1d5db', padding: '4px 0', textDecoration: 'none' }} className="hover:text-[#cb1e26] transition-colors">Ochrana súkromia</Link>
+              <Link href="/cookies" style={{ fontSize: 14, color: '#d1d5db', padding: '4px 0', textDecoration: 'none' }} className="hover:text-[#cb1e26] transition-colors">Cookies</Link>
+              <Link href="/podmienky" style={{ fontSize: 14, color: '#d1d5db', padding: '4px 0', textDecoration: 'none' }} className="hover:text-[#cb1e26] transition-colors">Podmienky používania</Link>
             </div>
           </div>
         </div>

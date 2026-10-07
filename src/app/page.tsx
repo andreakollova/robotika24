@@ -40,7 +40,7 @@ export default async function Home() {
       {/* Dark announcement bar with latest articles */}
       <AnnouncementBar articles={announcement} />
 
-      <div className="max-w-7xl mx-auto px-4 mt-6">
+      <div className="max-w-[1280px] mx-auto px-4 mt-6">
         {/* Hero section: big article + 2 side articles */}
         {hero && (
           <section className="mb-8">

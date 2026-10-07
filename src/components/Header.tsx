@@ -5,9 +5,12 @@ import Image from 'next/image';
 import Link from 'next/link';
 
 const categories = [
-  { name: 'ROBOTY', slug: 'roboty' },
-  { name: 'TECHNOLOGIE', slug: 'technologie' },
-  { name: 'VYVOJ', slug: 'vyvoj' },
+  { name: 'Novinky', slug: '/', isHome: true },
+  { name: 'Technologie', slug: '/kategoria/technologie' },
+  { name: 'Development', slug: '/kategoria/vyvoj' },
+  { name: 'Roboty', slug: '/kategoria/roboty' },
+  { name: 'Projekty', slug: '/projekty' },
+  { name: 'App', slug: '/app' },
 ];
 
 export default function Header() {
@@ -15,7 +18,7 @@ export default function Header() {
   const [mobileOpen, setMobileOpen] = useState(false);
 
   useEffect(() => {
-    const handleScroll = () => setScrolled(window.scrollY > 120);
+    const handleScroll = () => setScrolled(window.scrollY > 140);
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
@@ -23,45 +26,48 @@ export default function Header() {
   return (
     <>
       {/* Main white navbar */}
-      <header className="bg-white border-b border-gray-200 relative z-50">
-        <div className="max-w-7xl mx-auto px-4">
-          <div className="flex items-center justify-between h-16">
+      <header className="bg-white border-b border-gray-100">
+        <div className="max-w-[1280px] mx-auto px-4">
+          {/* Top row: logo */}
+          <div className="flex items-center justify-between py-4">
             <Link href="/" className="flex items-center">
               <Image
                 src="/logo.png"
                 alt="robotika24"
-                width={220}
-                height={44}
-                className="h-9 w-auto"
+                width={280}
+                height={56}
+                className="h-12 md:h-14 w-auto"
                 priority
               />
             </Link>
 
-            <nav className="hidden md:flex items-center gap-1">
-              {categories.map((cat) => (
-                <Link
-                  key={cat.slug}
-                  href={`/kategoria/${cat.slug}`}
-                  className="px-4 py-2 text-sm font-bold text-[#0c1a26] hover:text-[#cb1e26] transition-colors tracking-wide"
-                >
-                  {cat.name}
-                </Link>
-              ))}
-            </nav>
-
+            {/* Mobile menu button */}
             <button
               className="md:hidden text-[#0c1a26] p-2"
               onClick={() => setMobileOpen(!mobileOpen)}
             >
-              <svg width="24" height="24" fill="none" stroke="currentColor" strokeWidth="2">
+              <svg width="28" height="28" fill="none" stroke="currentColor" strokeWidth="2">
                 {mobileOpen ? (
-                  <path d="M6 6l12 12M6 18L18 6" />
+                  <path d="M6 6l16 16M6 22L22 6" />
                 ) : (
-                  <path d="M3 12h18M3 6h18M3 18h18" />
+                  <path d="M4 14h20M4 7h20M4 21h20" />
                 )}
               </svg>
             </button>
           </div>
+
+          {/* Nav row: categories */}
+          <nav className="hidden md:flex items-center gap-0 -mb-px border-t border-gray-100">
+            {categories.map((cat) => (
+              <Link
+                key={cat.slug}
+                href={cat.slug}
+                className="px-5 py-3 text-[13px] font-bold text-[#0c1a26] hover:text-[#cb1e26] transition-colors uppercase tracking-wide border-b-2 border-transparent hover:border-[#cb1e26]"
+              >
+                {cat.name}
+              </Link>
+            ))}
+          </nav>
 
           {/* Mobile menu */}
           {mobileOpen && (
@@ -69,8 +75,8 @@ export default function Header() {
               {categories.map((cat) => (
                 <Link
                   key={cat.slug}
-                  href={`/kategoria/${cat.slug}`}
-                  className="block px-4 py-3 text-sm font-bold text-[#0c1a26] hover:bg-gray-50"
+                  href={cat.slug}
+                  className="block px-4 py-3 text-sm font-bold text-[#0c1a26] hover:bg-gray-50 uppercase"
                   onClick={() => setMobileOpen(false)}
                 >
                   {cat.name}
@@ -87,23 +93,23 @@ export default function Header() {
           scrolled ? 'translate-y-0' : '-translate-y-full'
         }`}
       >
-        <div className="max-w-7xl mx-auto px-4">
+        <div className="max-w-[1280px] mx-auto px-4">
           <div className="flex items-center justify-between h-14">
             <Link href="/">
               <Image
-                src="/logo.png"
+                src="/logo-dark.png"
                 alt="robotika24"
-                width={180}
-                height={36}
-                className="h-7 w-auto brightness-0 invert"
+                width={200}
+                height={40}
+                className="h-9 w-auto"
               />
             </Link>
-            <nav className="hidden md:flex items-center gap-1">
+            <nav className="hidden md:flex items-center gap-0">
               {categories.map((cat) => (
                 <Link
                   key={cat.slug}
-                  href={`/kategoria/${cat.slug}`}
-                  className="px-4 py-2 text-sm font-bold text-gray-300 hover:text-white transition-colors tracking-wide"
+                  href={cat.slug}
+                  className="px-4 py-2 text-[12px] font-bold text-gray-300 hover:text-white transition-colors uppercase tracking-wide"
                 >
                   {cat.name}
                 </Link>

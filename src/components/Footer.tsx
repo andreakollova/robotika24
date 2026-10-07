@@ -1,28 +1,29 @@
 import Image from 'next/image';
 import Link from 'next/link';
 
-const categories = [
-  { name: 'Roboty', slug: 'roboty' },
-  { name: 'Technologie', slug: 'technologie' },
-  { name: 'Vyvoj', slug: 'vyvoj' },
+const navLinks = [
+  { name: 'Novinky', href: '/' },
+  { name: 'Technologie', href: '/kategoria/technologie' },
+  { name: 'Development', href: '/kategoria/vyvoj' },
+  { name: 'Roboty', href: '/kategoria/roboty' },
+  { name: 'Projekty', href: '/projekty' },
+  { name: 'App', href: '/app' },
 ];
 
 export default function Footer() {
   return (
     <footer className="bg-[#0c1a26] mt-16">
-      {/* Top accent line */}
       <div className="h-1 bg-[#cb1e26]" />
 
-      <div className="max-w-7xl mx-auto px-4 py-12">
+      <div className="max-w-[1280px] mx-auto px-4 py-12">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
-          {/* Brand */}
           <div>
             <Image
-              src="/logo.png"
+              src="/logo-dark.png"
               alt="robotika24"
-              width={200}
-              height={40}
-              className="h-8 w-auto brightness-0 invert mb-4"
+              width={220}
+              height={44}
+              className="h-10 w-auto mb-4"
             />
             <p className="text-gray-400 text-sm leading-relaxed">
               Spravodajsky portal o robotike, umelej inteligencii a modernych technologiach.
@@ -30,25 +31,23 @@ export default function Footer() {
             </p>
           </div>
 
-          {/* Categories */}
           <div>
             <h3 className="text-white text-sm font-bold uppercase tracking-wider mb-4 pb-2 border-b border-gray-700">
-              Kategorie
+              Sekcie
             </h3>
             <div className="space-y-2">
-              {categories.map((cat) => (
+              {navLinks.map((link) => (
                 <Link
-                  key={cat.slug}
-                  href={`/kategoria/${cat.slug}`}
+                  key={link.href}
+                  href={link.href}
                   className="block text-sm text-gray-400 hover:text-[#cb1e26] transition-colors py-1"
                 >
-                  {cat.name}
+                  {link.name}
                 </Link>
               ))}
             </div>
           </div>
 
-          {/* Info */}
           <div>
             <h3 className="text-white text-sm font-bold uppercase tracking-wider mb-4 pb-2 border-b border-gray-700">
               Informacie
@@ -61,7 +60,6 @@ export default function Footer() {
           </div>
         </div>
 
-        {/* Bottom bar */}
         <div className="border-t border-gray-800 mt-10 pt-6 flex flex-col md:flex-row items-center justify-between gap-4">
           <p className="text-gray-500 text-xs">
             &copy; {new Date().getFullYear()} robotika24. Vsetky prava vyhradene.

@@ -141,10 +141,10 @@ export default function Header() {
 
       {/* Main white navbar - taller, bigger logo */}
       <header style={{ backgroundColor: '#fff', borderBottom: '1px solid #e5e7eb' }}>
-        <div style={{ maxWidth: 1280, margin: '0 auto', padding: '0 20px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', height: 88 }}>
+        <div style={{ maxWidth: 1280, margin: '0 auto', padding: '0 20px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', height: 92 }}>
           {/* Logo - bigger */}
           <Link href="/" style={{ flexShrink: 0 }}>
-            <Image src="/logo.png" alt="robotika24" width={280} height={56} style={{ height: 60, width: 'auto' }} priority />
+            <Image src="/logo.png" alt="robotika24" width={280} height={56} style={{ height: 68, width: 'auto' }} priority />
           </Link>
 
           {/* Nav + actions */}
@@ -205,7 +205,7 @@ export default function Header() {
       }}>
         <div style={{ maxWidth: 1280, margin: '0 auto', padding: '0 20px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', height: 80 }}>
           <Link href="/" style={{ flexShrink: 0 }}>
-            <Image src="/logo-dark.png" alt="robotika24" width={280} height={56} style={{ height: 52, width: 'auto' }} />
+            <Image src="/logo-dark.png" alt="robotika24" width={280} height={56} style={{ height: 56, width: 'auto' }} />
           </Link>
           <div className="hidden md:flex" style={{ alignItems: 'center', gap: 0 }}>
             {categories.map((cat) => (

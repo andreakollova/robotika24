@@ -135,13 +135,13 @@ export default async function ArticlePage({ params }: { params: Promise<{ slug: 
           )}
 
           {!a.content && (
-            <p className="text-gray-400 italic">Plny obsah clanku bude dostupny coskoro.</p>
+            <p className="text-gray-400 italic">Plný obsah článku bude dostupný čoskoro.</p>
           )}
 
           {a.source_name && a.source_url && (
             <div className="mt-8 p-4 bg-gray-50 rounded-lg border border-gray-200">
               <p className="text-sm text-gray-500">
-                Tento clanok bol povodne publikovany na{' '}
+                Tento článok bol pôvodne publikovaný na{' '}
                 <a
                   href={a.source_url}
                   target="_blank"
@@ -150,7 +150,7 @@ export default async function ArticlePage({ params }: { params: Promise<{ slug: 
                 >
                   {a.source_name}
                 </a>
-                . Preklad a uprava: {a.author}, robotika24.
+                . Preklad a úprava: {a.author}, robotika24.
               </p>
             </div>
           )}

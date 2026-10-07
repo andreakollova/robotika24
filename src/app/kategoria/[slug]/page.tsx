@@ -2,7 +2,7 @@ import { supabase } from '@/lib/supabase';
 import type { Article } from '@/lib/supabase';
 import { notFound } from 'next/navigation';
 import ArticleCard from '@/components/ArticleCard';
-import Sidebar from '@/components/Sidebar';
+import CategorySidebar from '@/components/CategorySidebar';
 
 export const revalidate = 60;
 
@@ -24,32 +24,55 @@ export default async function CategoryPage({ params }: { params: Promise<{ slug:
     .eq('is_published', true)
     .order('published_at', { ascending: false });
 
+  // Most read in this category
   const { data: popular } = await supabase
     .from('articles')
     .select('*, categories(*)')
+    .eq('category_id', category.id)
     .eq('is_published', true)
     .order('views', { ascending: false })
     .limit(5);
 
+  // Articles with video in this category
+  const { data: withVideo } = await supabase
+    .from('articles')
+    .select('*, categories(*)')
+    .eq('category_id', category.id)
+    .eq('is_published', true)
+    .not('video_url', 'is', null)
+    .order('published_at', { ascending: false })
+    .limit(5);
+
   return (
     <div style={{ maxWidth: 1280, margin: '0 auto', padding: '24px 20px 0' }}>
-      <div className="border-b-2 border-[#cb1e26] mb-6">
-        <h1 className="text-2xl font-bold text-[#0c1a26] pb-2">{category.name}</h1>
+      <style>{`
+        .cat-grid { display: grid; grid-template-columns: 1fr; gap: 32px; }
+        @media (min-width: 1024px) { .cat-grid { grid-template-columns: 1fr 320px; } }
+        .cat-articles { display: grid; grid-template-columns: 1fr; gap: 24px; }
+        @media (min-width: 640px) { .cat-articles { grid-template-columns: repeat(2, 1fr); } }
+        @media (min-width: 1024px) { .cat-articles { grid-template-columns: repeat(2, 1fr); } }
+      `}</style>
+
+      <div style={{ borderBottom: '2px solid #cb1e26', marginBottom: 24 }}>
+        <h1 style={{ fontSize: 24, fontWeight: 700, color: '#0c1a26', paddingBottom: 8 }}>{category.name}</h1>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
-        <div className="lg:col-span-9">
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+      <div className="cat-grid">
+        <div>
+          <div className="cat-articles">
             {(articles || []).map((article: Article) => (
               <ArticleCard key={article.id} article={article} />
             ))}
           </div>
           {(!articles || articles.length === 0) && (
-            <p className="text-gray-400">Zatial ziadne clanky v tejto kategorii.</p>
+            <p style={{ color: '#9ca3af' }}>Zatiaľ žiadne články v tejto kategórii.</p>
           )}
         </div>
-        <div className="lg:col-span-3">
-          <Sidebar articles={(popular || []) as Article[]} />
+        <div>
+          <CategorySidebar
+            popular={(popular || []) as Article[]}
+            withVideo={(withVideo || []) as Article[]}
+          />
         </div>
       </div>
     </div>

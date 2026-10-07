@@ -66,8 +66,8 @@ export default function ShareLinks({ url, title }: { url: string; title: string 
           target="_blank"
           rel="noopener noreferrer"
           title={`Zdielat na ${link.name}`}
-          className="w-8 h-8 rounded-full flex items-center justify-center text-white transition-transform hover:scale-110"
-          style={{ backgroundColor: link.color }}
+          className="transition-transform hover:scale-110"
+          style={{ backgroundColor: link.color, color: '#ffffff', width: 32, height: 32, borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
         >
           {link.icon}
         </a>
@@ -78,7 +78,8 @@ export default function ShareLinks({ url, title }: { url: string; title: string 
           alert('Link skopirovaný!');
         }}
         title="Kopirovat link"
-        className="w-8 h-8 rounded-full flex items-center justify-center bg-gray-600 text-white transition-transform hover:scale-110"
+        className="transition-transform hover:scale-110"
+        style={{ backgroundColor: '#4b5563', color: '#ffffff', width: 32, height: 32, borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', border: 'none', cursor: 'pointer' }}
       >
         <svg viewBox="0 0 24 24" className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2">
           <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71" />

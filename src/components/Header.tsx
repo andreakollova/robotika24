@@ -22,28 +22,73 @@ function SearchIcon() {
   );
 }
 
+function BellIcon() {
+  return (
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9" />
+      <path d="M10.3 21a1.94 1.94 0 0 0 3.4 0" />
+    </svg>
+  );
+}
+
+function FlagSK() {
+  return (
+    <svg width="24" height="16" viewBox="0 0 900 600" style={{ borderRadius: 2, display: 'block' }}>
+      <rect width="900" height="600" fill="#fff" />
+      <rect width="900" height="400" y="200" fill="#0b4ea2" />
+      <rect width="900" height="200" y="400" fill="#ee1c25" />
+      <rect width="900" height="200" fill="#fff" />
+      <path d="M 180 100 v 400 c 0 80 120 120 180 160 c 60 -40 180 -80 180 -160 v -400 z" fill="#ee1c25" stroke="#fff" strokeWidth="20" />
+      <path d="M 240 320 h 240 M 240 260 h 240 M 360 180 v 240" stroke="#fff" strokeWidth="20" fill="none" />
+      <path d="M 280 380 q 80 60 180 0" fill="none" stroke="#0b4ea2" strokeWidth="30" />
+    </svg>
+  );
+}
+
+function FlagCZ() {
+  return (
+    <svg width="24" height="16" viewBox="0 0 900 600" style={{ borderRadius: 2, display: 'block' }}>
+      <rect width="900" height="300" fill="#fff" />
+      <rect width="900" height="300" y="300" fill="#d7141a" />
+      <polygon points="0,0 450,300 0,600" fill="#11457e" />
+    </svg>
+  );
+}
+
 function LangSelector() {
   const [open, setOpen] = useState(false);
   return (
     <div style={{ position: 'relative' }}>
       <button
         onClick={() => setOpen(!open)}
-        style={{ display: 'flex', alignItems: 'center', gap: 4, padding: '4px 8px', border: '1px solid #e5e7eb', borderRadius: 4, cursor: 'pointer', background: '#fff', fontSize: 13 }}
+        style={{ display: 'flex', alignItems: 'center', gap: 0, padding: 4, cursor: 'pointer', background: 'none', border: 'none' }}
       >
-        🇸🇰 <span style={{ fontSize: 11, color: '#6b7280' }}>SK</span>
-        <svg width="10" height="10" viewBox="0 0 10 10" fill="#9ca3af"><path d="M2 4l3 3 3-3" /></svg>
+        <FlagSK />
       </button>
       {open && (
-        <div style={{ position: 'absolute', top: '100%', right: 0, marginTop: 4, background: '#fff', border: '1px solid #e5e7eb', borderRadius: 4, boxShadow: '0 4px 12px rgba(0,0,0,0.1)', zIndex: 100, minWidth: 100 }}>
-          <div style={{ padding: '8px 12px', fontSize: 13, fontWeight: 600, display: 'flex', alignItems: 'center', gap: 6, color: '#0c1a26', borderBottom: '1px solid #f3f4f6' }}>
-            🇸🇰 Slovensky
+        <div style={{ position: 'absolute', top: '100%', right: 0, marginTop: 4, background: '#fff', border: '1px solid #e5e7eb', borderRadius: 4, boxShadow: '0 4px 12px rgba(0,0,0,0.1)', zIndex: 100, overflow: 'hidden' }}>
+          <div style={{ padding: '10px 14px', display: 'flex', alignItems: 'center', gap: 8, color: '#0c1a26', fontWeight: 600, fontSize: 13, borderBottom: '1px solid #f3f4f6', cursor: 'default' }}>
+            <FlagSK /> Slovensky
           </div>
-          <div style={{ padding: '8px 12px', fontSize: 13, display: 'flex', alignItems: 'center', gap: 6, color: '#9ca3af', cursor: 'default' }}>
-            🇨🇿 Česky
+          <div style={{ padding: '10px 14px', display: 'flex', alignItems: 'center', gap: 8, color: '#9ca3af', fontSize: 13, cursor: 'default' }}>
+            <FlagCZ /> Česky
           </div>
         </div>
       )}
     </div>
+  );
+}
+
+function PulsingDot() {
+  return (
+    <span style={{ position: 'relative', display: 'inline-flex', width: 10, height: 10, flexShrink: 0 }}>
+      <span style={{
+        position: 'absolute', inset: 0, borderRadius: '50%', backgroundColor: '#22c55e', opacity: 0.75,
+        animation: 'ping 1.5s cubic-bezier(0, 0, 0.2, 1) infinite',
+      }} />
+      <span style={{ position: 'relative', display: 'inline-flex', width: 10, height: 10, borderRadius: '50%', backgroundColor: '#22c55e' }} />
+      <style>{`@keyframes ping { 75%, 100% { transform: scale(2); opacity: 0; } }`}</style>
+    </span>
   );
 }
 
@@ -54,7 +99,7 @@ export default function Header() {
   const [searchOpen, setSearchOpen] = useState(false);
 
   useEffect(() => {
-    const handleScroll = () => setScrolled(window.scrollY > 140);
+    const handleScroll = () => setScrolled(window.scrollY > 160);
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
@@ -66,15 +111,25 @@ export default function Header() {
       .catch(() => {});
   }, []);
 
+  const subscribeBtn = (dark?: boolean) => (
+    <Link href="/odber" style={{
+      display: 'inline-flex', alignItems: 'center', gap: 6,
+      padding: '9px 22px', fontSize: 13, fontWeight: 700, color: '#fff',
+      backgroundColor: '#cb1e26', borderRadius: 4, textDecoration: 'none',
+      whiteSpace: 'nowrap' as const,
+    }} className="hover:bg-[#e0242d] transition-colors">
+      <BellIcon />
+      Odoberať
+    </Link>
+  );
+
   return (
     <>
-      {/* Top announcement bar */}
+      {/* Top announcement bar - centered text with pulsing dot */}
       {latestTitle && (
-        <div style={{ backgroundColor: '#0c1a26', padding: '8px 20px' }}>
-          <div style={{ maxWidth: 1280, margin: '0 auto', display: 'flex', alignItems: 'center', gap: 12 }}>
-            <span style={{ backgroundColor: '#cb1e26', color: '#fff', fontSize: 11, fontWeight: 700, padding: '2px 8px', borderRadius: 3, whiteSpace: 'nowrap' as const, textTransform: 'uppercase' as const, flexShrink: 0 }}>
-              Najnovšie
-            </span>
+        <div style={{ backgroundColor: '#0c1a26', padding: '9px 20px' }}>
+          <div style={{ maxWidth: 1280, margin: '0 auto', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 10 }}>
+            <PulsingDot />
             <p style={{ color: '#e5e7eb', fontSize: 13, fontWeight: 500, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' as const, margin: 0 }}>
               {latestTitle}
             </p>
@@ -82,12 +137,12 @@ export default function Header() {
         </div>
       )}
 
-      {/* Main white navbar */}
+      {/* Main white navbar - taller, bigger logo */}
       <header style={{ backgroundColor: '#fff', borderBottom: '1px solid #e5e7eb' }}>
-        <div style={{ maxWidth: 1280, margin: '0 auto', padding: '0 20px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', height: 64 }}>
-          {/* Logo */}
+        <div style={{ maxWidth: 1280, margin: '0 auto', padding: '0 20px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', height: 80 }}>
+          {/* Logo - bigger */}
           <Link href="/" style={{ flexShrink: 0 }}>
-            <Image src="/logo.png" alt="robotika24" width={220} height={44} style={{ height: 40, width: 'auto' }} priority />
+            <Image src="/logo.png" alt="robotika24" width={280} height={56} style={{ height: 52, width: 'auto' }} priority />
           </Link>
 
           {/* Nav + actions */}
@@ -99,18 +154,11 @@ export default function Header() {
             ))}
 
             <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginLeft: 16 }}>
-              {/* Search */}
               <button onClick={() => setSearchOpen(!searchOpen)} style={{ color: '#6b7280', cursor: 'pointer', background: 'none', border: 'none', padding: 4 }} className="hover:text-[#cb1e26] transition-colors">
                 <SearchIcon />
               </button>
-
-              {/* Language */}
               <LangSelector />
-
-              {/* Subscribe button */}
-              <Link href="/odber" style={{ padding: '8px 20px', fontSize: 13, fontWeight: 700, color: '#fff', backgroundColor: '#cb1e26', borderRadius: 4, textDecoration: 'none', whiteSpace: 'nowrap' as const }} className="hover:bg-[#e0242d] transition-colors">
-                Odoberať
-              </Link>
+              {subscribeBtn()}
             </div>
           </div>
 
@@ -146,16 +194,16 @@ export default function Header() {
         )}
       </header>
 
-      {/* Sticky dark navbar */}
+      {/* Sticky dark navbar - same bigger logo */}
       <div style={{
         position: 'fixed', top: 0, left: 0, right: 0, zIndex: 60,
         backgroundColor: '#0c1a26', boxShadow: '0 4px 6px -1px rgba(0,0,0,0.3)',
         transform: scrolled ? 'translateY(0)' : 'translateY(-100%)',
         transition: 'transform 0.3s ease',
       }}>
-        <div style={{ maxWidth: 1280, margin: '0 auto', padding: '0 20px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', height: 64 }}>
+        <div style={{ maxWidth: 1280, margin: '0 auto', padding: '0 20px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', height: 72 }}>
           <Link href="/" style={{ flexShrink: 0 }}>
-            <Image src="/logo-dark.png" alt="robotika24" width={220} height={44} style={{ height: 40, width: 'auto' }} />
+            <Image src="/logo-dark.png" alt="robotika24" width={280} height={56} style={{ height: 48, width: 'auto' }} />
           </Link>
           <div className="hidden md:flex" style={{ alignItems: 'center', gap: 0 }}>
             {categories.map((cat) => (
@@ -163,9 +211,7 @@ export default function Header() {
                 {cat.name}
               </Link>
             ))}
-            <Link href="/odber" style={{ marginLeft: 16, padding: '8px 20px', fontSize: 13, fontWeight: 700, color: '#fff', backgroundColor: '#cb1e26', borderRadius: 4, textDecoration: 'none' }} className="hover:bg-[#e0242d] transition-colors">
-              Odoberať
-            </Link>
+            {subscribeBtn(true)}
           </div>
         </div>
       </div>

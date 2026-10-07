@@ -39,7 +39,7 @@ export default async function ArticlePage({ params }: { params: Promise<{ slug: 
   const articleUrl = `https://robotika24.sk/clanok/${a.slug}`;
 
   return (
-    <div className="max-w-7xl mx-auto px-4">
+    <div className="max-w-7xl mx-auto px-4 pt-6">
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
         <article className="lg:col-span-2">
           {categoryName && (

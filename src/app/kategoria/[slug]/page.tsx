@@ -32,15 +32,14 @@ export default async function CategoryPage({ params }: { params: Promise<{ slug:
     .limit(5);
 
   return (
-    <div className="max-w-7xl mx-auto px-4">
-      <div className="mb-8">
-        <h1 className="text-3xl font-bold text-gray-900">{category.name}</h1>
-        <div className="h-1 w-16 bg-[#cb1e26] rounded mt-2" />
+    <div className="max-w-7xl mx-auto px-4 pt-6">
+      <div className="border-b-2 border-[#cb1e26] mb-6">
+        <h1 className="text-2xl font-bold text-[#0c1a26] pb-2">{category.name}</h1>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-        <div className="lg:col-span-2">
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
+        <div className="lg:col-span-9">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
             {(articles || []).map((article: Article) => (
               <ArticleCard key={article.id} article={article} />
             ))}
@@ -49,7 +48,7 @@ export default async function CategoryPage({ params }: { params: Promise<{ slug:
             <p className="text-gray-400">Zatial ziadne clanky v tejto kategorii.</p>
           )}
         </div>
-        <div>
+        <div className="lg:col-span-3">
           <Sidebar articles={(popular || []) as Article[]} />
         </div>
       </div>

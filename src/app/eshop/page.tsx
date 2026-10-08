@@ -7,10 +7,46 @@ const products = [
     id: 'mikina-less-talk',
     name: 'Mikina "Less Talk, More Torque"',
     price: '49,90 €',
-    description: 'Prémiová mikina robotika24 s kultovým sloganom "Less Talk, More Torque". Vyrobená zo 100% organickej bavlny s jemným vnútorným fleecom. Unisex strih, ideálna na bežné nosenie aj na hackathony.',
+    description: 'Prémiová mikina robotika24 so sloganom "Less Talk, More Torque" - menej rečí, viac krútiaceho momentu. Odkaz pre každého, kto radšej tvorí a buduje, než rozpráva. Krútiaci moment je to, čo poháňa každý motor aj každého robota - a presne tak fungujú aj tí najlepší inžinieri.',
     details: ['100% organická bavlna', 'Vnútorný fleece', 'Unisex strih', 'Potlač: sieťotlač', 'Farba: tmavo modrá'],
     images: ['/eshop/mikina-front.png', '/eshop/mikina-back.png'],
     sizes: ['S', 'M', 'L', 'XL', 'XXL'],
+  },
+  {
+    id: 'mikina-99-problems',
+    name: 'Mikina "99 Problems. 6 DOF."',
+    price: '49,90 €',
+    description: 'Biela mikina so sloganom "99 Problems. 6 DOF." - 99 problémov, ale pohyb medzi nimi nie je jeden z nich. DOF znamená Degrees of Freedom - stupne voľnosti, teda počet smerov, ktorými sa robot dokáže hýbať. Šesť stupňov voľnosti je štandard pre priemyselné robotické ramená. Ak máš 6 DOF, zvládneš čokoľvek.',
+    details: ['100% organická bavlna', 'Vnútorný fleece', 'Unisex strih', 'Potlač: sieťotlač', 'Farba: biela'],
+    images: ['/eshop/mikina-biela-front.png', '/eshop/mikina-biela-back.png'],
+    sizes: ['S', 'M', 'L', 'XL', 'XXL'],
+  },
+  {
+    id: 'mikina-inverse',
+    name: 'Mikina "Trust Me. I\'ve Done the Inverse."',
+    price: '49,90 €',
+    description: 'Červená mikina so sloganom "Trust Me. I\'ve Done the Inverse." - ver mi, urobil som inverznú úlohu. V robotike je inverzná kinematika jeden z najťažších výpočtov - keď potrebuješ zistiť, ako nastaviť kĺby robota, aby sa jeho ruka dostala presne tam, kam chceš. Kto to zvládol, tomu môžeš veriť.',
+    details: ['100% organická bavlna', 'Vnútorný fleece', 'Unisex strih', 'Potlač: sieťotlač', 'Farba: červená'],
+    images: ['/eshop/mikina-cervena-front.png', '/eshop/mikina-cervena-back.png'],
+    sizes: ['S', 'M', 'L', 'XL', 'XXL'],
+  },
+  {
+    id: 'tricko-revolute',
+    name: 'Tričko "Revolute Joints, Revolutionary Ideas"',
+    price: '29,90 €',
+    description: 'Biele tričko s nápisom "My joints are revolute. My ideas are revolutionary." - moje kĺby sú rotačné, moje nápady sú revolučné. Revolute joint je základný typ kĺbu v robotike, ktorý sa otáča okolo jednej osi - rovnako ako ľudský lakeť. Slovná hračka spája robotiku s odvahou myslieť inak.',
+    details: ['100% organická bavlna', 'Priedušný materiál', 'Unisex strih', 'Potlač: sieťotlač', 'Farba: biela'],
+    images: ['/eshop/tricko-front.png', '/eshop/tricko-back.png'],
+    sizes: ['S', 'M', 'L', 'XL', 'XXL'],
+  },
+  {
+    id: 'zapisnik-r24',
+    name: 'Zápisník robotika24',
+    price: '14,90 €',
+    description: 'Elegantný tmavo modrý zápisník s logom robotika24 a guľôčkovým perom. Linkované strany, tvrdé dosky, gumička na zatváranie. Ideálny na poznámky z prednášok, skicovanie robotov alebo plánovanie ďalšieho projektu. Pero s logom robotika24 v balení.',
+    details: ['Tvrdé dosky A5', 'Linkované strany', 'Gumička na zatváranie', 'Pero v balení', 'Farba: tmavo modrá'],
+    images: ['/eshop/zapisnik.png'],
+    sizes: [],
   },
 ];
 
@@ -96,6 +132,7 @@ function OrderModal({ product, onClose }: { product: typeof products[0]; onClose
               <input required placeholder="Meno a priezvisko *" value={form.name} onChange={e => setForm({ ...form, name: e.target.value })} style={{ padding: '12px 14px', border: '1px solid #e5e7eb', borderRadius: 8, fontSize: 14, outline: 'none' }} />
               <input required type="email" placeholder="Email *" value={form.email} onChange={e => setForm({ ...form, email: e.target.value })} style={{ padding: '12px 14px', border: '1px solid #e5e7eb', borderRadius: 8, fontSize: 14, outline: 'none' }} />
               <input placeholder="Telefón (voliteľné)" value={form.phone} onChange={e => setForm({ ...form, phone: e.target.value })} style={{ padding: '12px 14px', border: '1px solid #e5e7eb', borderRadius: 8, fontSize: 14, outline: 'none' }} />
+              {product.sizes.length > 0 && (
               <div>
                 <label style={{ fontSize: 13, fontWeight: 600, color: '#374151', marginBottom: 6, display: 'block' }}>Veľkosť *</label>
                 <div style={{ display: 'flex', gap: 8 }}>
@@ -106,6 +143,7 @@ function OrderModal({ product, onClose }: { product: typeof products[0]; onClose
                   ))}
                 </div>
               </div>
+              )}
               <textarea placeholder="Poznámka (voliteľné)" value={form.note} onChange={e => setForm({ ...form, note: e.target.value })} rows={2} style={{ padding: '12px 14px', border: '1px solid #e5e7eb', borderRadius: 8, fontSize: 14, outline: 'none', resize: 'vertical' }} />
               <button type="submit" disabled={status === 'loading'} style={{ padding: '14px', fontSize: 15, fontWeight: 700, color: '#fff', backgroundColor: '#cb1e26', borderRadius: 24, border: 'none', cursor: 'pointer', opacity: status === 'loading' ? 0.7 : 1 }}>
                 {status === 'loading' ? 'Odosiela sa...' : 'Odoslať objednávku'}

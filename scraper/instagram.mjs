@@ -403,14 +403,24 @@ async function generateCompanySlide1(logoPath) {
     .toBuffer();
 }
 
-// Slide 2+: company description pages - text only
-async function generateCompanyDescPages(companyName, description) {
+// Slide 2+: company description pages - small logo + text
+async function generateCompanyDescPages(companyName, description, logoPath) {
   const templatePath = resolve(__dirname, 'templates/poznasfirmu/slide2.png');
   const textColor = '#0c1a26';
 
   const fontSize = 46;
   const lineHeight = 60;
   const sentenceGap = 34;
+
+  // Small logo above text
+  let logoComposite = null;
+  const logoSize = 48;
+  if (logoPath && existsSync(logoPath)) {
+    const logoBuf = readFileSync(logoPath);
+    logoComposite = await sharp(logoBuf)
+      .resize(logoSize, logoSize, { fit: 'contain', background: { r: 0, g: 0, b: 0, alpha: 0 } })
+      .toBuffer();
+  }
 
   const nameSvg = `<text x="115" y="132" font-family="Inter, -apple-system, sans-serif" font-size="26" font-weight="700" fill="#cb1e26" dominant-baseline="central">${escapeXml(companyName)}</text>`;
 
@@ -452,8 +462,12 @@ async function generateCompanyDescPages(companyName, description) {
     }).join('\n');
 
     const svgOverlay = Buffer.from(`<svg width="${W}" height="${H}">${nameSvg}${textSvg}</svg>`);
+    const composites = [{ input: svgOverlay, top: 0, left: 0 }];
+    if (logoComposite) {
+      composites.push({ input: logoComposite, top: 108, left: 55 });
+    }
     const buf = await sharp(templatePath)
-      .composite([{ input: svgOverlay, top: 0, left: 0 }])
+      .composite(composites)
       .png()
       .toBuffer();
     buffers.push(buf);
@@ -475,7 +489,7 @@ export async function generateCompanyCarousel(company) {
 
   try {
     const slide1 = await generateCompanySlide1(logoPath);
-    const descPages = await generateCompanyDescPages(company.name, company.description);
+    const descPages = await generateCompanyDescPages(company.name, company.description, logoPath);
     const lastSlide = readFileSync(lastSlidePath);
 
     const slides = [];

@@ -412,17 +412,18 @@ async function generateCompanyDescPages(companyName, description, logoPath) {
   const lineHeight = 60;
   const sentenceGap = 34;
 
-  // Small logo above text
+  // Centered logo above text
   let logoComposite = null;
-  const logoSize = 48;
+  const logoW = 280;
+  const logoH = 80;
   if (logoPath && existsSync(logoPath)) {
     const logoBuf = readFileSync(logoPath);
     logoComposite = await sharp(logoBuf)
-      .resize(logoSize, logoSize, { fit: 'contain', background: { r: 0, g: 0, b: 0, alpha: 0 } })
+      .resize(logoW, logoH, { fit: 'contain', background: { r: 0, g: 0, b: 0, alpha: 0 } })
       .toBuffer();
   }
 
-  const nameSvg = `<text x="115" y="132" font-family="Inter, -apple-system, sans-serif" font-size="26" font-weight="700" fill="#cb1e26" dominant-baseline="central">${escapeXml(companyName)}</text>`;
+  const nameSvg = '';
 
   const sentences = description.split(/(?<=\.)\s+/).filter(s => s.trim());
   const sentenceGroups = sentences.map(s => wrapTextWithBold(s, 38));
@@ -450,8 +451,9 @@ async function generateCompanyDescPages(companyName, description, logoPath) {
     });
 
     const totalHeight = pageItems.reduce((h, item) => h + (item === null ? sentenceGap : lineHeight), 0);
-    const contentTop = 130;
-    const maxContentHeight = H - 380;
+    const logoSpace = logoComposite ? logoH + 40 : 0;
+    const contentTop = 130 + logoSpace;
+    const maxContentHeight = H - 380 - logoSpace;
     const startY = Math.max(contentTop, contentTop + (maxContentHeight - totalHeight) / 2);
 
     let currentY = startY;
@@ -461,10 +463,10 @@ async function generateCompanyDescPages(companyName, description, logoPath) {
       return renderRichLine(item, W / 2, currentY, fontSize, textColor);
     }).join('\n');
 
-    const svgOverlay = Buffer.from(`<svg width="${W}" height="${H}">${nameSvg}${textSvg}</svg>`);
+    const svgOverlay = Buffer.from(`<svg width="${W}" height="${H}">${textSvg}</svg>`);
     const composites = [{ input: svgOverlay, top: 0, left: 0 }];
     if (logoComposite) {
-      composites.push({ input: logoComposite, top: 108, left: 55 });
+      composites.push({ input: logoComposite, top: 130, left: Math.round((W - logoW) / 2) });
     }
     const buf = await sharp(templatePath)
       .composite(composites)

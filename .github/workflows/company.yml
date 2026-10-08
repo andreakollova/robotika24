@@ -1,0 +1,29 @@
+name: Company Post
+
+on:
+  schedule:
+    # Every other day at 18:00 CET (16:00 UTC) - odd days
+    - cron: '0 16 1,3,5,7,9,11,13,15,17,19,21,23,25,27,29,31 * *'
+  workflow_dispatch:
+
+jobs:
+  company:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Install dependencies
+        run: npm install --no-audit --no-fund
+
+      - name: Publish company post
+        env:
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+          IG_ACCESS_TOKEN: ${{ secrets.IG_ACCESS_TOKEN }}
+          IG_BUSINESS_ACCOUNT: ${{ secrets.IG_BUSINESS_ACCOUNT }}
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+        run: node scraper/company-daily.mjs

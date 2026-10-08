@@ -3,18 +3,6 @@
 
 export const glossaryTerms = [
   {
-    en: 'Unitree G1',
-    sk: 'Humanoidný robot',
-    explanation: 'Cenovo dostupný **humanoidný robot** od čínskej spoločnosti **Unitree Robotics**, ktorý sa pohybuje plynulo, dokáže robiť saltá a zvierať predmety pomocou šikovných rúk. Ľudia ho mohli predobjednať za približne **20 000 dolárov**, čím sa stal jedným z prvých humanoidov predávaných bežným zákazníkom.',
-    slug: 'unitree-g1',
-  },
-  {
-    en: 'Waymo',
-    sk: 'Robotaxi',
-    explanation: 'Taxislužba patriaca pod **Alphabet**, materskú firmu **Googlu**, ktorej autá jazdia mestom úplne bez vodiča. Okolie sledujú pomocou **lidarov**, radarov a kamier a cestujúci si jazdu objednajú cez aplikáciu ako bežné taxi. V amerických mestách ako **San Francisco**, **Los Angeles** či **Phoenix** už robotaxíky uskutočňujú stovky tisíc platených jázd týždenne.',
-    slug: 'waymo',
-  },
-  {
     en: 'RaaS',
     sk: 'Robot ako služba',
     explanation: 'Obchodný model, pri ktorom si firma robota nekúpi, ale **prenajme za mesačný poplatok**, ktorý zahŕňa údržbu aj aktualizácie softvéru. Robotizácia sa tak sprístupňuje aj menším firmám, ktoré nemajú na nákup drahého stroja. Funguje podobne ako **predplatné Netflixu**, len namiesto filmov dostanete pracovnú silu.',

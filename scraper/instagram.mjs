@@ -1,5 +1,5 @@
 import sharp from 'sharp';
-import { readFileSync, mkdirSync, existsSync } from 'fs';
+import { readFileSync, mkdirSync, existsSync, writeFileSync } from 'fs';
 import { resolve, dirname } from 'path';
 import { fileURLToPath } from 'url';
 
@@ -7,7 +7,11 @@ const __dirname = dirname(fileURLToPath(import.meta.url));
 const W = 1086;
 const H = 1448;
 
-// Wrap text into lines that fit within maxWidth (approximate char count)
+function escapeXml(str) {
+  return str.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&apos;');
+}
+
+// Wrap text into lines that fit within maxChars
 function wrapText(text, maxChars) {
   const words = text.split(' ');
   const lines = [];
@@ -24,90 +28,236 @@ function wrapText(text, maxChars) {
   return lines;
 }
 
-function createTextSvg(text, { color = '#ffffff', fontSize = 48, maxWidth = 900, y = 0, fontWeight = '700', align = 'start' }) {
-  const maxChars = Math.floor(maxWidth / (fontSize * 0.52));
-  const lines = wrapText(text, maxChars);
-  const lineHeight = fontSize * 1.25;
-  const totalHeight = lines.length * lineHeight;
-  const anchor = align === 'center' ? 'middle' : 'start';
-  const xPos = align === 'center' ? W / 2 : (W - maxWidth) / 2;
+// ============================================================
+// ARTICLE CAROUSEL (3 slides)
+// ============================================================
 
-  const textElements = lines.map((line, i) =>
-    `<text x="${xPos}" y="${y + i * lineHeight + fontSize}" font-family="Inter, -apple-system, sans-serif" font-size="${fontSize}" font-weight="${fontWeight}" fill="${color}" text-anchor="${anchor}">${escapeXml(line)}</text>`
-  ).join('\n');
-
-  return { svg: textElements, height: totalHeight };
-}
-
-function escapeXml(str) {
-  return str.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
-}
-
-// Generate slide 1: template + article image behind + title in lower third
-async function generateSlide1(articleImage, title, theme) {
+// Slide 1: article image FULL HEIGHT as base layer, template on top, title on top of everything
+async function generateArticleSlide1(articleImageUrl, title, theme) {
   const templatePath = resolve(__dirname, `templates/${theme}/slide1.png`);
-  const template = sharp(templatePath);
-  const color = theme === 'modry' ? '#ffffff' : '#0c1a26';
+  const textColor = theme === 'modry' ? '#ffffff' : '#0c1a26';
+  const bgColor = theme === 'modry' ? '#0c1a26' : '#ffffff';
 
   // Download article image
   let articleImg = null;
   try {
-    const imgRes = await fetch(articleImage, {
+    const imgRes = await fetch(articleImageUrl, {
       headers: { 'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36' },
     });
     if (imgRes.ok && imgRes.headers.get('content-type')?.startsWith('image')) {
       const imgBuf = Buffer.from(await imgRes.arrayBuffer());
+      // Full size - covers entire canvas
       articleImg = await sharp(imgBuf)
-        .resize(W - 120, H - 380, { fit: 'cover', position: 'center' })
+        .resize(W, H, { fit: 'cover', position: 'center' })
         .toBuffer();
     }
-  } catch {};
+  } catch {}
 
-  // Create title SVG overlay
-  const titleLines = wrapText(title, 22);
-  const lineHeight = 52;
-  const titleStartY = H - 200 - (titleLines.length * lineHeight);
+  // Title - big, left-aligned with red bar (~x:45), lower third
+  const titleLines = wrapText(title, 20);
+  const lineHeight = 88;
+  const titleBlockHeight = titleLines.length * lineHeight;
+  const titleStartY = H - 240 - titleBlockHeight;
 
   const titleSvg = titleLines.map((line, i) =>
-    `<text x="70" y="${titleStartY + i * lineHeight + 44}" font-family="Inter, -apple-system, sans-serif" font-size="44" font-weight="800" fill="${color}">${escapeXml(line)}</text>`
+    `<text x="85" y="${titleStartY + i * lineHeight + 78}" font-family="Inter, -apple-system, sans-serif" font-size="80" font-weight="800" fill="${textColor}">${escapeXml(line)}</text>`
   ).join('\n');
 
+  // Gradient from bottom going up - under the template graphic, over the photo
   const svgOverlay = Buffer.from(`<svg width="${W}" height="${H}">
     <defs>
-      <linearGradient id="fade" x1="0" y1="0" x2="0" y2="1">
-        <stop offset="0.5" stop-color="${theme === 'modry' ? '#0c1a26' : '#ffffff'}" stop-opacity="0"/>
-        <stop offset="1" stop-color="${theme === 'modry' ? '#0c1a26' : '#ffffff'}" stop-opacity="0.85"/>
+      <linearGradient id="fade-bottom" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0.45" stop-color="#0c1a26" stop-opacity="0"/>
+        <stop offset="0.7" stop-color="#0c1a26" stop-opacity="0.75"/>
+        <stop offset="1" stop-color="#0c1a26" stop-opacity="0.95"/>
       </linearGradient>
     </defs>
-    <rect x="60" y="130" width="${W - 120}" height="${H - 330}" rx="8" fill="none"/>
-    <rect x="0" y="${H - 400}" width="${W}" height="400" fill="url(#fade)"/>
+    <rect x="0" y="0" width="${W}" height="${H}" fill="url(#fade-bottom)"/>
     ${titleSvg}
   </svg>`);
 
-  const composites = [];
-  if (articleImg) composites.push({ input: articleImg, top: 150, left: 60 });
-  composites.push({ input: svgOverlay, top: 0, left: 0 });
+  // Layer order: 1) image, 2) gradient over image, 3) template on top, 4) title on top
+  const base = articleImg
+    ? sharp(articleImg).resize(W, H)
+    : sharp(templatePath);
 
-  return sharp(templatePath)
+  const composites = [
+    { input: svgOverlay, top: 0, left: 0 },        // gradient + title under template
+    { input: readFileSync(templatePath), top: 0, left: 0 }, // template graphics on top
+  ];
+
+  // Title needs to be on top of everything - render separately
+  const titleOnlySvg = Buffer.from(`<svg width="${W}" height="${H}">${titleSvg}</svg>`);
+  composites.push({ input: titleOnlySvg, top: 0, left: 0 });
+
+  return base
     .composite(composites)
     .png()
     .toBuffer();
 }
 
-// Generate slide 2: template + excerpt text
-async function generateSlide2(excerpt, theme) {
+// Parse **bold** markers into word-level metadata, then wrap lines preserving bold info
+// Returns array of { text, bold } word objects per line
+function wrapTextWithBold(text, maxChars) {
+  // First extract bold ranges by splitting on **
+  const segments = [];
+  const parts = text.split(/(\*\*)/g);
+  let inBold = false;
+  for (const part of parts) {
+    if (part === '**') { inBold = !inBold; continue; }
+    if (!part) continue;
+    const words = part.split(' ').filter(w => w);
+    for (const word of words) {
+      segments.push({ text: word, bold: inBold });
+    }
+  }
+
+  // Now wrap into lines
+  const lines = [];
+  let currentLine = [];
+  let currentLen = 0;
+  for (const seg of segments) {
+    const addLen = (currentLen > 0 ? 1 : 0) + seg.text.length;
+    if (currentLen + addLen > maxChars && currentLine.length > 0) {
+      lines.push([...currentLine]);
+      currentLine = [];
+      currentLen = 0;
+    }
+    currentLine.push(seg);
+    currentLen += (currentLen > 0 ? 1 : 0) + seg.text.length;
+  }
+  if (currentLine.length > 0) lines.push(currentLine);
+  return lines;
+}
+
+// Render a line of word segments (with bold metadata) as SVG text
+function renderRichLine(wordSegments, x, y, size, color) {
+  // Group consecutive words with same bold value into tspans
+  let spans = '';
+  let currentBold = null;
+  let currentWords = [];
+
+  function flush() {
+    if (currentWords.length === 0) return;
+    const text = escapeXml(currentWords.join(' '));
+    const weight = currentBold ? '800' : '500';
+    // Don't add space before punctuation
+    if (spans && !text.match(/^[.,;:!?]/)) spans += ' ';
+    spans += `<tspan font-weight="${weight}">${text}</tspan>`;
+    currentWords = [];
+  }
+
+  for (const seg of wordSegments) {
+    if (seg.bold !== currentBold) {
+      flush();
+      currentBold = seg.bold;
+    }
+    currentWords.push(seg.text);
+  }
+  flush();
+
+  return `<text x="${x}" y="${y}" font-family="Inter, -apple-system, sans-serif" font-size="${size}" font-weight="500" fill="${color}" text-anchor="middle">${spans}</text>`;
+}
+
+// Slide 2 (and optionally 3): template + excerpt text + category label
+// Returns array of page buffers (1 or 2 pages)
+async function generateArticleExcerptPages(excerpt, theme, category) {
   const templatePath = resolve(__dirname, `templates/${theme}/slide2.png`);
-  const color = theme === 'modry' ? '#ffffff' : '#0c1a26';
+  const textColor = theme === 'modry' ? '#ffffff' : '#0c1a26';
+  const catLabel = category || '';
 
-  const lines = wrapText(excerpt, 28);
-  const lineHeight = 40;
-  const startY = 200;
+  const fontSize = 54;
+  const lineHeight = 70;
+  const sentenceGap = 40;
+  const maxContentHeight = H - 350;
+  const contentStartY = 130;
 
-  const textSvg = lines.map((line, i) =>
-    `<text x="70" y="${startY + i * lineHeight + 34}" font-family="Inter, -apple-system, sans-serif" font-size="34" font-weight="500" fill="${color}">${escapeXml(line)}</text>`
-  ).join('\n');
+  // Split into sentences, wrap each with bold preservation - wider lines
+  const sentences = excerpt.split(/(?<=\.)\s+/).filter(s => s.trim());
 
-  const svgOverlay = Buffer.from(`<svg width="${W}" height="${H}">${textSvg}</svg>`);
+  // Each sentence group = array of lines, each line = array of {text, bold} segments
+  const sentenceGroups = sentences.map(s => wrapTextWithBold(s, 28));
+
+  // Category label - to the right of red bar (bar at x:85-99, y:89-174, center y:132)
+  const catSvg = catLabel
+    ? `<text x="115" y="132" font-family="Inter, -apple-system, sans-serif" font-size="26" font-weight="700" fill="#cb1e26" dominant-baseline="central">${escapeXml(catLabel)}</text>`
+    : '';
+
+  // Calculate total height of all content
+  const totalContentHeight = sentenceGroups.reduce((h, group, i) => {
+    return h + group.length * lineHeight + (i > 0 ? sentenceGap : 0);
+  }, 0);
+
+  // Always split evenly across 2 pages by sentences
+  const mid = Math.ceil(sentenceGroups.length / 2);
+  const page1Items = [];
+  const page2Items = [];
+  sentenceGroups.forEach((group, i) => {
+    const target = i < mid ? page1Items : page2Items;
+    if (target.length > 0) target.push(null);
+    group.forEach(line => target.push(line));
+  });
+  const pages = page2Items.length > 0 ? [page1Items, page2Items] : [page1Items];
+
+  // Render each page
+  const buffers = [];
+  for (const pageItems of pages) {
+    const totalHeight = pageItems.reduce((h, item) => h + (item === null ? sentenceGap : lineHeight), 0);
+    const startY = Math.max(contentStartY, (H - 200 - totalHeight) / 2);
+
+    let currentY = startY;
+    const textSvg = pageItems.map((item) => {
+      if (item === null) { currentY += sentenceGap; return ''; }
+      currentY += lineHeight;
+      return renderRichLine(item, W / 2, currentY, fontSize, textColor);
+    }).join('\n');
+
+    const svgOverlay = Buffer.from(`<svg width="${W}" height="${H}">${catSvg}${textSvg}</svg>`);
+    const buf = await sharp(templatePath)
+      .composite([{ input: svgOverlay, top: 0, left: 0 }])
+      .png()
+      .toBuffer();
+    buffers.push(buf);
+  }
+
+  return buffers;
+}
+
+// Slide 3: CTA template as-is
+function generateArticleSlide3(theme) {
+  const templatePath = resolve(__dirname, `templates/${theme}/slide3.png`);
+  return readFileSync(templatePath);
+}
+
+// ============================================================
+// GLOSSARY / "VIES CO JE" CAROUSEL
+// ============================================================
+
+// Slide 1: "Vieš, čo je to..." template + English term (big) + Slovak term (single line)
+async function generateGlossarySlide1(termEN, termSK) {
+  const templatePath = resolve(__dirname, 'templates/viescoaje/slide1.png');
+
+  // English term - always single line, auto-size to fit, thick underline behind
+  const maxTermWidth = W - 120;
+  // Scale font to fit on one line
+  let termFontSize = 110;
+  const approxCharWidth = () => termFontSize * 0.58;
+  while (termEN.length * approxCharWidth() > maxTermWidth && termFontSize > 50) {
+    termFontSize -= 4;
+  }
+
+  const enY = 720;
+  const textWidth = termEN.length * approxCharWidth();
+  const lineX = W / 2 - textWidth / 2 - 10;
+
+  const enText = `<text x="${W / 2}" y="${enY}" font-family="Inter, -apple-system, sans-serif" font-size="${termFontSize}" font-weight="800" fill="#ffffff" text-anchor="middle">${escapeXml(termEN)}</text>`;
+  const enSvg = enText;
+
+  // Slovak term - single line, below underline with spacing
+  const skStartY = enY + 65;
+  const skSvg = `<text x="${W / 2}" y="${skStartY}" font-family="Inter, -apple-system, sans-serif" font-size="28" font-weight="500" fill="#ffffff" opacity="0.6" text-anchor="middle">${escapeXml(termSK)}</text>`;
+
+  const svgOverlay = Buffer.from(`<svg width="${W}" height="${H}">${enSvg}${skSvg}</svg>`);
 
   return sharp(templatePath)
     .composite([{ input: svgOverlay, top: 0, left: 0 }])
@@ -115,13 +265,98 @@ async function generateSlide2(excerpt, theme) {
     .toBuffer();
 }
 
-// Slide 3 is just the template as-is
-async function generateSlide3(theme) {
-  const templatePath = resolve(__dirname, `templates/${theme}/slide3.png`);
+// Glossary explanation page(s) - term in red next to bar, "Vysvetlenie" heading with icon, centered text with bold
+async function generateGlossaryExplanationPages(termEN, explanation) {
+  const templatePath = resolve(__dirname, 'templates/viescoaje/slide2.png');
+
+  const fontSize = 50;
+  const lineHeight = 66;
+  const sentenceGap = 36;
+  const maxContentHeight = H - 380;
+
+  // Term name in red - to the right of red bar (bar at x:85-99, y:89-174, center y:132)
+  const termSvg = `<text x="115" y="132" font-family="Inter, -apple-system, sans-serif" font-size="26" font-weight="700" fill="#cb1e26" dominant-baseline="central">${escapeXml(termEN)}</text>`;
+
+  // "Vysvetlenie" is NOT a separate heading - it's the first line of text content
+  // Will be prepended as a bold larger line directly above the explanation text
+  const headingY = 0; // not used as separate element
+  const headingSvg = ''; // empty - handled inline below
+
+  // Parse explanation with bold support, split into sentences
+  const sentences = explanation.split(/(?<=\.)\s+/).filter(s => s.trim());
+  const sentenceGroups = sentences.map(s => wrapTextWithBold(s, 26));
+
+  // Calculate total height
+  const totalContentHeight = sentenceGroups.reduce((h, group, i) => {
+    return h + group.length * lineHeight + (i > 0 ? sentenceGap : 0);
+  }, 0);
+
+  // Always split evenly across 2 pages by sentences
+  const mid = Math.ceil(sentenceGroups.length / 2);
+  let pageGroups;
+  if (sentenceGroups.length >= 2) {
+    pageGroups = [sentenceGroups.slice(0, mid), sentenceGroups.slice(mid)];
+  } else {
+    pageGroups = [sentenceGroups];
+  }
+
+  const buffers = [];
+  for (let p = 0; p < pageGroups.length; p++) {
+    const groups = pageGroups[p];
+    const isFirstPage = p === 0;
+
+    // Build page items
+    const pageItems = [];
+    groups.forEach((group, i) => {
+      if (i > 0) pageItems.push(null);
+      group.forEach(line => pageItems.push(line));
+    });
+
+    const totalHeight = pageItems.reduce((h, item) => h + (item === null ? sentenceGap : lineHeight), 0);
+    const contentTop = 130;
+
+    // On first page, add "Vysvetlenie" as first bold line + gap
+    const vysvetlenieHeight = isFirstPage ? 70 + sentenceGap : 0;
+    const totalWithHeading = totalHeight + vysvetlenieHeight;
+    const startY = Math.max(contentTop, contentTop + (maxContentHeight - totalWithHeading) / 2);
+
+    let currentY = startY;
+    let vysvetlenieSvg = '';
+    if (isFirstPage) {
+      currentY += 70;
+      vysvetlenieSvg = `<text x="${W / 2}" y="${currentY}" font-family="Inter, -apple-system, sans-serif" font-size="56" font-weight="800" fill="#ffffff" text-anchor="middle">Vysvetlenie</text>`;
+      currentY += sentenceGap;
+    }
+
+    const textSvg = pageItems.map((item) => {
+      if (item === null) { currentY += sentenceGap; return ''; }
+      currentY += lineHeight;
+      return renderRichLine(item, W / 2, currentY, fontSize, '#ffffff');
+    }).join('\n');
+
+    const pageHeading = vysvetlenieSvg;
+    const svgOverlay = Buffer.from(`<svg width="${W}" height="${H}">${termSvg}${pageHeading}${textSvg}</svg>`);
+    const buf = await sharp(templatePath)
+      .composite([{ input: svgOverlay, top: 0, left: 0 }])
+      .png()
+      .toBuffer();
+    buffers.push(buf);
+  }
+
+  return buffers;
+}
+
+// Last slide: "Uloz si / posli kamosovi" template as-is
+function generateGlossaryLastSlide() {
+  const templatePath = resolve(__dirname, 'templates/viescoaje/slide3.png');
   return readFileSync(templatePath);
 }
 
-// Main export
+// ============================================================
+// PUBLIC EXPORTS
+// ============================================================
+
+// Generate article carousel (3 slides: image+title, excerpt, CTA)
 export async function generateCarousel(article, postIndex) {
   const theme = postIndex % 2 === 0 ? 'modry' : 'biely';
   const outputDir = resolve(__dirname, '../public/ig');
@@ -133,19 +368,65 @@ export async function generateCarousel(article, postIndex) {
   console.log(`  IG: Generating ${theme} carousel for: ${article.title.substring(0, 50)}...`);
 
   try {
-    const slide1 = await generateSlide1(article.image_url, article.title, theme);
-    const slide2 = await generateSlide2(article.excerpt || article.title, theme);
-    const slide3 = await generateSlide3(theme);
+    const slide1 = await generateArticleSlide1(article.image_url, article.title, theme);
+    const excerptPages = await generateArticleExcerptPages(article.excerpt || article.title, theme, article.category);
+    const lastSlide = generateArticleSlide3(theme);
 
-    const { writeFileSync } = await import('fs');
+    const slides = [];
     writeFileSync(`${prefix}-1.png`, slide1);
-    writeFileSync(`${prefix}-2.png`, slide2);
-    writeFileSync(`${prefix}-3.png`, slide3);
+    slides.push(`${prefix}-1.png`);
 
-    console.log(`  IG: Saved 3 slides to /public/ig/${slug}-*.png`);
-    return { theme, slides: [`${prefix}-1.png`, `${prefix}-2.png`, `${prefix}-3.png`] };
+    excerptPages.forEach((page, i) => {
+      const path = `${prefix}-${i + 2}.png`;
+      writeFileSync(path, page);
+      slides.push(path);
+    });
+
+    const lastPath = `${prefix}-${slides.length + 1}.png`;
+    writeFileSync(lastPath, lastSlide);
+    slides.push(lastPath);
+
+    console.log(`  IG: Saved ${slides.length} slides to /public/ig/${slug}-*.png`);
+    return { theme, slug, slides };
   } catch (err) {
     console.error(`  IG: Error generating carousel: ${err.message}`);
+    return null;
+  }
+}
+
+// Generate glossary carousel (slide1: term, slide2+: explanation, last: CTA)
+export async function generateGlossaryCarousel(term) {
+  const outputDir = resolve(__dirname, '../public/ig/glossary');
+  if (!existsSync(outputDir)) mkdirSync(outputDir, { recursive: true });
+
+  const slug = term.slug || term.en.toLowerCase().replace(/\s+/g, '-');
+  const prefix = `${outputDir}/${slug}`;
+
+  console.log(`  IG Glossary: Generating carousel for: ${term.en}...`);
+
+  try {
+    const slide1 = await generateGlossarySlide1(term.en, term.sk);
+    const explanationPages = await generateGlossaryExplanationPages(term.en, term.explanation);
+    const lastSlide = generateGlossaryLastSlide();
+
+    const slides = [];
+    writeFileSync(`${prefix}-1.png`, slide1);
+    slides.push(`${prefix}-1.png`);
+
+    explanationPages.forEach((page, i) => {
+      const path = `${prefix}-${i + 2}.png`;
+      writeFileSync(path, page);
+      slides.push(path);
+    });
+
+    const lastPath = `${prefix}-${slides.length + 1}.png`;
+    writeFileSync(lastPath, lastSlide);
+    slides.push(lastPath);
+
+    console.log(`  IG Glossary: Saved ${slides.length} slides to /public/ig/glossary/${slug}-*.png`);
+    return { slug, slides };
+  } catch (err) {
+    console.error(`  IG Glossary: Error generating carousel: ${err.message}`);
     return null;
   }
 }

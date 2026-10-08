@@ -160,21 +160,24 @@ function extractTextFromHtml(html) {
 }
 
 async function translateToSlovak(title, excerpt, content) {
-  const prompt = `Preloz nasledujuci clanok z anglictiny do slovenciny. Nepreloz len doslovne, ale prepis ho tak, aby to znelo ako profesionalny slovensky technologicky clanok. Zachovaj odborne terminy kde je to potrebne (napr. nazvy spolocnosti, produktov, technologii). Pouzivaj spravnu slovensku gramatiku a diakritiku.
+  const prompt = `Preloz nasledujuci clanok z anglictiny do slovenciny. Nepreloz len doslovne, ale prepis ho tak, aby to znelo ako profesionalny slovensky technologicky clanok.
 
 KRITICKE PRAVIDLA:
+- NADPIS: Musi byt KRATKY a UDERY - maximalne 8-10 slov. Ziadne zbytocne slova. Musi sa zmestit na Instagram post (max ~60 znakov). Priklad: "Boston Dynamics ukazal novu humanoidnu ruku" alebo "Waymo spusta robotaxi v Tokiu".
+- EXCERPT: 3-4 vety, do 400 znakov. Zhrnuje podstatu clanku zaujimavo a informativne. Kazda veta musi koncit bodkou. Dolezite slova a nazvy (firmy, roboty, technologie, cisla) oznac **boldom** pomocou **dvojitych hviezdiciek**. Priklad: "**Boston Dynamics** odhalila novu **styrprstovu ruku** pre humanoida **Atlas**."
+- NIKDY NEPREKLADAJ: nazvy firiem (Boston Dynamics, Waymo, Tesla, Unitree, NVIDIA...), nazvy robotov (Atlas, Spot, Optimus, Digit...), nazvy produktov a technologii (ROS, LiDAR, GPT...), mena ludi (Marc Raibert, Elon Musk...). Tieto nechaj v povodnom anglickom tvare.
 - Nikdy nepouzivaj dlhe pomlcky (em-dash — ani en-dash –). Vzdy pouzivaj iba kratku pomlcku - (hyphen-minus).
-- VZDY SKONTROLUJ SPRAVNE SKLONOVANIE. Prídavné mená MUSIA súhlasiť s podstatným menom v rode, čísle a páde. Príklady správneho skloňovania:
-  * "robotická ruka" (ženský rod) - NIE "robotický ruka"
-  * "čínska robotická ruka" - NIE "čínsky robotický ruka"
-  * "autonómne vozidlo" (stredný rod) - NIE "autonómny vozidlo"
-  * "priemyselný robot" (mužský rod) - správne
-  * "nová technológia" (ženský rod) - NIE "nový technológia"
-- Píš profesionálnou, gramaticky bezchybnou slovenčinou. Každú vetu skontroluj, či dáva zmysel.
-- Nadpis musí byť gramaticky perfektný - je to prvé čo čitateľ vidí.
+- VZDY SKONTROLUJ SPRAVNE SKLONOVANIE. Pridavne mena MUSIA suhlasit s podstatnym menom v rode, cisle a pade. Priklady spravneho sklonovania:
+  * "roboticka ruka" (zensky rod) - NIE "roboticky ruka"
+  * "cinska roboticka ruka" - NIE "cinsky roboticky ruka"
+  * "autonomne vozidlo" (stredny rod) - NIE "autonomny vozidlo"
+  * "priemyselny robot" (muzsky rod) - spravne
+  * "nova technologia" (zensky rod) - NIE "novy technologia"
+- Pis profesionalnou, gramaticky bezchybnou slovencinou. Kazdu vetu skontroluj, ci dava zmysel.
+- Nadpis musi byt gramaticky perfektny - je to prve co citatel vidi.
 
 Vrat odpoved v tomto JSON formate (bez markdown blokov):
-{"title": "prelozeny nadpis", "excerpt": "kratky popis 1-2 vety", "content": "plny preklad clanku"}
+{"title": "prelozeny nadpis max 8-10 slov", "excerpt": "3-4 vety zhrnutie do 400 znakov", "content": "plny preklad clanku"}
 
 NADPIS:
 ${title}
@@ -189,7 +192,7 @@ ${content}`;
     model: 'gpt-4o-mini',
     messages: [{ role: 'user', content: prompt }],
     temperature: 0.3,
-    max_tokens: 4000,
+    max_tokens: 8000,
   });
 
   const text = response.choices[0].message.content.trim();
@@ -312,10 +315,13 @@ async function main() {
       'Interesting Engineering',
       ARTICLES_PER_SOURCE * 3
     );
-    // Only take AI & Robotics articles (strict filter)
+    // Only take robotics articles (strict filter - must contain "robot" in category or title)
     const filtered = ieItems.filter(item => {
       const cats = item.categories.map(c => c.toLowerCase()).join(' ');
-      return cats.includes('ai and robotics') || cats.includes('robotics');
+      const titleLow = item.title.toLowerCase();
+      const hasRobotCat = cats.includes('robotics') || cats.includes('robot');
+      const hasRobotTitle = titleLow.includes('robot') || titleLow.includes('humanoid') || titleLow.includes('drone') || titleLow.includes('autonomous');
+      return hasRobotCat || hasRobotTitle;
     });
     allItems.push(...filtered);
   } catch (err) {
@@ -386,7 +392,6 @@ async function main() {
       source_name: item.sourceName,
       original_author: item.author,
       original_date: item.pubDate,
-      subcategory,
       is_featured: inserted < 3,
       is_published: true,
       published_at: new Date(item.pubDate).toISOString(),
@@ -396,7 +401,7 @@ async function main() {
       console.error(`  DB error: ${error.message}`);
     } else {
       console.log(`  OK: ${translated.title.substring(0, 60)}...`);
-      insertedArticles.push(translated.title);
+      insertedArticles.push({ title: translated.title, slug, imageUrl, catSlug });
 
       // Generate Instagram carousel
       try {
@@ -414,18 +419,66 @@ async function main() {
     }
   }
 
-  // Send Slack notification
+  // Send Slack notification with article previews + IG buttons
   const slackWebhook = process.env.SLACK_WEBHOOK_URL;
+  const siteUrl = process.env.SITE_URL || 'https://robotika24.vercel.app';
+  const igSecret = process.env.IG_PUBLISH_SECRET || 'r24igpub';
+
   if (slackWebhook && insertedArticles.length > 0) {
-    const articleList = insertedArticles.map((t, i) => `${i + 1}. ${t}`).join('\n');
-    const slackMsg = {
-      text: `*robotika24 - Nove clanky (${new Date().toLocaleDateString('sk-SK')})*\n\nPridanych: ${inserted} clankov\n\n${articleList}\n\nhttps://robotika24.vercel.app`,
-    };
+    const blocks = [
+      {
+        type: 'header',
+        text: { type: 'plain_text', text: `robotika24 - ${inserted} nových článkov`, emoji: true },
+      },
+      {
+        type: 'section',
+        text: { type: 'mrkdwn', text: `*${new Date().toLocaleDateString('sk-SK')}*  |  <${siteUrl}|Otvoriť web>` },
+      },
+      { type: 'divider' },
+    ];
+
+    for (const art of insertedArticles) {
+      const articleUrl = `${siteUrl}/clanok/${art.slug}`;
+      const igUrl = `${siteUrl}/api/ig-publish?slug=${art.slug}&token=${igSecret}`;
+
+      blocks.push({
+        type: 'section',
+        text: {
+          type: 'mrkdwn',
+          text: `*<${articleUrl}|${art.title}>*`,
+        },
+        accessory: art.imageUrl ? {
+          type: 'image',
+          image_url: art.imageUrl,
+          alt_text: art.title,
+        } : undefined,
+      });
+
+      blocks.push({
+        type: 'actions',
+        elements: [
+          {
+            type: 'button',
+            text: { type: 'plain_text', text: '📸 Pridať na Instagram', emoji: true },
+            url: igUrl,
+            style: 'primary',
+          },
+          {
+            type: 'button',
+            text: { type: 'plain_text', text: '🔗 Otvoriť článok', emoji: true },
+            url: articleUrl,
+          },
+        ],
+      });
+
+      blocks.push({ type: 'divider' });
+    }
+
     try {
       await fetch(slackWebhook, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(slackMsg),
+        body: JSON.stringify({ blocks }),
       });
       console.log('Slack notification sent!');
     } catch (err) {

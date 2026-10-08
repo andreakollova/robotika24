@@ -73,6 +73,16 @@ export async function generateMetadata({
   };
 }
 
+function renderBold(text: string) {
+  const parts = text.split(/(\*\*[^*]+\*\*)/g);
+  return parts.map((part, i) => {
+    if (part.startsWith('**') && part.endsWith('**')) {
+      return <strong key={i}>{part.slice(2, -2)}</strong>;
+    }
+    return part;
+  });
+}
+
 export default async function ArticlePage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
 
@@ -213,12 +223,12 @@ export default async function ArticlePage({ params }: { params: Promise<{ slug: 
                   return (
                     <p key={i} className="pl-4 mb-1">
                       <span className="text-[#cb1e26] mr-2">-</span>
-                      {line.replace('- ', '')}
+                      {renderBold(line.replace('- ', ''))}
                     </p>
                   );
                 }
                 if (line.trim()) {
-                  return <p key={i} className="mb-4">{line}</p>;
+                  return <p key={i} className="mb-4">{renderBold(line)}</p>;
                 }
                 return null;
               })}

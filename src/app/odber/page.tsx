@@ -41,10 +41,9 @@ export default function OdberPage() {
       </div>
 
       {status === 'success' ? (
-        <div style={{ textAlign: 'center', padding: '40px 20px', backgroundColor: '#f0fdf4', borderRadius: 8, border: '1px solid #bbf7d0' }}>
-          <div style={{ fontSize: 36, marginBottom: 12 }}>✓</div>
-          <h2 style={{ fontSize: 20, fontWeight: 700, color: '#166534', marginBottom: 8 }}>Ďakujeme!</h2>
-          <p style={{ color: '#15803d', fontSize: 14 }}>{message}</p>
+        <div style={{ textAlign: 'center', padding: '40px 20px' }}>
+          <h2 style={{ fontSize: 20, fontWeight: 700, color: '#16a34a', marginBottom: 8 }}>Ďakujeme!</h2>
+          <p style={{ color: '#16a34a', fontSize: 14 }}>{message}</p>
         </div>
       ) : (
         <form onSubmit={handleSubmit} style={{ display: 'flex', gap: 10, flexWrap: 'wrap' }}>

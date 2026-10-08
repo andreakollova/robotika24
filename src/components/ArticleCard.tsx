@@ -42,7 +42,7 @@ export default function ArticleCard({
             <h2 className="text-xl md:text-2xl font-bold text-white leading-snug mb-2">
               {article.title}
             </h2>
-            <p className="text-gray-300 text-sm line-clamp-2 hidden md:block">{article.excerpt}</p>
+            <p className="text-gray-300 text-sm line-clamp-2 hidden md:block">{article.excerpt?.replace(/\*\*/g, '')}</p>
             <div className="flex items-center gap-2 mt-2 text-gray-400 text-xs">
               <span className="font-medium">{article.author}</span>
               <span>|</span>

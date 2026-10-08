@@ -165,7 +165,8 @@ async function translateToSlovak(title, excerpt, content) {
 KRITICKE PRAVIDLA:
 - NADPIS: Musi byt KRATKY a UDERY - maximalne 8-10 slov. Ziadne zbytocne slova. Musi sa zmestit na Instagram post (max ~60 znakov). Priklad: "Boston Dynamics ukazal novu humanoidnu ruku" alebo "Waymo spusta robotaxi v Tokiu".
 - EXCERPT: 3-4 vety, do 400 znakov. Zhrnuje podstatu clanku zaujimavo a informativne. Kazda veta musi koncit bodkou. Dolezite slova a nazvy (firmy, roboty, technologie, cisla) oznac **boldom** pomocou **dvojitych hviezdiciek**. Priklad: "**Boston Dynamics** odhalila novu **styrprstovu ruku** pre humanoida **Atlas**."
-- NIKDY NEPREKLADAJ: nazvy firiem (Boston Dynamics, Waymo, Tesla, Unitree, NVIDIA...), nazvy robotov (Atlas, Spot, Optimus, Digit...), nazvy produktov a technologii (ROS, LiDAR, GPT...), mena ludi (Marc Raibert, Elon Musk...). Tieto nechaj v povodnom anglickom tvare.
+- NIKDY NEPREKLADAJ mena ludi (Marc Raibert, Elon Musk...), nazvy firiem (Boston Dynamics, Waymo, Tesla, Unitree, NVIDIA...), nazvy produktov a technologii (ROS, LiDAR, GPT...). Tieto nechaj v povodnom anglickom tvare.
+- NAZVY ROBOTOV MOZES SKLONOVAT po slovensky: "robot Atlas" -> "robota Atlasa", "humanoid Digit" -> "humanoida Digita", "robot Spot" -> "robota Spota". Pouzivaj spravne slovenske sklonovanie vlastnych mien robotov ako keby to boli muzske mena.
 - Nikdy nepouzivaj dlhe pomlcky (em-dash — ani en-dash –). Vzdy pouzivaj iba kratku pomlcku - (hyphen-minus).
 - VZDY SKONTROLUJ SPRAVNE SKLONOVANIE. Pridavne mena MUSIA suhlasit s podstatnym menom v rode, cisle a pade. Priklady spravneho sklonovania:
   * "roboticka ruka" (zensky rod) - NIE "roboticky ruka"

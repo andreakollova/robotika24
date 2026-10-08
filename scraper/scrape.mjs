@@ -4,7 +4,6 @@ import OpenAI from 'openai';
 import { readFileSync } from 'fs';
 import { resolve, dirname } from 'path';
 import { fileURLToPath } from 'url';
-import { generateCarousel } from './instagram.mjs';
 
 // Load env from .env.local
 const __dirname = dirname(fileURLToPath(import.meta.url));
@@ -424,19 +423,6 @@ async function main() {
     } else {
       console.log(`  OK: ${translated.title.substring(0, 60)}...`);
       insertedArticles.push({ title: translated.title, slug, imageUrl, catSlug });
-
-      // Generate Instagram carousel
-      try {
-        await generateCarousel({
-          title: translated.title,
-          excerpt: translated.excerpt,
-          image_url: imageUrl,
-          slug,
-        }, inserted);
-      } catch (igErr) {
-        console.error(`  IG error: ${igErr.message}`);
-      }
-
       inserted++;
     }
   }

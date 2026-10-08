@@ -157,13 +157,13 @@ function OrderModal({ product, onClose }: { product: typeof products[0]; onClose
   );
 }
 
-export default function EshopPage() {
+export default function E-shopPage() {
   const [orderProduct, setOrderProduct] = useState<typeof products[0] | null>(null);
 
   return (
     <div style={{ maxWidth: 1280, margin: '0 auto', padding: '32px 20px 80px' }}>
       <div style={{ borderBottom: '2px solid #cb1e26', marginBottom: 32 }}>
-        <h1 style={{ fontSize: 24, fontWeight: 700, color: '#0c1a26', paddingBottom: 8 }}>Eshop</h1>
+        <h1 style={{ fontSize: 24, fontWeight: 700, color: '#0c1a26', paddingBottom: 8 }}>E-shop</h1>
       </div>
 
       {products.map((p) => (

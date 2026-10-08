@@ -221,18 +221,15 @@ async function generateArticleExcerptPages(excerpt, theme, category) {
     return h + group.length * lineHeight + (i > 0 ? sentenceGap : 0);
   }, 0);
 
-  // Split across pages - 2 pages for short texts, 3 for longer
+  // Always split across 3 pages
   const totalSentences = sentenceGroups.length;
   const pageGroupsList = [];
-  if (totalSentences >= 6) {
-    // 3 pages for 6+ sentences
+  if (totalSentences >= 3) {
     const t1 = Math.ceil(totalSentences / 3);
     const t2 = Math.ceil((totalSentences * 2) / 3);
     pageGroupsList.push(sentenceGroups.slice(0, t1), sentenceGroups.slice(t1, t2), sentenceGroups.slice(t2));
   } else if (totalSentences >= 2) {
-    // 2 pages for 2-5 sentences
-    const mid = Math.ceil(totalSentences / 2);
-    pageGroupsList.push(sentenceGroups.slice(0, mid), sentenceGroups.slice(mid));
+    pageGroupsList.push(sentenceGroups.slice(0, 1), sentenceGroups.slice(1));
   } else {
     pageGroupsList.push(sentenceGroups);
   }

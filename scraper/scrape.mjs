@@ -163,7 +163,7 @@ async function translateToSlovak(title, excerpt, content) {
 
 KRITICKE PRAVIDLA:
 - NADPIS: Musi byt KRATKY a UDERY - maximalne 8-10 slov. Ziadne zbytocne slova. Musi sa zmestit na Instagram post (max ~60 znakov). Priklad: "Boston Dynamics ukazal novu humanoidnu ruku" alebo "Waymo spusta robotaxi v Tokiu".
-- EXCERPT: 3-4 vety, do 400 znakov. Zhrnuje podstatu clanku zaujimavo a informativne. Kazda veta musi koncit bodkou. Dolezite slova a nazvy (firmy, roboty, technologie, cisla) oznac **boldom** pomocou **dvojitych hviezdiciek**. Priklad: "**Boston Dynamics** odhalila novu **styrprstovu ruku** pre humanoida **Atlas**."
+- EXCERPT: 6-8 viet, do 800 znakov. Zhrnuje podstatu clanku zaujimavo a informativne. Kazda veta musi koncit bodkou. Dolezite slova a nazvy (firmy, roboty, technologie, cisla) VZDY oznac **boldom** pomocou **dvojitych hviezdiciek**. Priklad: "**Boston Dynamics** odhalila novu **styrprstovu ruku** pre humanoida **Atlas**. Robot dokaze uniest az **25 kilogramov**."
 - NIKDY NEPREKLADAJ mena ludi (Marc Raibert, Elon Musk...), nazvy firiem (Boston Dynamics, Waymo, Tesla, Unitree, NVIDIA...), nazvy produktov a technologii (ROS, LiDAR, GPT...). Tieto nechaj v povodnom anglickom tvare.
 - NAZVY ROBOTOV MOZES SKLONOVAT po slovensky: "robot Atlas" -> "robota Atlasa", "humanoid Digit" -> "humanoida Digita", "robot Spot" -> "robota Spota". Pouzivaj spravne slovenske sklonovanie vlastnych mien robotov ako keby to boli muzske mena.
 - Nikdy nepouzivaj dlhe pomlcky (em-dash — ani en-dash –). Vzdy pouzivaj iba kratku pomlcku - (hyphen-minus).
@@ -183,7 +183,7 @@ SEO PRAVIDLA (VELMI DOLEZITE):
 - Prirod slovensky text, ziadne keyword stuffing. Text musi zniet prirodzene.
 
 Vrat odpoved v tomto JSON formate (bez markdown blokov):
-{"title": "prelozeny SEO nadpis max 8-10 slov s klucovym slovom na zaciatku", "excerpt": "3-4 vety SEO zhrnutie do 400 znakov s klucovymi slovami", "content": "plny SEO optimalizovany preklad clanku s ## nadpismi"}
+{"title": "prelozeny SEO nadpis max 8-10 slov s klucovym slovom na zaciatku", "excerpt": "6-8 viet SEO zhrnutie do 800 znakov s **boldmi** na klucovych slovach", "content": "plny SEO optimalizovany preklad clanku s ## nadpismi"}
 
 NADPIS:
 ${title}

@@ -1,8 +1,8 @@
 const models = [
-  { category: 'Inteligencia', name: 'Claude Opus 4.6', domain: 'anthropic.com' },
-  { category: 'Rýchlosť', name: 'Gemini 2.5 Flash', domain: 'deepmind.google' },
-  { category: 'Latencia', name: 'Gemini Flash-Lite', domain: 'deepmind.google' },
-  { category: 'Najlacnejší', name: 'GPT-6 Luna', domain: 'openai.com' },
+  { category: 'Inteligencia', name: 'Claude Opus 4.6', logo: 'https://logo.clearbit.com/anthropic.com' },
+  { category: 'Rýchlosť', name: 'Gemini 2.5 Flash', logo: 'https://logo.clearbit.com/deepmind.google' },
+  { category: 'Latencia', name: 'Gemini Flash-Lite', logo: 'https://logo.clearbit.com/deepmind.google' },
+  { category: 'Najlacnejší', name: 'GPT-6 Luna', logo: 'https://logo.clearbit.com/openai.com' },
 ];
 
 export default function AIModelsWidget() {
@@ -12,21 +12,19 @@ export default function AIModelsWidget() {
         <span style={{ fontSize: 10, fontWeight: 700, color: '#cb1e26', textTransform: 'uppercase', letterSpacing: '0.08em' }}>AI Modely</span>
         <p style={{ fontSize: 13, color: '#374151', margin: '6px 0 0', lineHeight: 1.4 }}>Aktuálne najlepšie modely v daných kategóriách</p>
       </div>
-      <table style={{ width: '100%', borderCollapse: 'collapse' }}>
-        <tbody>
-          {models.map((m) => (
-            <tr key={m.category} style={{ borderBottom: '1px solid #f3f4f6' }}>
-              <td style={{ padding: '10px 14px', width: 40 }}>
-                <img src={`https://www.google.com/s2/favicons?domain=${m.domain}&sz=128`} alt="" style={{ width: 28, height: 28, borderRadius: 6, display: 'block' }} />
-              </td>
-              <td style={{ padding: '10px 0' }}>
-                <div style={{ fontSize: 14, fontWeight: 600, color: '#0c1a26' }}>{m.name}</div>
-              </td>
-              <td style={{ padding: '10px 14px', fontSize: 11, color: '#9ca3af', textAlign: 'right', whiteSpace: 'nowrap' }}>{m.category}</td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
+      <div>
+        {models.map((m) => (
+          <div key={m.category} style={{ display: 'flex', alignItems: 'center', padding: '10px 14px', borderBottom: '1px solid #f3f4f6', gap: 12 }}>
+            <div style={{ width: 32, height: 32, borderRadius: 8, overflow: 'hidden', flexShrink: 0, backgroundColor: '#f9fafb', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+              <img src={m.logo} alt={m.name} style={{ width: 32, height: 32, objectFit: 'contain' }} />
+            </div>
+            <div style={{ flex: 1, minWidth: 0 }}>
+              <div style={{ fontSize: 14, fontWeight: 600, color: '#0c1a26' }}>{m.name}</div>
+            </div>
+            <span style={{ fontSize: 11, color: '#9ca3af', whiteSpace: 'nowrap' }}>{m.category}</span>
+          </div>
+        ))}
+      </div>
       <a href="https://artificialanalysis.ai/leaderboards/models" target="_blank" rel="noopener noreferrer"
         style={{ display: 'block', padding: '8px', fontSize: 10, color: '#9ca3af', textDecoration: 'none', textAlign: 'center' }}>
         artificialanalysis.ai

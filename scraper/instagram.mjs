@@ -353,6 +353,122 @@ function generateGlossaryLastSlide() {
 }
 
 // ============================================================
+// COMPANY / "POZNAS TUTO FIRMU?" CAROUSEL
+// ============================================================
+
+// Slide 1: "Poznas tuto firmu?" template + company logo centered
+async function generateCompanySlide1(logoPath) {
+  const templatePath = resolve(__dirname, 'templates/poznasfirmu/slide1.png');
+
+  const logoBuf = readFileSync(logoPath);
+  const logoResized = await sharp(logoBuf)
+    .resize(680, 340, { fit: 'contain', background: { r: 0, g: 0, b: 0, alpha: 0 } })
+    .toBuffer();
+
+  const logoX = Math.round((W - 680) / 2);
+  const logoY = 680;
+
+  return sharp(templatePath)
+    .composite([{ input: logoResized, top: logoY, left: logoX }])
+    .png()
+    .toBuffer();
+}
+
+// Slide 2+: company description pages (same layout as article excerpt - biely template)
+async function generateCompanyDescPages(companyName, description) {
+  const templatePath = resolve(__dirname, 'templates/poznasfirmu/slide2.png');
+  const textColor = '#0c1a26';
+
+  const fontSize = 46;
+  const lineHeight = 60;
+  const sentenceGap = 34;
+  const maxContentHeight = H - 380;
+
+  // Company name next to red bar
+  const nameSvg = `<text x="70" y="72" font-family="Inter, -apple-system, sans-serif" font-size="26" font-weight="700" fill="#cb1e26" dominant-baseline="central">${escapeXml(companyName)}</text>`;
+
+  const sentences = description.split(/(?<=\.)\s+/).filter(s => s.trim());
+  const sentenceGroups = sentences.map(s => wrapTextWithBold(s, 26));
+
+  // Always split evenly across 2 pages
+  const mid = Math.ceil(sentenceGroups.length / 2);
+  let pageGroups;
+  if (sentenceGroups.length >= 2) {
+    pageGroups = [sentenceGroups.slice(0, mid), sentenceGroups.slice(mid)];
+  } else {
+    pageGroups = [sentenceGroups];
+  }
+
+  const buffers = [];
+  for (const groups of pageGroups) {
+    const pageItems = [];
+    groups.forEach((group, i) => {
+      if (i > 0) pageItems.push(null);
+      group.forEach(line => pageItems.push(line));
+    });
+
+    const totalHeight = pageItems.reduce((h, item) => h + (item === null ? sentenceGap : lineHeight), 0);
+    const contentTop = 130;
+    const startY = Math.max(contentTop, contentTop + (maxContentHeight - totalHeight) / 2);
+
+    let currentY = startY;
+    const textSvg = pageItems.map((item) => {
+      if (item === null) { currentY += sentenceGap; return ''; }
+      currentY += lineHeight;
+      return renderRichLine(item, W / 2, currentY, fontSize, textColor);
+    }).join('\n');
+
+    const svgOverlay = Buffer.from(`<svg width="${W}" height="${H}">${nameSvg}${textSvg}</svg>`);
+    const buf = await sharp(templatePath)
+      .composite([{ input: svgOverlay, top: 0, left: 0 }])
+      .png()
+      .toBuffer();
+    buffers.push(buf);
+  }
+
+  return buffers;
+}
+
+// Generate company carousel
+export async function generateCompanyCarousel(company) {
+  const outputDir = resolve(__dirname, '../public/ig/company');
+  if (!existsSync(outputDir)) mkdirSync(outputDir, { recursive: true });
+
+  const slug = company.slug || company.name.toLowerCase().replace(/\s+/g, '-');
+  const prefix = `${outputDir}/${slug}`;
+  const logoPath = resolve(__dirname, `templates/poznasfirmu/loga/${company.logo}`);
+  const lastSlidePath = resolve(__dirname, 'templates/poznasfirmu/slide3.png');
+
+  console.log(`  IG Company: Generating carousel for: ${company.name}...`);
+
+  try {
+    const slide1 = await generateCompanySlide1(logoPath);
+    const descPages = await generateCompanyDescPages(company.name, company.description);
+    const lastSlide = readFileSync(lastSlidePath);
+
+    const slides = [];
+    writeFileSync(`${prefix}-1.png`, slide1);
+    slides.push(`${prefix}-1.png`);
+
+    descPages.forEach((page, i) => {
+      const path = `${prefix}-${i + 2}.png`;
+      writeFileSync(path, page);
+      slides.push(path);
+    });
+
+    const lastPath = `${prefix}-${slides.length + 1}.png`;
+    writeFileSync(lastPath, lastSlide);
+    slides.push(lastPath);
+
+    console.log(`  IG Company: Saved ${slides.length} slides to /public/ig/company/${slug}-*.png`);
+    return { slug, slides };
+  } catch (err) {
+    console.error(`  IG Company: Error: ${err.message}`);
+    return null;
+  }
+}
+
+// ============================================================
 // PUBLIC EXPORTS
 // ============================================================
 

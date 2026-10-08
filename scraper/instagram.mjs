@@ -597,6 +597,58 @@ export async function generateCompanyCarousel(company) {
 }
 
 // ============================================================
+// STORY (1080x1920) - article image + template overlay + title lower third
+// ============================================================
+
+const SW = 1080;
+const SH = 1920;
+
+export async function generateStory(articleImageUrl, title) {
+  const templatePath = resolve(__dirname, 'templates/story/template.png');
+
+  // Download article image as full background
+  let bgBuf;
+  try {
+    const imgRes = await fetch(articleImageUrl, {
+      headers: { 'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36' },
+    });
+    if (imgRes.ok && imgRes.headers.get('content-type')?.startsWith('image')) {
+      const raw = Buffer.from(await imgRes.arrayBuffer());
+      bgBuf = await sharp(raw).resize(SW, SH, { fit: 'cover', position: 'center' }).toBuffer();
+    }
+  } catch {}
+
+  // If no image, use solid dark bg
+  if (!bgBuf) {
+    bgBuf = await sharp({ create: { width: SW, height: SH, channels: 4, background: { r: 12, g: 26, b: 38, alpha: 1 } } }).png().toBuffer();
+  }
+
+  // Template overlay (resized to 1080x1920)
+  const templateBuf = await sharp(templatePath).resize(SW, SH, { fit: 'cover' }).toBuffer();
+
+  // Title - bottom left, below template graphic
+  const titleLines = wrapText(title, 28);
+  const lineHeight = 58;
+  const titleBlockHeight = titleLines.length * lineHeight;
+  const titleStartY = SH - 90 - titleBlockHeight;
+
+  const titleSvg = titleLines.map((line, i) =>
+    `<text x="80" y="${titleStartY + i * lineHeight + 54}" font-family="Inter, -apple-system, sans-serif" font-size="52" font-weight="800" fill="#ffffff">${escapeXml(line)}</text>`
+  ).join('\n');
+
+  const overlaySvg = Buffer.from(`<svg width="${SW}" height="${SH}">${titleSvg}</svg>`);
+
+  // Layer: 1) article image, 2) template, 3) gradient+title on top
+  return sharp(bgBuf)
+    .composite([
+      { input: templateBuf, top: 0, left: 0 },
+      { input: overlaySvg, top: 0, left: 0 },
+    ])
+    .png()
+    .toBuffer();
+}
+
+// ============================================================
 // PUBLIC EXPORTS
 // ============================================================
 
@@ -630,8 +682,19 @@ export async function generateCarousel(article, postIndex) {
     writeFileSync(lastPath, lastSlide);
     slides.push(lastPath);
 
+    // Generate story
+    let storyPath = null;
+    try {
+      const storyBuf = await generateStory(article.image_url, article.title);
+      storyPath = `${prefix}-story.png`;
+      writeFileSync(storyPath, storyBuf);
+      console.log(`  IG: Story saved to /public/ig/${slug}-story.png`);
+    } catch (storyErr) {
+      console.error(`  IG: Story error: ${storyErr.message}`);
+    }
+
     console.log(`  IG: Saved ${slides.length} slides to /public/ig/${slug}-*.png`);
-    return { theme, slug, slides };
+    return { theme, slug, slides, storyPath };
   } catch (err) {
     console.error(`  IG: Error generating carousel: ${err.message}`);
     return null;

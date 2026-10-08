@@ -106,8 +106,40 @@ export async function GET(req: NextRequest) {
     // Save IG post ID to article
     await supabase.from('articles').update({ ig_post_id: pubData.id }).eq('slug', slug);
 
+    // Publish story automatically
+    let storyMsg = '';
+    try {
+      const { generateStory } = await import('../../../../scraper/instagram.mjs' as string);
+      const storyBuf = await generateStory(article.image_url, article.title);
+      const storyName = `story-${article.slug}-${Date.now()}.png`;
+      await supabase.storage.from('ig-assets').upload(storyName, storyBuf, { contentType: 'image/png', upsert: true });
+      const { data: storyUrlData } = supabase.storage.from('ig-assets').getPublicUrl(storyName);
+
+      // Create story container
+      const storyContRes = await fetch(`https://graph.facebook.com/v21.0/${IG_ACCOUNT}/media`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ image_url: storyUrlData.publicUrl, media_type: 'STORIES', access_token: IG_TOKEN }),
+      });
+      const storyContData = await storyContRes.json();
+      if (storyContData.error) throw new Error(storyContData.error.message);
+
+      await new Promise(r => setTimeout(r, 5000));
+
+      const storyPubRes = await fetch(`https://graph.facebook.com/v21.0/${IG_ACCOUNT}/media_publish`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ creation_id: storyContData.id, access_token: IG_TOKEN }),
+      });
+      const storyPubData = await storyPubRes.json();
+      if (storyPubData.error) throw new Error(storyPubData.error.message);
+      storyMsg = '<br>Story tiež publikované!';
+    } catch (storyErr: any) {
+      storyMsg = `<br>Story chyba: ${storyErr.message}`;
+    }
+
     return new NextResponse(
-      html(`Článok "${article.title}" bol úspešne publikovaný na Instagram! 🎉<br>Post ID: ${pubData.id}`, true),
+      html(`Článok "${article.title}" bol úspešne publikovaný na Instagram! 🎉${storyMsg}<br>Post ID: ${pubData.id}`, true),
       { headers: { 'Content-Type': 'text/html' } }
     );
   } catch (err: any) {

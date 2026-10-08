@@ -174,6 +174,7 @@ KRITICKE PRAVIDLA:
   * "priemyselny robot" (muzsky rod) - spravne
   * "nova technologia" (zensky rod) - NIE "novy technologia"
 - Pis profesionalnou, gramaticky bezchybnou slovencinou. Kazdu vetu skontroluj, ci dava zmysel.
+- DIAKRITIKA JE POVINNÁ v KAŽDOM slove aj v excerpte aj v obsahu. Nikdy nepíš "krajin" ale "krajín", nie "spolocnost" ale "spoločnosť", nie "technologii" ale "technológií". Skontroluj KAŽDÉ slovo!
 - Nadpis musi byt gramaticky perfektny - je to prve co citatel vidi.
 
 SEO PRAVIDLA (VELMI DOLEZITE):

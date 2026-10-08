@@ -17,6 +17,15 @@ try {
 const W = 1086;
 const H = 1448;
 
+// On Vercel serverless, use /tmp/ for output; locally use public/ig
+function getOutputDir(subdir = '') {
+  const isVercel = process.env.VERCEL || process.env.AWS_LAMBDA_FUNCTION_NAME;
+  const base = isVercel ? '/tmp/ig' : resolve(__dirname, '../public/ig');
+  const dir = subdir ? `${base}/${subdir}` : base;
+  if (!existsSync(dir)) mkdirSync(dir, { recursive: true });
+  return dir;
+}
+
 function escapeXml(str) {
   return str.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&apos;');
 }
@@ -538,8 +547,7 @@ async function generateCompanyDescPages(companyName, description, photoPath) {
 
 // Generate company carousel
 export async function generateCompanyCarousel(company) {
-  const outputDir = resolve(__dirname, '../public/ig/company');
-  if (!existsSync(outputDir)) mkdirSync(outputDir, { recursive: true });
+  const outputDir = getOutputDir('company');
 
   const slug = company.slug || company.name.toLowerCase().replace(/\s+/g, '-');
   const prefix = `${outputDir}/${slug}`;
@@ -655,8 +663,7 @@ export async function generateStory(articleImageUrl, title) {
 // Generate article carousel (3 slides: image+title, excerpt, CTA)
 export async function generateCarousel(article, postIndex) {
   const theme = postIndex % 2 === 0 ? 'modry' : 'biely';
-  const outputDir = resolve(__dirname, '../public/ig');
-  if (!existsSync(outputDir)) mkdirSync(outputDir, { recursive: true });
+  const outputDir = getOutputDir();
 
   const slug = article.slug || 'post';
   const prefix = `${outputDir}/${slug}`;
@@ -703,8 +710,7 @@ export async function generateCarousel(article, postIndex) {
 
 // Generate glossary carousel (slide1: term, slide2+: explanation, last: CTA)
 export async function generateGlossaryCarousel(term) {
-  const outputDir = resolve(__dirname, '../public/ig/glossary');
-  if (!existsSync(outputDir)) mkdirSync(outputDir, { recursive: true });
+  const outputDir = getOutputDir('glossary');
 
   const slug = term.slug || term.en.toLowerCase().replace(/\s+/g, '-');
   const prefix = `${outputDir}/${slug}`;

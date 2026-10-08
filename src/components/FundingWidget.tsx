@@ -1,11 +1,11 @@
 const companies = [
-  { name: 'Figure', raised: '$1.9B', logo: 'https://logo.clearbit.com/figure.ai' },
-  { name: 'Neura Robotics', raised: '$1.7B', logo: 'https://logo.clearbit.com/neurarobotics.com' },
-  { name: 'XPeng Robotics', raised: '$1.0B', logo: 'https://logo.clearbit.com/xpeng.com' },
-  { name: 'Galbot', raised: '$964M', logo: 'https://logo.clearbit.com/galbot.com' },
-  { name: 'Apptronik', raised: '$950M', logo: 'https://logo.clearbit.com/apptronik.com' },
-  { name: 'Rhoda', raised: '$680M', logo: 'https://logo.clearbit.com/rhodarobotics.com' },
-  { name: 'Agility', raised: '$570M', logo: 'https://logo.clearbit.com/agilityrobotics.com' },
+  { name: 'Figure', raised: '$1.9B', logo: 'https://www.google.com/s2/favicons?domain=figure.ai&sz=128' },
+  { name: 'Neura Robotics', raised: '$1.7B', logo: 'https://www.google.com/s2/favicons?domain=neurarobotics.com&sz=128' },
+  { name: 'XPeng Robotics', raised: '$1.0B', logo: 'https://www.google.com/s2/favicons?domain=xpeng.com&sz=128' },
+  { name: 'Galbot', raised: '$964M', logo: 'https://www.google.com/s2/favicons?domain=galbot.com&sz=128' },
+  { name: 'Apptronik', raised: '$950M', logo: 'https://www.google.com/s2/favicons?domain=apptronik.com&sz=128' },
+  { name: 'Rhoda', raised: '$680M', logo: 'https://www.google.com/s2/favicons?domain=rhodarobotics.com&sz=128' },
+  { name: 'Agility', raised: '$570M', logo: 'https://www.google.com/s2/favicons?domain=agilityrobotics.com&sz=128' },
 ];
 
 export default function FundingWidget() {

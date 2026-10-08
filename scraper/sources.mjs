@@ -29,5 +29,6 @@ export const SOURCES = {
     'https://www.therobotreport.com/category/robots-platforms/self-driving-vehicles/',
     'https://www.therobotreport.com/category/robots-platforms/ums/',
     'https://interestingengineering.com/ai-robotics',
+    'https://techfundingnews.com/tag/robotics/',
   ],
 };

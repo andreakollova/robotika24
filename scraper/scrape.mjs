@@ -335,6 +335,21 @@ async function main() {
     console.error('Error fetching Interesting Engineering:', err.message);
   }
 
+  // Respectful delay between feed fetches
+  await sleep(DELAY_BETWEEN_FEEDS);
+
+  // Tech Funding News - robotics tag
+  try {
+    const tfnItems = await scrapeSource(
+      'https://techfundingnews.com/tag/robotics/feed/',
+      'Tech Funding News',
+      ARTICLES_PER_SOURCE
+    );
+    allItems.push(...tfnItems);
+  } catch (err) {
+    console.error('Error fetching Tech Funding News:', err.message);
+  }
+
   console.log(`\nTotal articles to process: ${allItems.length}`);
 
   let inserted = 0;

@@ -449,17 +449,21 @@ async function main() {
       const articleUrl = `${siteUrl}/clanok/${art.slug}`;
       const igUrl = `${siteUrl}/api/ig-publish?slug=${art.slug}&token=${igSecret}`;
 
+      if (art.imageUrl) {
+        blocks.push({
+          type: 'image',
+          image_url: art.imageUrl,
+          alt_text: art.title,
+          title: { type: 'plain_text', text: art.title },
+        });
+      }
+
       blocks.push({
         type: 'section',
         text: {
           type: 'mrkdwn',
           text: `*<${articleUrl}|${art.title}>*`,
         },
-        accessory: art.imageUrl ? {
-          type: 'image',
-          image_url: art.imageUrl,
-          alt_text: art.title,
-        } : undefined,
       });
 
       blocks.push({
@@ -467,13 +471,13 @@ async function main() {
         elements: [
           {
             type: 'button',
-            text: { type: 'plain_text', text: '📸 Pridať na Instagram', emoji: true },
+            text: { type: 'plain_text', text: 'Instagram', emoji: true },
             url: igUrl,
             style: 'primary',
           },
           {
             type: 'button',
-            text: { type: 'plain_text', text: '🔗 Otvoriť článok', emoji: true },
+            text: { type: 'plain_text', text: 'Otvoriť', emoji: true },
             url: articleUrl,
           },
         ],

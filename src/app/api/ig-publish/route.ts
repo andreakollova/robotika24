@@ -46,10 +46,18 @@ export async function GET(req: NextRequest) {
     const catName = (article as any).categories?.name || 'Technológie';
     const catSlug = (article as any).categories?.slug || 'technologie';
 
+    // If excerpt has no bold markers, add them to key terms (names, numbers)
+    let excerpt = article.excerpt || article.title;
+    if (!excerpt.includes('**')) {
+      // Bold proper nouns (capitalized words 2+ chars not at sentence start) and numbers
+      excerpt = excerpt.replace(/(?<=[.!?]\s+|\b)(\d[\d\s,.]*\d|\d+)(?=\s|[.,]|$)/g, '**$1**');
+      excerpt = excerpt.replace(/(?<=\s)([A-Z][a-zA-Z]{2,}(?:\s[A-Z][a-zA-Z]+)*)/g, '**$1**');
+    }
+
     // Generate carousel
     const result = await generateCarousel({
       title: article.title,
-      excerpt: article.excerpt,
+      excerpt,
       image_url: article.image_url,
       slug: article.slug,
       category: catName,

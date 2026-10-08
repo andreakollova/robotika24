@@ -221,15 +221,18 @@ async function generateArticleExcerptPages(excerpt, theme, category) {
     return h + group.length * lineHeight + (i > 0 ? sentenceGap : 0);
   }, 0);
 
-  // Split evenly across 3 pages by sentences
+  // Split across pages - 2 pages for short texts, 3 for longer
   const totalSentences = sentenceGroups.length;
   const pageGroupsList = [];
-  if (totalSentences >= 3) {
+  if (totalSentences >= 6) {
+    // 3 pages for 6+ sentences
     const t1 = Math.ceil(totalSentences / 3);
     const t2 = Math.ceil((totalSentences * 2) / 3);
     pageGroupsList.push(sentenceGroups.slice(0, t1), sentenceGroups.slice(t1, t2), sentenceGroups.slice(t2));
   } else if (totalSentences >= 2) {
-    pageGroupsList.push(sentenceGroups.slice(0, 1), sentenceGroups.slice(1));
+    // 2 pages for 2-5 sentences
+    const mid = Math.ceil(totalSentences / 2);
+    pageGroupsList.push(sentenceGroups.slice(0, mid), sentenceGroups.slice(mid));
   } else {
     pageGroupsList.push(sentenceGroups);
   }
@@ -564,7 +567,7 @@ export async function generateStory(articleImageUrl, title) {
   const titleLines = wrapText(title, 28);
   const lineHeight = 58;
   const titleBlockHeight = titleLines.length * lineHeight;
-  const titleStartY = SH - 90 - titleBlockHeight;
+  const titleStartY = SH - 140 - titleBlockHeight;
 
   const titleSvg = titleLines.map((line, i) =>
     `<text x="80" y="${titleStartY + i * lineHeight + 54}" font-family="Inter, -apple-system, sans-serif" font-size="52" font-weight="800" fill="#ffffff">${escapeXml(line)}</text>`

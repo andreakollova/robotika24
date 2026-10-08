@@ -23,15 +23,15 @@ export default function Sidebar({ articles, latestArticles }: { articles: Articl
 
   return (
     <div>
-      <aside style={{ border: '1px solid #e5e7eb', borderRadius: 8, overflow: 'hidden' }}>
-        <div style={{ display: 'flex', borderBottom: '1px solid #e5e7eb' }}>
+      <aside style={{ border: '1px solid var(--border)', borderRadius: 8, overflow: 'hidden' }}>
+        <div style={{ display: 'flex', borderBottom: '1px solid var(--border)' }}>
           <button
             onClick={() => setTab('popular')}
             style={{
               flex: 1, padding: '12px 16px', fontSize: 14, fontWeight: 700, border: 'none', cursor: 'pointer',
-              color: tab === 'popular' ? '#0c1a26' : '#9ca3af',
+              color: tab === 'popular' ? 'var(--text-primary)' : 'var(--text-muted)',
               borderBottom: tab === 'popular' ? '2px solid #cb1e26' : '2px solid transparent',
-              backgroundColor: tab === 'popular' ? '#fff' : '#f9fafb',
+              backgroundColor: tab === 'popular' ? 'var(--card-bg)' : 'var(--bg-secondary)',
             }}
           >
             Najčítanejšie
@@ -40,9 +40,9 @@ export default function Sidebar({ articles, latestArticles }: { articles: Articl
             onClick={() => setTab('latest')}
             style={{
               flex: 1, padding: '12px 16px', fontSize: 14, fontWeight: 700, border: 'none', cursor: 'pointer',
-              color: tab === 'latest' ? '#0c1a26' : '#9ca3af',
+              color: tab === 'latest' ? 'var(--text-primary)' : 'var(--text-muted)',
               borderBottom: tab === 'latest' ? '2px solid #cb1e26' : '2px solid transparent',
-              backgroundColor: tab === 'latest' ? '#fff' : '#f9fafb',
+              backgroundColor: tab === 'latest' ? 'var(--card-bg)' : 'var(--bg-secondary)',
             }}
           >
             Najnovšie
@@ -55,16 +55,16 @@ export default function Sidebar({ articles, latestArticles }: { articles: Articl
               key={article.id}
               href={`/clanok/${article.slug}`}
               className="group"
-              style={{ display: 'flex', gap: 12, alignItems: 'flex-start', padding: '12px 0', borderBottom: i < displayArticles.length - 1 ? '1px solid #f3f4f6' : 'none', textDecoration: 'none' }}
+              style={{ display: 'flex', gap: 12, alignItems: 'flex-start', padding: '12px 0', borderBottom: i < displayArticles.length - 1 ? '1px solid var(--border-light)' : 'none', textDecoration: 'none' }}
             >
-              <span style={{ width: 28, height: 28, borderRadius: '50%', border: '2px solid #d1d5db', fontSize: 13, fontWeight: 700, color: '#6b7280', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }} className="group-hover:border-[#cb1e26] group-hover:text-[#cb1e26] transition-colors">
+              <span style={{ width: 28, height: 28, borderRadius: '50%', border: '2px solid var(--border)', fontSize: 13, fontWeight: 700, color: 'var(--text-tertiary)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }} className="group-hover:border-[#cb1e26] group-hover:text-[#cb1e26] transition-colors">
                 {i + 1}
               </span>
               <div style={{ minWidth: 0, flex: 1 }}>
-                <h3 style={{ fontSize: 13, fontWeight: 700, color: '#0c1a26', lineHeight: 1.35, overflow: 'hidden', display: '-webkit-box', WebkitLineClamp: 3, WebkitBoxOrient: 'vertical' as const }} className="group-hover:text-[#cb1e26] transition-colors">
+                <h3 style={{ fontSize: 13, fontWeight: 700, color: 'var(--text-primary)', lineHeight: 1.35, overflow: 'hidden', display: '-webkit-box', WebkitLineClamp: 3, WebkitBoxOrient: 'vertical' as const }} className="group-hover:text-[#cb1e26] transition-colors">
                   {article.title}
                 </h3>
-                <span style={{ fontSize: 11, color: '#9ca3af', marginTop: 4, display: 'block' }}>
+                <span style={{ fontSize: 11, color: 'var(--text-muted)', marginTop: 4, display: 'block' }}>
                   {timeAgo(article.published_at)}
                 </span>
               </div>

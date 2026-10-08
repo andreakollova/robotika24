@@ -26,12 +26,12 @@ export default function CookieBanner() {
   return (
     <div style={{
       position: 'fixed', bottom: 0, left: 0, right: 0, zIndex: 70,
-      backgroundColor: '#fff', borderTop: '1px solid #e5e7eb',
+      backgroundColor: 'var(--card-bg)', borderTop: '1px solid var(--border)',
       boxShadow: '0 -4px 20px rgba(0,0,0,0.1)',
       padding: '20px 0',
     }}>
       <div style={{ maxWidth: 900, margin: '0 auto', padding: '0 20px', display: 'flex', alignItems: 'center', gap: 20, flexWrap: 'wrap', justifyContent: 'center' }}>
-        <p style={{ fontSize: 14, color: '#374151', lineHeight: 1.6, flex: 1, minWidth: 280 }}>
+        <p style={{ fontSize: 14, color: 'var(--text-secondary)', lineHeight: 1.6, flex: 1, minWidth: 280 }}>
           Táto stránka používa cookies na zabezpečenie funkčnosti webu a zobrazovanie reklám.
           Viac informácií nájdete v{' '}
           <Link href="/cookies" style={{ color: '#cb1e26', textDecoration: 'underline' }}>zásadách používania cookies</Link>
@@ -43,7 +43,7 @@ export default function CookieBanner() {
             onClick={decline}
             style={{
               padding: '10px 24px', fontSize: 13, fontWeight: 700,
-              color: '#6b7280', backgroundColor: '#f3f4f6',
+              color: 'var(--text-tertiary)', backgroundColor: 'var(--bg-tertiary)',
               borderRadius: 24, border: 'none', cursor: 'pointer',
             }}
           >

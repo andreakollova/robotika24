@@ -17,7 +17,7 @@ function ArticleList({ articles, title }: { articles: Article[]; title: string }
   return (
     <div style={{ marginBottom: 24 }}>
       <div style={{ borderBottom: '2px solid #cb1e26', marginBottom: 16 }}>
-        <h3 style={{ fontSize: 16, fontWeight: 700, color: '#0c1a26', paddingBottom: 8 }}>{title}</h3>
+        <h3 style={{ fontSize: 16, fontWeight: 700, color: 'var(--text-primary)', paddingBottom: 8 }}>{title}</h3>
       </div>
       <div>
         {articles.map((article, i) => (
@@ -25,7 +25,7 @@ function ArticleList({ articles, title }: { articles: Article[]; title: string }
             key={article.id}
             href={`/clanok/${article.slug}`}
             className="group"
-            style={{ display: 'flex', gap: 12, alignItems: 'flex-start', padding: '12px 0', borderBottom: i < articles.length - 1 ? '1px solid #f3f4f6' : 'none', textDecoration: 'none' }}
+            style={{ display: 'flex', gap: 12, alignItems: 'flex-start', padding: '12px 0', borderBottom: i < articles.length - 1 ? '1px solid var(--border-light)' : 'none', textDecoration: 'none' }}
           >
             {article.image_url && (
               <div style={{ position: 'relative', flexShrink: 0 }}>
@@ -40,10 +40,10 @@ function ArticleList({ articles, title }: { articles: Article[]; title: string }
               </div>
             )}
             <div style={{ minWidth: 0, flex: 1 }}>
-              <h4 style={{ fontSize: 13, fontWeight: 700, color: '#0c1a26', lineHeight: 1.35, overflow: 'hidden', display: '-webkit-box', WebkitLineClamp: 3, WebkitBoxOrient: 'vertical' as const }} className="group-hover:text-[#cb1e26] transition-colors">
+              <h4 style={{ fontSize: 13, fontWeight: 700, color: 'var(--text-primary)', lineHeight: 1.35, overflow: 'hidden', display: '-webkit-box', WebkitLineClamp: 3, WebkitBoxOrient: 'vertical' as const }} className="group-hover:text-[#cb1e26] transition-colors">
                 {article.title}
               </h4>
-              <span style={{ fontSize: 11, color: '#9ca3af', marginTop: 4, display: 'block' }}>
+              <span style={{ fontSize: 11, color: 'var(--text-muted)', marginTop: 4, display: 'block' }}>
                 {timeAgo(article.published_at)}
               </span>
             </div>

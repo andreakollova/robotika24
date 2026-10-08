@@ -28,7 +28,7 @@ export default async function ProjectsSection() {
   return (
     <section style={{ maxWidth: 1280, margin: '0 auto', padding: '0 20px 48px' }}>
       <div style={{ borderBottom: '2px solid #cb1e26', marginBottom: 24, display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-        <h2 style={{ fontSize: 18, fontWeight: 700, color: '#0c1a26', paddingBottom: 8 }}>Open Source Projekty</h2>
+        <h2 style={{ fontSize: 18, fontWeight: 700, color: 'var(--text-primary)', paddingBottom: 8 }}>Open Source Projekty</h2>
         <a href="/projekty" style={{ fontSize: 13, fontWeight: 600, color: '#cb1e26', textDecoration: 'none', paddingBottom: 8 }}>
           Zobraziť všetky &rarr;
         </a>
@@ -41,7 +41,7 @@ export default async function ProjectsSection() {
             href={project.external_url}
             target="_blank"
             rel="noopener noreferrer"
-            style={{ display: 'block', textDecoration: 'none', border: '1px solid #e5e7eb', borderRadius: 10, padding: 16, transition: 'border-color 0.2s' }}
+            style={{ display: 'block', textDecoration: 'none', border: '1px solid var(--border)', borderRadius: 10, padding: 16, transition: 'border-color 0.2s' }}
             className="group hover:border-[#cb1e26]"
           >
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 8 }}>
@@ -50,18 +50,18 @@ export default async function ProjectsSection() {
                 <span style={{ fontSize: 9, fontWeight: 700, color: '#fff', backgroundColor: '#cb1e26', padding: '2px 6px', borderRadius: 3, textTransform: 'uppercase' }}>New</span>
               )}
             </div>
-            <h3 style={{ fontSize: 16, fontWeight: 700, color: '#0c1a26', lineHeight: 1.3, marginBottom: 6 }} className="group-hover:text-[#cb1e26] transition-colors">
+            <h3 style={{ fontSize: 16, fontWeight: 700, color: 'var(--text-primary)', lineHeight: 1.3, marginBottom: 6 }} className="group-hover:text-[#cb1e26] transition-colors">
               {project.title}
             </h3>
-            <p style={{ fontSize: 13, color: '#6b7280', lineHeight: 1.45, marginBottom: 12, display: '-webkit-box', WebkitLineClamp: 3, WebkitBoxOrient: 'vertical', overflow: 'hidden' }}>
+            <p style={{ fontSize: 13, color: 'var(--text-tertiary)', lineHeight: 1.45, marginBottom: 12, display: '-webkit-box', WebkitLineClamp: 3, WebkitBoxOrient: 'vertical', overflow: 'hidden' }}>
               {project.description}
             </p>
             <div style={{ display: 'flex', flexWrap: 'wrap', gap: 4, marginBottom: 12 }}>
               {(project.tags || []).slice(0, 3).map((tag) => (
-                <span key={tag} style={{ fontSize: 10, color: '#6b7280', backgroundColor: '#f3f4f6', padding: '2px 8px', borderRadius: 4 }}>{tag}</span>
+                <span key={tag} style={{ fontSize: 10, color: 'var(--text-tertiary)', backgroundColor: 'var(--bg-tertiary)', padding: '2px 8px', borderRadius: 4 }}>{tag}</span>
               ))}
             </div>
-            <div style={{ display: 'flex', alignItems: 'center', gap: 12, fontSize: 12, color: '#9ca3af' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 12, fontSize: 12, color: 'var(--text-muted)' }}>
               <span>⭐ {project.stars.toLocaleString()}</span>
               {project.license && <span>{project.license}</span>}
               <span style={{ marginLeft: 'auto' }}>growbotics.ai ↗</span>

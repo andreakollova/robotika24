@@ -77,7 +77,7 @@ export default async function CategoryPage({ params }: { params: Promise<{ slug:
   return (
     <div style={{ maxWidth: 1280, margin: '0 auto', padding: '24px 20px 0' }}>
       <div style={{ borderBottom: '2px solid #cb1e26', marginBottom: 24 }}>
-        <h1 style={{ fontSize: 24, fontWeight: 700, color: '#0c1a26', paddingBottom: 8 }}>{category.name}</h1>
+        <h1 style={{ fontSize: 24, fontWeight: 700, color: 'var(--text-primary)', paddingBottom: 8 }}>{category.name}</h1>
       </div>
 
       <div className="cat-grid">
@@ -88,7 +88,7 @@ export default async function CategoryPage({ params }: { params: Promise<{ slug:
             ))}
           </div>
           {(!articles || articles.length === 0) && (
-            <p style={{ color: '#9ca3af' }}>Zatiaľ žiadne články v tejto kategórii.</p>
+            <p style={{ color: 'var(--text-muted)' }}>Zatiaľ žiadne články v tejto kategórii.</p>
           )}
         </div>
         <div>

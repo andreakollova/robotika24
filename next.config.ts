@@ -7,6 +7,10 @@ const nextConfig: NextConfig = {
       { protocol: 'https', hostname: '*.supabase.co' },
     ],
   },
+  serverExternalPackages: ['sharp'],
+  outputFileTracingIncludes: {
+    '/api/ig-publish': ['./scraper/**/*'],
+  },
   cacheComponents: false,
   partialPrefetching: false,
   turbopack: {

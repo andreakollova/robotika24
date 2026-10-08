@@ -55,7 +55,7 @@ export async function GET(req: NextRequest) {
       category: catName,
     }, postIndex);
 
-    if (!result) throw new Error('Carousel generation failed');
+    if (!result) throw new Error('Carousel generation returned null - check sharp/template availability');
 
     // Upload slides to Supabase Storage
     const { readFileSync } = await import('fs');

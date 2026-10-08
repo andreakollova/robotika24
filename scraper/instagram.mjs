@@ -616,7 +616,7 @@ export async function generateCarousel(article, postIndex) {
     return { theme, slug, slides, storyPath };
   } catch (err) {
     console.error(`  IG: Error generating carousel: ${err.message}`);
-    return null;
+    throw err;
   }
 }
 

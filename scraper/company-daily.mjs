@@ -142,7 +142,13 @@ async function main() {
     return;
   }
 
-  const caption = `Poznáš túto firmu? ${company.name}\n\n${company.description.replace(/\*\*/g, '').substring(0, 500)}\n\n#robotika24 #robotika #humanoidnéroboty #technológie #${company.slug.replace(/-/g, '')}`;
+  const companyCaptions = [
+    `${company.name} | Kto stojí za jedným z najsledovanejších robotov súčasnosti? Pozri sa na fakty, ktoré ťa možno prekvapia ⚡\n\n#robotika24 #robotika #robotics #humanoidrobot #AI #inovácie #technológie #startup`,
+    `${company.name} | Svet robotiky sa mení rýchlejšie ako kedykoľvek predtým. Spoznaj firmu, ktorá ho posúva dopredu 🚀\n\n#robotika24 #robotika #umeláinteligencia #humanoidy #technológie #robotics #AI #budúcnosťpráce`,
+    `${company.name} | Zaujímavosti a kľúčové fakty zo sveta robotiky. Súčasť našej série o spoločnostiach, ktoré formujú budúcnosť technológií 🤖\n\n#robotika24 #robotika #robotics #AI #umeláinteligencia #technológie #inovácie`,
+    `${company.name} | Ďalšia časť našej série o významných menách v robotike. Fakty, ktoré stojí za to poznať 💡\n\n#robotika24 #robotika #robotics #humanoidrobot #AI #technológie #inovácie #startup`,
+  ];
+  const caption = companyCaptions[idx % companyCaptions.length];
 
   if (!IG_TOKEN || !IG_ACCOUNT) {
     console.log('[DRY RUN] Would publish:', company.name);

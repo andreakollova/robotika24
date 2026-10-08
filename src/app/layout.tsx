@@ -83,7 +83,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           crossOrigin="anonymous"
         />
         <link rel="sitemap" href="/sitemap.xml" />
-        <script dangerouslySetInnerHTML={{ __html: `(function(){try{var t=localStorage.getItem('theme');if(t==='dark'||(!t&&window.matchMedia('(prefers-color-scheme:dark)').matches)){document.documentElement.classList.add('dark')}}catch(e){}})()` }} />
+        <script dangerouslySetInnerHTML={{ __html: `(function(){try{var t=localStorage.getItem('theme');if(t==='dark'){document.documentElement.classList.add('dark')}}catch(e){}})()` }} />
         <meta name="geo.region" content="SK" />
         <meta name="geo.placename" content="Slovensko" />
         <link rel="alternate" hrefLang="sk" href="https://robotika24.sk" />

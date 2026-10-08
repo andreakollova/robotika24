@@ -10,6 +10,7 @@ type Project = {
   stars: number;
   license: string;
   external_url: string;
+  image_url: string | null;
   source_name: string;
   is_new: boolean;
 };
@@ -34,37 +35,42 @@ export default async function ProjectsSection() {
         </a>
       </div>
 
-      <div className="articles-grid">
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 20 }} className="max-md:!grid-cols-2 max-sm:!grid-cols-1">
         {projects.map((project) => (
           <a
             key={project.id}
             href={project.external_url}
             target="_blank"
             rel="noopener noreferrer"
-            style={{ display: 'block', textDecoration: 'none', border: '1px solid var(--border)', borderRadius: 10, padding: 16, transition: 'border-color 0.2s' }}
+            style={{ display: 'block', textDecoration: 'none', border: '1px solid var(--border)', borderRadius: 10, overflow: 'hidden', transition: 'border-color 0.2s' }}
             className="group hover:border-[#cb1e26]"
           >
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 8 }}>
-              <span style={{ fontSize: 11, fontWeight: 600, color: '#cb1e26', textTransform: 'uppercase', letterSpacing: '0.04em' }}>{project.category}</span>
-              {project.is_new && (
-                <span style={{ fontSize: 9, fontWeight: 700, color: '#fff', backgroundColor: '#cb1e26', padding: '2px 6px', borderRadius: 3, textTransform: 'uppercase' }}>New</span>
-              )}
-            </div>
-            <h3 style={{ fontSize: 16, fontWeight: 700, color: 'var(--text-primary)', lineHeight: 1.3, marginBottom: 6 }} className="group-hover:text-[#cb1e26] transition-colors">
-              {project.title}
-            </h3>
-            <p style={{ fontSize: 13, color: 'var(--text-tertiary)', lineHeight: 1.45, marginBottom: 12, display: '-webkit-box', WebkitLineClamp: 3, WebkitBoxOrient: 'vertical', overflow: 'hidden' }}>
-              {project.description}
-            </p>
-            <div style={{ display: 'flex', flexWrap: 'wrap', gap: 4, marginBottom: 12 }}>
-              {(project.tags || []).slice(0, 3).map((tag) => (
-                <span key={tag} style={{ fontSize: 10, color: 'var(--text-tertiary)', backgroundColor: 'var(--bg-tertiary)', padding: '2px 8px', borderRadius: 4 }}>{tag}</span>
-              ))}
-            </div>
-            <div style={{ display: 'flex', alignItems: 'center', gap: 12, fontSize: 12, color: 'var(--text-muted)' }}>
-              <span>⭐ {project.stars.toLocaleString()}</span>
-              {project.license && <span>{project.license}</span>}
-              <span style={{ marginLeft: 'auto' }}>growbotics.ai ↗</span>
+            {project.image_url ? (
+              <div style={{ aspectRatio: '16/9', overflow: 'hidden', backgroundColor: 'var(--bg-tertiary)' }}>
+                <img src={project.image_url} alt={project.title} style={{ width: '100%', height: '100%', objectFit: 'cover' }} className="group-hover:scale-105 transition-transform duration-300" />
+              </div>
+            ) : (
+              <div style={{ aspectRatio: '16/9', backgroundColor: 'var(--bg-tertiary)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                <span style={{ fontSize: 28, color: 'var(--text-muted)' }}>{'</>'}</span>
+              </div>
+            )}
+            <div style={{ padding: 14 }}>
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 6 }}>
+                <span style={{ fontSize: 11, fontWeight: 600, color: '#cb1e26', textTransform: 'uppercase', letterSpacing: '0.04em' }}>{project.category}</span>
+                {project.is_new && (
+                  <span style={{ fontSize: 9, fontWeight: 700, color: '#fff', backgroundColor: '#cb1e26', padding: '2px 6px', borderRadius: 3, textTransform: 'uppercase' }}>New</span>
+                )}
+              </div>
+              <h3 style={{ fontSize: 15, fontWeight: 700, color: 'var(--text-primary)', lineHeight: 1.3, marginBottom: 6 }} className="group-hover:text-[#cb1e26] transition-colors">
+                {project.title}
+              </h3>
+              <p style={{ fontSize: 12, color: 'var(--text-tertiary)', lineHeight: 1.45, marginBottom: 10, display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', overflow: 'hidden' }}>
+                {project.description}
+              </p>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 10, fontSize: 11, color: 'var(--text-muted)' }}>
+                <span>{project.stars.toLocaleString()} stars</span>
+                {project.license && <span>{project.license}</span>}
+              </div>
             </div>
           </a>
         ))}

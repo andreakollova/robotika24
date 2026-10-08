@@ -86,14 +86,15 @@ function MoonIcon() {
   );
 }
 
-function ThemeToggle() {
+function ThemeToggle({ onToggle }: { onToggle?: (dark: boolean) => void }) {
   const [dark, setDark] = useState(false);
 
   useEffect(() => {
     const saved = localStorage.getItem('theme');
-    const isDark = saved === 'dark' || (!saved && window.matchMedia('(prefers-color-scheme: dark)').matches);
+    const isDark = saved === 'dark';
     setDark(isDark);
     document.documentElement.classList.toggle('dark', isDark);
+    onToggle?.(isDark);
   }, []);
 
   const toggle = () => {
@@ -101,10 +102,11 @@ function ThemeToggle() {
     setDark(next);
     document.documentElement.classList.toggle('dark', next);
     localStorage.setItem('theme', next ? 'dark' : 'light');
+    onToggle?.(next);
   };
 
   return (
-    <button onClick={toggle} style={{ color: '#6b7280', cursor: 'pointer', background: 'none', border: 'none', padding: 4 }} className="hover:text-[#cb1e26] transition-colors" aria-label="Prepnúť tmavý režim">
+    <button onClick={toggle} style={{ color: 'var(--text-tertiary)', cursor: 'pointer', background: 'none', border: 'none', padding: 4 }} className="hover:text-[#cb1e26] transition-colors" aria-label="Prepnúť tmavý režim">
       {dark ? <SunIcon /> : <MoonIcon />}
     </button>
   );
@@ -157,6 +159,7 @@ function NavItem({ cat }: { cat: typeof categories[0] }) {
 export default function Header() {
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [isDark, setIsDark] = useState(false);
   const [latestTitle, setLatestTitle] = useState('');
   const [searchOpen, setSearchOpen] = useState(false);
 
@@ -191,7 +194,7 @@ export default function Header() {
       <header className="hidden md:block" style={{ backgroundColor: 'var(--bg)', borderBottom: '1px solid var(--border)' }}>
         <div style={{ maxWidth: 1280, margin: '0 auto', padding: '0 20px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', height: 92 }}>
           <Link href="/" style={{ flexShrink: 0 }}>
-            <Image src="/logo.png" alt="robotika24" width={280} height={56} style={{ height: 68, width: 'auto' }} priority />
+            <Image src={isDark ? '/logo-dark.png' : '/logo.png'} alt="robotika24" width={280} height={56} style={{ height: 68, width: 'auto' }} priority />
           </Link>
 
           <div style={{ display: 'flex', alignItems: 'center' }}>
@@ -202,7 +205,7 @@ export default function Header() {
               <button onClick={() => setSearchOpen(!searchOpen)} style={{ color: '#6b7280', cursor: 'pointer', background: 'none', border: 'none', padding: 4 }} className="hover:text-[#cb1e26] transition-colors">
                 <SearchIcon />
               </button>
-              <ThemeToggle />
+              <ThemeToggle onToggle={setIsDark} />
               <LangSelector />
               <Link href="/odber" style={{ display: 'inline-flex', alignItems: 'center', gap: 6, padding: '9px 22px', fontSize: 13, fontWeight: 700, color: '#fff', backgroundColor: '#cb1e26', borderRadius: 24, textDecoration: 'none' }} className="hover:bg-[#e0242d] transition-colors">
                 <BellIcon /> Odoberať
@@ -233,7 +236,7 @@ export default function Header() {
 
           {/* Logo center */}
           <Link href="/" style={{ position: 'absolute', left: '50%', transform: 'translateX(-50%)' }}>
-            <Image src="/logo.png" alt="robotika24" width={180} height={36} style={{ height: 32, width: 'auto' }} priority />
+            <Image src={isDark ? '/logo-dark.png' : '/logo.png'} alt="robotika24" width={180} height={36} style={{ height: 32, width: 'auto' }} priority />
           </Link>
 
           {/* Search right */}

@@ -1,8 +1,8 @@
 const models = [
-  { category: 'Inteligencia', name: 'Claude Opus 4.6', logo: 'https://logo.clearbit.com/anthropic.com' },
-  { category: 'Rýchlosť', name: 'Gemini 2.5 Flash', logo: 'https://logo.clearbit.com/deepmind.google' },
-  { category: 'Latencia', name: 'Gemini Flash-Lite', logo: 'https://logo.clearbit.com/deepmind.google' },
-  { category: 'Najlacnejší', name: 'GPT-6 Luna', logo: 'https://logo.clearbit.com/openai.com' },
+  { category: 'Inteligencia', name: 'Claude Opus 4.6', logo: 'https://www.google.com/s2/favicons?domain=anthropic.com&sz=128' },
+  { category: 'Rýchlosť', name: 'Gemini 2.5 Flash', logo: 'https://www.google.com/s2/favicons?domain=deepmind.google&sz=128' },
+  { category: 'Latencia', name: 'Gemini Flash-Lite', logo: 'https://www.google.com/s2/favicons?domain=deepmind.google&sz=128' },
+  { category: 'Najlacnejší', name: 'GPT-6 Luna', logo: 'https://www.google.com/s2/favicons?domain=openai.com&sz=128' },
 ];
 
 export default function AIModelsWidget() {

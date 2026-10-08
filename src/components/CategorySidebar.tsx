@@ -29,7 +29,7 @@ function ArticleList({ articles, title }: { articles: Article[]; title: string }
           >
             {article.image_url && (
               <div style={{ position: 'relative', flexShrink: 0 }}>
-                <img src={article.image_url} alt="" style={{ width: 80, height: 56, borderRadius: 4, objectFit: 'cover' }} />
+                <img src={article.image_url} alt={article.title} style={{ width: 80, height: 56, borderRadius: 4, objectFit: 'cover' }} />
                 {article.video_url && (
                   <div style={{ position: 'absolute', inset: 0, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                     <div style={{ width: 24, height: 24, borderRadius: '50%', backgroundColor: 'rgba(0,0,0,0.6)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>

@@ -1,4 +1,8 @@
-export const metadata = { title: 'O nás' };
+export const metadata = {
+  title: 'O nás',
+  description: 'robotika24 je slovenský spravodajský portál zameraný na robotiku, umelú inteligenciu a moderné technológie. Denne prinášame novinky zo sveta robotov.',
+  alternates: { canonical: '/o-nas' },
+};
 
 export default function AboutPage() {
   return (

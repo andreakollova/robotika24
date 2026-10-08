@@ -34,7 +34,7 @@ export default function ArticleSidebar({ articles }: { articles: Article[] }) {
               style={{ display: 'flex', gap: 12, alignItems: 'flex-start', padding: '12px 0', borderBottom: i < articles.length - 1 ? '1px solid #f3f4f6' : 'none', textDecoration: 'none' }}
             >
               {article.image_url && (
-                <img src={article.image_url} alt="" style={{ width: 80, height: 56, borderRadius: 4, objectFit: 'cover', flexShrink: 0 }} />
+                <img src={article.image_url} alt={article.title} style={{ width: 80, height: 56, borderRadius: 4, objectFit: 'cover', flexShrink: 0 }} />
               )}
               <div style={{ minWidth: 0, flex: 1 }}>
                 <h4 style={{ fontSize: 13, fontWeight: 700, color: '#0c1a26', lineHeight: 1.35, overflow: 'hidden', display: '-webkit-box', WebkitLineClamp: 3, WebkitBoxOrient: 'vertical' as const }} className="group-hover:text-[#cb1e26] transition-colors">

@@ -2,52 +2,52 @@
 // Format: Kategoria | Nazov clanku + rotujuci popis + hashtags
 
 const descriptions = [
-  `Prinasame vam najnovsie poznatky zo sveta robotiky a automatizacie.
-Cely clanok najdete na nasom webe, odkaz je v profile.`,
+  `Prinášame vám najnovšie poznatky zo sveta robotiky a automatizácie.
+Celý článok nájdete na našom webe, odkaz je v profile.`,
 
-  `Aktualny pohlad na vyvoj v oblasti robotiky a umelej inteligencie.
-Podrobnosti si precitajte na robotika24.sk, odkaz najdete v profile.`,
+  `Aktuálny pohľad na vývoj v oblasti robotiky a umelej inteligencie.
+Podrobnosti si prečítajte na robotika24.sk, odkaz nájdete v profile.`,
 
-  `Technologie, ktore menia sposob, akym pracujeme a zijeme.
-Viac informacii najdete v clanku na nasom webe, odkaz je v profile.`,
+  `Technológie, ktoré menia spôsob, akým pracujeme a žijeme.
+Viac informácií nájdete v článku na našom webe, odkaz je v profile.`,
 
-  `Sledujte s nami trendy, ktore formuju buducnost robotiky.
-Cely clanok je dostupny na nasom webe, odkaz najdete v profile.`,
+  `Sledujte s nami trendy, ktoré formujú budúcnosť robotiky.
+Celý článok je dostupný na našom webe, odkaz nájdete v profile.`,
 
-  `Prehlad najdolezitejsich noviniek z oblasti robotiky na jednom mieste.
-Cely clanok si mozete precitat na nasom webe, odkaz najdete v profile.`,
+  `Prehľad najdôležitejších noviniek z oblasti robotiky na jednom mieste.
+Celý článok si môžete prečítať na našom webe, odkaz nájdete v profile.`,
 
-  `Odborny pohlad na riesenia, ktore posuvaju hranice modernych technologii.
-Viac sa dozviete v clanku na nasom webe, odkaz je v profile.`,
+  `Odborný pohľad na riešenia, ktoré posúvajú hranice moderných technológií.
+Viac sa dozviete v článku na našom webe, odkaz je v profile.`,
 
-  `Ako robotika a umela inteligencia ovplyvnuju priemysel a kazdodenny zivot.
-Podrobnosti najdete na nasom webe, odkaz je dostupny v profile.`,
+  `Ako robotika a umelá inteligencia ovplyvňujú priemysel a každodenný život.
+Podrobnosti nájdete na našom webe, odkaz je dostupný v profile.`,
 
-  `Zostan informovani o vyvoji, ktory formuje technologicku buducnost.
-Cely clanok najdete na robotika24.sk, odkaz je v profile.`,
+  `Zostaň informovaný o vývoji, ktorý formuje technologickú budúcnosť.
+Celý článok nájdete na robotika24.sk, odkaz je v profile.`,
 ];
 
 const hashtags = [
-  '#robotika24 #robotika #automatizacia #technologie #inovacie',
-  '#robotika24 #umelainteligencia #robotika #technologie #priemysel',
-  '#robotika24 #inovacie #automatizacia #AI #buducnost',
-  '#robotika24 #robotika #technologie #trendy #inovacie',
-  '#robotika24 #robotika #novinky #technologie #automatizacia',
-  '#robotika24 #inovacie #robotika #AI #vyskum',
-  '#robotika24 #umelainteligencia #priemysel #technologie #digitalizacia',
-  '#robotika24 #technologie #robotika #buducnost #inovacie',
+  '#robotika24 #robotika #automatizácia #technológie #inovácie',
+  '#robotika24 #umeláinteligencia #robotika #technológie #priemysel',
+  '#robotika24 #inovácie #automatizácia #AI #budúcnosť',
+  '#robotika24 #robotika #technológie #trendy #inovácie',
+  '#robotika24 #robotika #novinky #technológie #automatizácia',
+  '#robotika24 #inovácie #robotika #AI #výskum',
+  '#robotika24 #umeláinteligencia #priemysel #technológie #digitalizácia',
+  '#robotika24 #technológie #robotika #budúcnosť #inovácie',
 ];
 
 // Category slug to display name
 const categoryNames = {
   roboty: 'Roboty',
-  technologie: 'Technologie',
-  vyvoj: 'Development',
+  technologie: 'Technológie',
+  vyvoj: 'Vývoj',
 };
 
 // Build caption: Kategoria | Nazov clanku \n\n popis \n\n hashtags
 export function getArticleCaption(index, title, categorySlug) {
-  const cat = categoryNames[categorySlug] || 'Technologie';
+  const cat = categoryNames[categorySlug] || 'Technológie';
   const desc = descriptions[index % descriptions.length];
   const tags = hashtags[index % hashtags.length];
   return `${cat} | ${title}\n\n${desc}\n\n${tags}`;
@@ -55,14 +55,14 @@ export function getArticleCaption(index, title, categorySlug) {
 
 // Glossary post captions
 export const glossaryCaptions = [
-  `Novy pojem z nasho slovnicka robotiky! Uloz si to na neskor alebo posli kamosovi.
-#robotika24 #robotika #vzdelavanie #technologie #slovnicek`,
+  `Nový pojem z nášho slovníčka robotiky! Ulož si to na neskôr alebo pošli kamošovi.
+#robotika24 #robotika #vzdelávanie #technológie #slovníček`,
 
-  `Vies co to znamena? Pozri nase vysvetlenie!
-#robotika24 #robotika #slovnicek #technologie #ucimesa`,
+  `Vieš čo to znamená? Pozri naše vysvetlenie!
+#robotika24 #robotika #slovníček #technológie #učímesa`,
 
-  `Dnesny pojem zo sveta robotiky. Vedel si to?
-#robotika24 #robotika #vzdelavanie #pojmy #technologie`,
+  `Dnešný pojem zo sveta robotiky. Vedel si to?
+#robotika24 #robotika #vzdelávanie #pojmy #technológie`,
 ];
 
 // Get caption for glossary post: "Vieš, čo je to... Term?" + rotujúci popis

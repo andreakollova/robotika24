@@ -63,7 +63,7 @@ async function uploadToSupabaseStorage(filePath, fileName) {
   const storagePath = `ig/${fileName}`;
 
   const { error } = await supabase.storage
-    .from('public-assets')
+    .from('ig-assets')
     .upload(storagePath, fileBuffer, {
       contentType: 'image/png',
       upsert: true,
@@ -71,7 +71,7 @@ async function uploadToSupabaseStorage(filePath, fileName) {
 
   if (error) throw new Error(`Storage upload error: ${error.message}`);
 
-  const { data } = supabase.storage.from('public-assets').getPublicUrl(storagePath);
+  const { data } = supabase.storage.from('ig-assets').getPublicUrl(storagePath);
   return data.publicUrl;
 }
 
@@ -241,7 +241,7 @@ async function publishGlossaryPost() {
   const result = await generateGlossaryCarousel(term);
   if (!result) return;
 
-  const caption = getGlossaryCaption(termIdx);
+  const caption = getGlossaryCaption(termIdx, term.en);
 
   if (IG_ENABLED) {
     try {

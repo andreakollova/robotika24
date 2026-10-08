@@ -177,8 +177,14 @@ KRITICKE PRAVIDLA:
 - Pis profesionalnou, gramaticky bezchybnou slovencinou. Kazdu vetu skontroluj, ci dava zmysel.
 - Nadpis musi byt gramaticky perfektny - je to prve co citatel vidi.
 
+SEO PRAVIDLA (VELMI DOLEZITE):
+- NADPIS: Musi obsahovat hlavne klucove slovo (nazov robota, firmy alebo technologie) co najblizsie k zaciatku. Google zobrazuje prvych ~60 znakov.
+- EXCERPT: Musi obsahovat relevantne klucove slova pre vyhladavanie v slovenčine. Pouzi slova ktore by ludia hladali na Google (napr. "humanoidny robot", "umela inteligencia", "roboticke rameno", "autonomne auto").
+- CONTENT: Pouzi nadpisy ## pre sekcie - Google ich pouziva pre featured snippets. Klucove pojmy (nazvy firiem, robotov, technologii) uvadzaj na zaciatku odsekov ked sa da. Pouzi priamo prirodzene dlhorepasove klucove frazy v texte (napr. "novy humanoidny robot od Boston Dynamics" namiesto len "novy robot").
+- Prirod slovensky text, ziadne keyword stuffing. Text musi zniet prirodzene.
+
 Vrat odpoved v tomto JSON formate (bez markdown blokov):
-{"title": "prelozeny nadpis max 8-10 slov", "excerpt": "3-4 vety zhrnutie do 400 znakov", "content": "plny preklad clanku"}
+{"title": "prelozeny SEO nadpis max 8-10 slov s klucovym slovom na zaciatku", "excerpt": "3-4 vety SEO zhrnutie do 400 znakov s klucovymi slovami", "content": "plny SEO optimalizovany preklad clanku s ## nadpismi"}
 
 NADPIS:
 ${title}

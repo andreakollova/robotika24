@@ -10,31 +10,41 @@ const inter = Inter({ subsets: ["latin", "latin-ext"] });
 
 export const metadata: Metadata = {
   title: {
-    default: 'robotika24 - Správy zo sveta robotiky a AI',
-    template: '%s | robotika24',
+    default: 'robotika24.sk - Správy zo sveta robotiky, AI a automatizácie na Slovensku',
+    template: '%s | robotika24.sk',
   },
-  description: 'Najnovšie správy o robotike, umelej inteligencii, dronoch a moderných technológiách. Denne prinášame novinky zo sveta robotov, automatizácie a vývoja.',
-  keywords: ['robotika', 'roboty', 'umelá inteligencia', 'AI', 'technológie', 'drony', 'automatizácia', 'humanoidné roboty', 'strojové učenie', 'slovensko'],
+  description: 'Najnovšie správy o robotike, umelej inteligencii, humanoidných robotoch a automatizácii v slovenčine. Denne prinášame novinky, analýzy a rozhovory zo sveta robotov, dronov a moderných technológií pre slovenských čitateľov.',
+  keywords: [
+    'robotika', 'roboty', 'umelá inteligencia', 'AI', 'humanoidné roboty',
+    'automatizácia', 'drony', 'strojové učenie', 'priemyselné roboty',
+    'Boston Dynamics', 'Figure', 'Tesla Optimus', 'robotika Slovensko',
+    'novinky robotika', 'technológie Slovensko', 'AI novinky', 'robotické ramená',
+    'autonomné vozidlá', 'coboty', 'ROS', 'simulácia robotov',
+  ],
   authors: [{ name: 'robotika24' }],
   creator: 'robotika24',
   publisher: 'robotika24',
   metadataBase: new URL('https://robotika24.sk'),
   alternates: {
     canonical: '/',
+    languages: {
+      'sk-SK': 'https://robotika24.sk',
+    },
   },
   openGraph: {
     type: 'website',
     locale: 'sk_SK',
     url: 'https://robotika24.sk',
     siteName: 'robotika24',
-    title: 'robotika24 - Správy zo sveta robotiky a AI',
-    description: 'Najnovšie správy o robotike, umelej inteligencii, dronoch a moderných technológiách.',
+    title: 'robotika24.sk - Správy zo sveta robotiky a AI',
+    description: 'Najnovšie správy o robotike, umelej inteligencii a moderných technológiách v slovenčine.',
     images: [{ url: '/logo.png', width: 1200, height: 630 }],
+    countryName: 'Slovakia',
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'robotika24 - Správy zo sveta robotiky a AI',
-    description: 'Najnovšie správy o robotike, umelej inteligencii a moderných technológiách.',
+    title: 'robotika24.sk - Správy zo sveta robotiky a AI',
+    description: 'Najnovšie správy o robotike, umelej inteligencii a moderných technológiách v slovenčine.',
   },
   robots: {
     index: true,
@@ -54,8 +64,12 @@ export const metadata: Metadata = {
     ],
     apple: '/apple-touch-icon.png',
   },
-  verification: {
-    google: '',
+  other: {
+    'geo.region': 'SK',
+    'geo.placename': 'Slovensko',
+    'content-language': 'sk',
+    'distribution': 'Slovakia',
+    'rating': 'general',
   },
 };
 
@@ -69,6 +83,37 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           crossOrigin="anonymous"
         />
         <link rel="sitemap" href="/sitemap.xml" />
+        <meta name="geo.region" content="SK" />
+        <meta name="geo.placename" content="Slovensko" />
+        <link rel="alternate" hrefLang="sk" href="https://robotika24.sk" />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              '@context': 'https://schema.org',
+              '@type': 'NewsMediaOrganization',
+              name: 'robotika24',
+              url: 'https://robotika24.sk',
+              logo: {
+                '@type': 'ImageObject',
+                url: 'https://robotika24.sk/logo.png',
+              },
+              sameAs: ['https://www.instagram.com/robotika24.sk/'],
+              description: 'Slovenský spravodajský portál o robotike, umelej inteligencii a moderných technológiách.',
+              foundingDate: '2025',
+              areaServed: {
+                '@type': 'Country',
+                name: 'Slovakia',
+              },
+              inLanguage: 'sk',
+              publisher: {
+                '@type': 'Organization',
+                name: 'DRIXTON s.r.o.',
+                email: 'studio@drixton.com',
+              },
+            }),
+          }}
+        />
       </head>
       <body className="min-h-screen flex flex-col bg-white">
         <Header />

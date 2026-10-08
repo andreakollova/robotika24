@@ -1,9 +1,19 @@
 import sharp from 'sharp';
-import { readFileSync, mkdirSync, existsSync, writeFileSync } from 'fs';
+import { readFileSync, mkdirSync, existsSync, writeFileSync, readdirSync } from 'fs';
 import { resolve, dirname } from 'path';
 import { fileURLToPath } from 'url';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
+
+// Load env
+try {
+  const envFile = readFileSync(resolve(__dirname, '..', '.env.local'), 'utf8');
+  envFile.split('\n').forEach(line => {
+    const [key, ...vals] = line.split('=');
+    if (key && vals.length && !process.env[key.trim()]) process.env[key.trim()] = vals.join('=').trim();
+  });
+} catch {}
+
 const W = 1086;
 const H = 1448;
 
@@ -176,7 +186,7 @@ async function generateArticleExcerptPages(excerpt, theme, category) {
   const sentences = excerpt.split(/(?<=\.)\s+/).filter(s => s.trim());
 
   // Each sentence group = array of lines, each line = array of {text, bold} segments
-  const sentenceGroups = sentences.map(s => wrapTextWithBold(s, 28));
+  const sentenceGroups = sentences.map(s => wrapTextWithBold(s, 34));
 
   // Category label - to the right of red bar (bar at x:85-99, y:89-174, center y:132)
   const catSvg = catLabel
@@ -188,16 +198,27 @@ async function generateArticleExcerptPages(excerpt, theme, category) {
     return h + group.length * lineHeight + (i > 0 ? sentenceGap : 0);
   }, 0);
 
-  // Always split evenly across 2 pages by sentences
-  const mid = Math.ceil(sentenceGroups.length / 2);
-  const page1Items = [];
-  const page2Items = [];
-  sentenceGroups.forEach((group, i) => {
-    const target = i < mid ? page1Items : page2Items;
-    if (target.length > 0) target.push(null);
-    group.forEach(line => target.push(line));
+  // Split evenly across 3 pages by sentences
+  const totalSentences = sentenceGroups.length;
+  const pageGroupsList = [];
+  if (totalSentences >= 3) {
+    const t1 = Math.ceil(totalSentences / 3);
+    const t2 = Math.ceil((totalSentences * 2) / 3);
+    pageGroupsList.push(sentenceGroups.slice(0, t1), sentenceGroups.slice(t1, t2), sentenceGroups.slice(t2));
+  } else if (totalSentences >= 2) {
+    pageGroupsList.push(sentenceGroups.slice(0, 1), sentenceGroups.slice(1));
+  } else {
+    pageGroupsList.push(sentenceGroups);
+  }
+
+  const pages = pageGroupsList.map(groups => {
+    const items = [];
+    groups.forEach((group, i) => {
+      if (i > 0) items.push(null);
+      group.forEach(line => items.push(line));
+    });
+    return items;
   });
-  const pages = page2Items.length > 0 ? [page1Items, page2Items] : [page1Items];
 
   // Render each page
   const buffers = [];
@@ -284,7 +305,7 @@ async function generateGlossaryExplanationPages(termEN, explanation) {
 
   // Parse explanation with bold support, split into sentences
   const sentences = explanation.split(/(?<=\.)\s+/).filter(s => s.trim());
-  const sentenceGroups = sentences.map(s => wrapTextWithBold(s, 26));
+  const sentenceGroups = sentences.map(s => wrapTextWithBold(s, 32));
 
   // Calculate total height
   const totalContentHeight = sentenceGroups.reduce((h, group, i) => {
@@ -356,51 +377,114 @@ function generateGlossaryLastSlide() {
 // COMPANY / "POZNAS TUTO FIRMU?" CAROUSEL
 // ============================================================
 
-// Slide 1: "Poznas tuto firmu?" template + company logo centered
-async function generateCompanySlide1(logoPath) {
+// Slide 1: template + logo centered + CEO circle bottom-right with name
+async function generateCompanySlide1(logoPath, ceoPath, ceoName, companyName) {
   const templatePath = resolve(__dirname, 'templates/poznasfirmu/slide1.png');
 
+  // Logo - bigger, centered lower
   const logoBuf = readFileSync(logoPath);
   const logoResized = await sharp(logoBuf)
-    .resize(680, 340, { fit: 'contain', background: { r: 0, g: 0, b: 0, alpha: 0 } })
+    .resize(620, 310, { fit: 'contain', background: { r: 0, g: 0, b: 0, alpha: 0 } })
     .toBuffer();
+  const logoX = Math.round((W - 620) / 2);
+  const logoY = 540;
 
-  const logoX = Math.round((W - 680) / 2);
-  const logoY = 680;
+  const composites = [
+    { input: logoResized, top: logoY, left: logoX },
+  ];
+
+  // CEO circle photo - smaller, bottom-right, lower
+  if (ceoPath && existsSync(ceoPath)) {
+    const ceoSize = 180;
+    const ceoBuf = readFileSync(ceoPath);
+    const ceoResized = await sharp(ceoBuf)
+      .resize(ceoSize, ceoSize, { fit: 'cover' })
+      .toBuffer();
+
+    const circleMask = Buffer.from(`<svg width="${ceoSize}" height="${ceoSize}">
+      <circle cx="${ceoSize / 2}" cy="${ceoSize / 2}" r="${ceoSize / 2}" fill="white"/>
+    </svg>`);
+    const ceoCircle = await sharp(ceoResized)
+      .composite([{ input: circleMask, blend: 'dest-in' }])
+      .png()
+      .toBuffer();
+
+    const ceoX = W - ceoSize - 80;
+    const ceoY = H - ceoSize - 100;
+    composites.push({ input: ceoCircle, top: ceoY, left: ceoX });
+
+    // Name + "CEO" label - white, bold, below circle
+    const labelX = ceoX + ceoSize / 2;
+    const nameSvg = Buffer.from(`<svg width="${W}" height="${H}">
+      <text x="${labelX}" y="${ceoY + ceoSize + 36}" font-family="Inter, -apple-system, sans-serif" font-size="28" font-weight="700" fill="#ffffff" text-anchor="middle">${escapeXml(ceoName || '')}</text>
+      <text x="${labelX}" y="${ceoY + ceoSize + 64}" font-family="Inter, -apple-system, sans-serif" font-size="20" font-weight="800" fill="#ffffff" text-anchor="middle" opacity="0.7">CEO</text>
+    </svg>`);
+    composites.push({ input: nameSvg, top: 0, left: 0 });
+  }
 
   return sharp(templatePath)
-    .composite([{ input: logoResized, top: logoY, left: logoX }])
+    .composite(composites)
     .png()
     .toBuffer();
 }
 
-// Slide 2+: company description pages (same layout as article excerpt - biely template)
-async function generateCompanyDescPages(companyName, description) {
+// Slide 2+: company description pages - first page has photo with rounded corners, rest text only
+async function generateCompanyDescPages(companyName, description, photoPath) {
   const templatePath = resolve(__dirname, 'templates/poznasfirmu/slide2.png');
   const textColor = '#0c1a26';
 
   const fontSize = 46;
   const lineHeight = 60;
   const sentenceGap = 34;
-  const maxContentHeight = H - 380;
 
-  // Company name next to red bar
-  const nameSvg = `<text x="70" y="72" font-family="Inter, -apple-system, sans-serif" font-size="26" font-weight="700" fill="#cb1e26" dominant-baseline="central">${escapeXml(companyName)}</text>`;
+  // Company name to the right of red bar (bar at x:86-99, center y:132)
+  const nameSvg = `<text x="115" y="132" font-family="Inter, -apple-system, sans-serif" font-size="26" font-weight="700" fill="#cb1e26" dominant-baseline="central">${escapeXml(companyName)}</text>`;
 
   const sentences = description.split(/(?<=\.)\s+/).filter(s => s.trim());
-  const sentenceGroups = sentences.map(s => wrapTextWithBold(s, 26));
+  const sentenceGroups = sentences.map(s => wrapTextWithBold(s, 38));
 
-  // Always split evenly across 2 pages
-  const mid = Math.ceil(sentenceGroups.length / 2);
+  // Split across 3 pages - if photo on page 1, limit to 2 sentences there
+  const totalSentences = sentenceGroups.length;
   let pageGroups;
-  if (sentenceGroups.length >= 2) {
-    pageGroups = [sentenceGroups.slice(0, mid), sentenceGroups.slice(mid)];
+  const hasPhoto = photoPath && existsSync(photoPath);
+  if (totalSentences >= 3) {
+    const page1Count = hasPhoto ? 2 : Math.ceil(totalSentences / 3);
+    const remaining = sentenceGroups.slice(page1Count);
+    const mid = Math.ceil(remaining.length / 2);
+    pageGroups = [sentenceGroups.slice(0, page1Count), remaining.slice(0, mid), remaining.slice(mid)];
+    // Remove empty pages
+    pageGroups = pageGroups.filter(g => g.length > 0);
+  } else if (totalSentences >= 2) {
+    pageGroups = [sentenceGroups.slice(0, 1), sentenceGroups.slice(1)];
   } else {
     pageGroups = [sentenceGroups];
   }
 
+  // Prepare photo for first page (rounded corners)
+  let photoComposite = null;
+  const photoW = W - 140;
+  const photoH = 440;
+  const photoRadius = 24;
+  if (photoPath && existsSync(photoPath)) {
+    const photoBuf = readFileSync(photoPath);
+    const photoResized = await sharp(photoBuf)
+      .resize(photoW, photoH, { fit: 'cover' })
+      .toBuffer();
+    const roundMask = Buffer.from(`<svg width="${photoW}" height="${photoH}">
+      <rect x="0" y="0" width="${photoW}" height="${photoH}" rx="${photoRadius}" ry="${photoRadius}" fill="white"/>
+    </svg>`);
+    photoComposite = await sharp(photoResized)
+      .composite([{ input: roundMask, blend: 'dest-in' }])
+      .png()
+      .toBuffer();
+  }
+
   const buffers = [];
-  for (const groups of pageGroups) {
+  for (let p = 0; p < pageGroups.length; p++) {
+    const groups = pageGroups[p];
+    const isFirstPage = p === 0;
+    const pageHasPhoto = isFirstPage && photoComposite;
+
     const pageItems = [];
     groups.forEach((group, i) => {
       if (i > 0) pageItems.push(null);
@@ -409,18 +493,41 @@ async function generateCompanyDescPages(companyName, description) {
 
     const totalHeight = pageItems.reduce((h, item) => h + (item === null ? sentenceGap : lineHeight), 0);
     const contentTop = 130;
-    const startY = Math.max(contentTop, contentTop + (maxContentHeight - totalHeight) / 2);
 
-    let currentY = startY;
-    const textSvg = pageItems.map((item) => {
-      if (item === null) { currentY += sentenceGap; return ''; }
-      currentY += lineHeight;
-      return renderRichLine(item, W / 2, currentY, fontSize, textColor);
-    }).join('\n');
+    const composites = [];
 
-    const svgOverlay = Buffer.from(`<svg width="${W}" height="${H}">${nameSvg}${textSvg}</svg>`);
+    if (pageHasPhoto) {
+      // Photo on top (below red bar area), text below
+      const photoX = 70;
+      const photoY = contentTop + 60;
+      composites.push({ input: photoComposite, top: photoY, left: photoX });
+
+      // Text starts right after photo
+      const textStartY = photoY + photoH + 20;
+      let currentY = textStartY;
+      const textSvg = pageItems.map((item) => {
+        if (item === null) { currentY += sentenceGap; return ''; }
+        currentY += lineHeight;
+        return renderRichLine(item, W / 2, currentY, fontSize, textColor);
+      }).join('\n');
+      const svgOverlay = Buffer.from(`<svg width="${W}" height="${H}">${nameSvg}${textSvg}</svg>`);
+      composites.push({ input: svgOverlay, top: 0, left: 0 });
+    } else {
+      // Text only - centered vertically
+      const maxContentHeight = H - 380;
+      const startY = Math.max(contentTop, contentTop + (maxContentHeight - totalHeight) / 2);
+      let currentY = startY;
+      const textSvg = pageItems.map((item) => {
+        if (item === null) { currentY += sentenceGap; return ''; }
+        currentY += lineHeight;
+        return renderRichLine(item, W / 2, currentY, fontSize, textColor);
+      }).join('\n');
+      const svgOverlay = Buffer.from(`<svg width="${W}" height="${H}">${nameSvg}${textSvg}</svg>`);
+      composites.push({ input: svgOverlay, top: 0, left: 0 });
+    }
+
     const buf = await sharp(templatePath)
-      .composite([{ input: svgOverlay, top: 0, left: 0 }])
+      .composite(composites)
       .png()
       .toBuffer();
     buffers.push(buf);
@@ -436,14 +543,35 @@ export async function generateCompanyCarousel(company) {
 
   const slug = company.slug || company.name.toLowerCase().replace(/\s+/g, '-');
   const prefix = `${outputDir}/${slug}`;
-  const logoPath = resolve(__dirname, `templates/poznasfirmu/loga/${company.logo}`);
+  const companyDir = resolve(__dirname, `templates/poznasfirmu/loga/${slug}`);
+  const logoPath = existsSync(companyDir) ? resolve(companyDir, 'logo', company.logo) : resolve(__dirname, `templates/poznasfirmu/loga/${company.logo}`);
+  const ceoDir = resolve(companyDir, 'ceo');
+  const photoDir = resolve(companyDir, 'photo');
   const lastSlidePath = resolve(__dirname, 'templates/poznasfirmu/slide3.png');
+
+  // Find CEO photo and name from filename
+  let ceoPath = null;
+  let ceoName = null;
+  if (existsSync(ceoDir)) {
+    const ceoFiles = readdirSync(ceoDir).filter(f => !f.startsWith('.'));
+    if (ceoFiles.length > 0) {
+      ceoPath = resolve(ceoDir, ceoFiles[0]);
+      ceoName = ceoFiles[0].replace(/\.\w+$/, ''); // name from filename
+    }
+  }
+
+  // Find company photo
+  let photoPath = null;
+  if (existsSync(photoDir)) {
+    const photoFiles = readdirSync(photoDir).filter(f => !f.startsWith('.'));
+    if (photoFiles.length > 0) photoPath = resolve(photoDir, photoFiles[0]);
+  }
 
   console.log(`  IG Company: Generating carousel for: ${company.name}...`);
 
   try {
-    const slide1 = await generateCompanySlide1(logoPath);
-    const descPages = await generateCompanyDescPages(company.name, company.description);
+    const slide1 = await generateCompanySlide1(logoPath, ceoPath, ceoName, company.name);
+    const descPages = await generateCompanyDescPages(company.name, company.description, photoPath);
     const lastSlide = readFileSync(lastSlidePath);
 
     const slides = [];

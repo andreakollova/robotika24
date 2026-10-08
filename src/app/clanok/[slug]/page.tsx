@@ -5,18 +5,78 @@ import Link from 'next/link';
 import ArticleSidebar from '@/components/ArticleSidebar';
 import ShareLinks from '@/components/ShareLinks';
 import AboutAuthor from '@/components/AboutAuthor';
+import type { Metadata } from 'next';
 
 export const revalidate = 60;
 
-export default async function ArticlePage({ params }: { params: Promise<{ slug: string }> }) {
-  const { slug } = await params;
+const BASE_URL = 'https://robotika24.sk';
 
-  const { data: article } = await supabase
+async function getArticle(slug: string) {
+  const { data } = await supabase
     .from('articles')
     .select('*, categories(*)')
     .eq('slug', slug)
     .eq('is_published', true)
     .single();
+  return data as Article | null;
+}
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ slug: string }>;
+}): Promise<Metadata> {
+  const { slug } = await params;
+  const article = await getArticle(slug);
+
+  if (!article) {
+    return { title: 'Článok nenájdený | robotika24' };
+  }
+
+  const canonicalUrl = `${BASE_URL}/clanok/${article.slug}`;
+  const description = article.excerpt?.replace(/\*\*/g, '') || '';
+
+  return {
+    title: `${article.title} | robotika24`,
+    description,
+    authors: article.author ? [{ name: article.author }] : undefined,
+    openGraph: {
+      title: article.title,
+      description,
+      url: canonicalUrl,
+      siteName: 'robotika24',
+      locale: 'sk_SK',
+      type: 'article',
+      publishedTime: article.published_at,
+      modifiedTime: article.updated_at || article.published_at,
+      authors: article.author ? [article.author] : undefined,
+      images: article.image_url
+        ? [
+            {
+              url: article.image_url,
+              width: 1200,
+              height: 630,
+              alt: article.title,
+            },
+          ]
+        : undefined,
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title: article.title,
+      description,
+      images: article.image_url ? [article.image_url] : undefined,
+    },
+    alternates: {
+      canonical: canonicalUrl,
+    },
+  };
+}
+
+export default async function ArticlePage({ params }: { params: Promise<{ slug: string }> }) {
+  const { slug } = await params;
+
+  const article = await getArticle(slug);
 
   if (!article) notFound();
 
@@ -38,8 +98,39 @@ export default async function ArticlePage({ params }: { params: Promise<{ slug: 
   const categoryName = a.categories?.name;
   const articleUrl = `https://robotika24.sk/clanok/${a.slug}`;
 
+  const jsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'NewsArticle',
+    headline: a.title,
+    description: a.excerpt?.replace(/\*\*/g, '') || '',
+    image: a.image_url || undefined,
+    datePublished: a.published_at,
+    dateModified: (a as any).updated_at || a.published_at,
+    author: {
+      '@type': 'Person',
+      name: a.author,
+    },
+    publisher: {
+      '@type': 'Organization',
+      name: 'robotika24',
+      logo: {
+        '@type': 'ImageObject',
+        url: `${BASE_URL}/logo.png`,
+      },
+    },
+    mainEntityOfPage: {
+      '@type': 'WebPage',
+      '@id': articleUrl,
+    },
+  };
+
   return (
-    <div className="max-w-7xl mx-auto px-4 pt-6">
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
+      <div className="max-w-7xl mx-auto px-4 pt-6">
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
         <article className="lg:col-span-2">
           {categoryName && (
@@ -167,5 +258,6 @@ export default async function ArticlePage({ params }: { params: Promise<{ slug: 
         </div>
       </div>
     </div>
+    </>
   );
 }

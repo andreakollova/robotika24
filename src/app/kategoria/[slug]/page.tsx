@@ -1,10 +1,41 @@
 import { supabase } from '@/lib/supabase';
 import type { Article } from '@/lib/supabase';
+import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import ArticleCard from '@/components/ArticleCard';
 import CategorySidebar from '@/components/CategorySidebar';
 
 export const revalidate = 60;
+
+export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
+  const { slug } = await params;
+
+  const { data: category } = await supabase
+    .from('categories')
+    .select('*')
+    .eq('slug', slug)
+    .single();
+
+  if (!category) {
+    return { title: 'Kategória nenájdená' };
+  }
+
+  const title = `${category.name} - Články o robotike | robotika24`;
+  const description = `Najnovšie články z kategórie ${category.name}. Správy, novinky a analýzy zo sveta robotiky a moderných technológií na robotika24.`;
+
+  return {
+    title,
+    description,
+    alternates: { canonical: `/kategoria/${slug}` },
+    openGraph: {
+      title,
+      description,
+      url: `/kategoria/${slug}`,
+      siteName: 'robotika24',
+      type: 'website',
+    },
+  };
+}
 
 export default async function CategoryPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;

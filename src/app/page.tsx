@@ -3,6 +3,7 @@ import type { Article } from '@/lib/supabase';
 import ArticleCard from '@/components/ArticleCard';
 import Sidebar from '@/components/Sidebar';
 import AnnouncementBar from '@/components/AnnouncementBar';
+import ProjectsSection from '@/components/ProjectsSection';
 
 export const revalidate = 60;
 
@@ -39,8 +40,23 @@ async function getArticles() {
 export default async function Home() {
   const { announcement, hero, heroSide, grid, popular, latest } = await getArticles();
 
+  const jsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'WebSite',
+    name: 'robotika24',
+    url: 'https://robotika24.sk',
+    description: 'Slovenský spravodajský portál o robotike, umelej inteligencii a moderných technológiách.',
+    inLanguage: 'sk',
+    publisher: {
+      '@type': 'Organization',
+      name: 'robotika24',
+      logo: { '@type': 'ImageObject', url: 'https://robotika24.sk/logo.png' },
+    },
+  };
+
   return (
     <>
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
       <AnnouncementBar articles={announcement} />
 
       <div style={{ maxWidth: 1280, margin: '0 auto', padding: '24px 20px 0' }}>
@@ -71,6 +87,8 @@ export default async function Home() {
           </aside>
         </div>
       </div>
+
+      <ProjectsSection />
     </>
   );
 }

@@ -2,9 +2,11 @@ import { supabase } from '@/lib/supabase';
 import type { MetadataRoute } from 'next';
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
+  const baseUrl = 'https://robotika24.sk';
+
   const { data: articles } = await supabase
     .from('articles')
-    .select('slug, published_at')
+    .select('slug, published_at, updated_at')
     .eq('is_published', true)
     .order('published_at', { ascending: false });
 
@@ -12,11 +14,9 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     .from('categories')
     .select('slug');
 
-  const baseUrl = 'https://robotika24.sk';
-
   const articleUrls = (articles || []).map((a) => ({
     url: `${baseUrl}/clanok/${a.slug}`,
-    lastModified: new Date(a.published_at),
+    lastModified: new Date(a.updated_at || a.published_at),
     changeFrequency: 'weekly' as const,
     priority: 0.8,
   }));
@@ -28,8 +28,16 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     priority: 0.7,
   }));
 
+  const staticPages = [
+    { url: baseUrl, lastModified: new Date(), changeFrequency: 'hourly' as const, priority: 1 },
+    { url: `${baseUrl}/projekty`, lastModified: new Date(), changeFrequency: 'daily' as const, priority: 0.7 },
+    { url: `${baseUrl}/o-nas`, lastModified: new Date(), changeFrequency: 'monthly' as const, priority: 0.4 },
+    { url: `${baseUrl}/eshop`, lastModified: new Date(), changeFrequency: 'weekly' as const, priority: 0.5 },
+    { url: `${baseUrl}/odber`, lastModified: new Date(), changeFrequency: 'monthly' as const, priority: 0.4 },
+  ];
+
   return [
-    { url: baseUrl, lastModified: new Date(), changeFrequency: 'hourly', priority: 1 },
+    ...staticPages,
     ...categoryUrls,
     ...articleUrls,
   ];

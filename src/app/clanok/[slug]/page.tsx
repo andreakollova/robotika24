@@ -205,7 +205,7 @@ export default async function ArticlePage({ params }: { params: Promise<{ slug: 
 
           {a.excerpt && (
             <p className="text-lg text-gray-600 leading-relaxed mb-6 font-medium border-l-4 border-[#cb1e26] pl-4">
-              {a.excerpt?.replace(/\*\*/g, '')}
+              {renderBold(a.excerpt || '')}
             </p>
           )}
 

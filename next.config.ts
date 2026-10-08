@@ -9,7 +9,7 @@ const nextConfig: NextConfig = {
   },
   serverExternalPackages: ['sharp'],
   outputFileTracingIncludes: {
-    '/api/ig-publish': ['./scraper/**/*'],
+    '/api/ig-publish': ['./scraper/**/*', './scraper/fonts/**/*'],
   },
   cacheComponents: false,
   partialPrefetching: false,

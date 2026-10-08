@@ -1,9 +1,23 @@
 import sharp from 'sharp';
-import { readFileSync, mkdirSync, existsSync, writeFileSync, readdirSync } from 'fs';
+import { readFileSync, mkdirSync, existsSync, writeFileSync, readdirSync, copyFileSync } from 'fs';
 import { resolve, dirname } from 'path';
 import { fileURLToPath } from 'url';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
+
+// Setup fonts for sharp SVG rendering (needed on Linux/Vercel)
+const fontsDir = resolve(__dirname, 'fonts');
+if (existsSync(fontsDir)) {
+  // Copy font to /tmp/fonts so fontconfig can find it
+  const tmpFonts = '/tmp/fonts';
+  if (!existsSync(tmpFonts)) mkdirSync(tmpFonts, { recursive: true });
+  const fontFile = resolve(fontsDir, 'Inter.ttf');
+  const confFile = resolve(fontsDir, 'fonts.conf');
+  if (existsSync(fontFile)) copyFileSync(fontFile, resolve(tmpFonts, 'Inter.ttf'));
+  if (existsSync(confFile)) copyFileSync(confFile, resolve(tmpFonts, 'fonts.conf'));
+  process.env.FONTCONFIG_PATH = tmpFonts;
+  process.env.FONTCONFIG_FILE = resolve(tmpFonts, 'fonts.conf');
+}
 
 // Load env
 try {

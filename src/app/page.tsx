@@ -33,7 +33,7 @@ async function getArticles() {
 
   const popular = allPopular.filter(a => !heroIds.has(a.id)).slice(0, 5);
   const latest = articles.filter(a => !heroIds.has(a.id)).slice(0, 5);
-  const grid = articles.filter(a => !heroIds.has(a.id));
+  const grid = articles.filter(a => !heroIds.has(a.id)).slice(0, 20);
 
   return { announcement, hero, heroSide, grid, popular, latest };
 }

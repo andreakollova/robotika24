@@ -6,6 +6,7 @@ import Footer from "@/components/Footer";
 import CookieBanner from "@/components/CookieBanner";
 import { Analytics } from "@vercel/analytics/next";
 import PageTracker from "@/components/PageTracker";
+import CopyProtection from "@/components/CopyProtection";
 import AuthGate from "@/components/AuthGate";
 
 const inter = Inter({ subsets: ["latin", "latin-ext"] });
@@ -136,6 +137,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <main className="flex-1 w-full overflow-x-hidden">{children}</main>
         <Footer />
         <CookieBanner />
+        <CopyProtection />
         <PageTracker />
         <Analytics />
       </body>

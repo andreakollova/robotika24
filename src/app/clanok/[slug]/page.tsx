@@ -209,6 +209,11 @@ export default async function ArticlePage({ params }: { params: Promise<{ slug: 
             </p>
           )}
 
+          {/* Hidden watermark for copy detection */}
+          <span style={{ position: 'absolute', opacity: 0, fontSize: 0, pointerEvents: 'none' }} aria-hidden="true">
+            {`©robotika24.sk/${a.slug}`}
+          </span>
+
           {a.content && (
             <div className="text-gray-700 leading-relaxed whitespace-pre-wrap text-[15px]">
               {a.content.split('\n').map((line, i) => {

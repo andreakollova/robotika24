@@ -78,6 +78,8 @@ export default function Footer() {
               <Link href="/ochrana-sukromia" style={{ fontSize: 14, color: '#d1d5db', padding: '4px 0', textDecoration: 'none' }} className="hover:text-[#cb1e26] transition-colors">Ochrana súkromia</Link>
               <Link href="/cookies" style={{ fontSize: 14, color: '#d1d5db', padding: '4px 0', textDecoration: 'none' }} className="hover:text-[#cb1e26] transition-colors">Cookies</Link>
               <Link href="/podmienky" style={{ fontSize: 14, color: '#d1d5db', padding: '4px 0', textDecoration: 'none' }} className="hover:text-[#cb1e26] transition-colors">Podmienky používania</Link>
+              <Link href="/spolupraca" style={{ fontSize: 14, color: '#d1d5db', padding: '4px 0', textDecoration: 'none' }} className="hover:text-[#cb1e26] transition-colors">Spolupráca</Link>
+              <Link href="/kontakt" style={{ fontSize: 14, color: '#d1d5db', padding: '4px 0', textDecoration: 'none' }} className="hover:text-[#cb1e26] transition-colors">Kontakt</Link>
             </div>
           </div>
         </div>

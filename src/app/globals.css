@@ -53,6 +53,11 @@ body {
   margin: 0;
   padding: 0;
   transition: background-color 0.2s, color 0.2s;
+  overflow-x: hidden;
+}
+
+html {
+  overflow-x: hidden;
 }
 
 a {
@@ -120,16 +125,16 @@ a {
   }
 }
 
-/* Mobile: ensure images have rounded corners */
+/* Mobile fixes */
 @media (max-width: 639px) {
   .articles-grid img {
     border-radius: 8px;
   }
-  .articles-grid {
-    padding: 0 4px;
-  }
+  .content-layout,
+  .articles-grid,
   .hero-cards {
-    padding: 0 4px;
+    max-width: 100%;
+    overflow: hidden;
   }
 }
 

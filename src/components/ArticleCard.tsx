@@ -24,12 +24,13 @@ export default function ArticleCard({
   if (size === 'hero') {
     return (
       <Link href={`/clanok/${article.slug}`} className="group block relative">
-        <div className="relative overflow-hidden rounded-lg aspect-[16/10]" style={{ backgroundColor: 'var(--bg-tertiary)' }}>
+        <div className="relative overflow-hidden rounded-lg" style={{ backgroundColor: 'var(--bg-tertiary)', paddingBottom: '62.5%' }}>
           {article.image_url && (
             <img
               src={article.image_url}
               alt={article.title}
-              className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+              style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', objectFit: 'cover' }}
+              className="group-hover:scale-105 transition-transform duration-500"
             />
           )}
           <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent" />
@@ -77,12 +78,13 @@ export default function ArticleCard({
   // Normal - vertical card like SportNet grid articles
   return (
     <Link href={`/clanok/${article.slug}`} className="group block">
-      <div className="overflow-hidden rounded-lg aspect-[16/10] mb-3 relative" style={{ backgroundColor: 'var(--bg-tertiary)' }}>
+      <div className="overflow-hidden rounded-lg mb-3 relative" style={{ backgroundColor: 'var(--bg-tertiary)', paddingBottom: '62.5%' }}>
         {article.image_url && (
           <img
             src={article.image_url}
             alt={article.title}
-            className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+            style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', objectFit: 'cover' }}
+            className="group-hover:scale-105 transition-transform duration-500"
           />
         )}
       </div>

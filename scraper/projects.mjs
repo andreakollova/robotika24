@@ -57,7 +57,7 @@ async function scrapeProjects() {
       tags: (p.tags || []).slice(0, 6),
       stars: p.stars || 0,
       license: p.license || '',
-      external_url: `https://robotics.growbotics.ai/project/${p.slug}`,
+      external_url: `https://robotics.growbotics.ai/projects/${p.projectType || 'software'}/${p.slug}`,
       image_url: p.imageUrl || null,
       source_name: 'growbotics.ai',
       is_published: true,

@@ -6,18 +6,6 @@ export default function OdberPage() {
   const [email, setEmail] = useState('');
   const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
   const [message, setMessage] = useState('');
-  const [authed, setAuthed] = useState(false);
-  const [user, setUser] = useState('');
-  const [pass, setPass] = useState('');
-
-  function handleLogin(e: React.FormEvent) {
-    e.preventDefault();
-    if (user === 'admin' && pass === 'admin') {
-      setAuthed(true);
-    } else {
-      alert('Nesprávne prihlasovacie údaje');
-    }
-  }
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -38,33 +26,6 @@ export default function OdberPage() {
       setStatus('error');
       setMessage('Nastala chyba. Skúste to znova.');
     }
-  }
-
-  if (!authed) {
-    return (
-      <div style={{ maxWidth: 400, margin: '0 auto', padding: '80px 20px' }}>
-        <h1 style={{ fontSize: 24, fontWeight: 700, color: 'var(--text-primary)', marginBottom: 24, textAlign: 'center' }}>Prihlásenie</h1>
-        <form onSubmit={handleLogin} style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
-          <input
-            type="text"
-            value={user}
-            onChange={(e) => setUser(e.target.value)}
-            placeholder="Meno"
-            style={{ padding: '12px 16px', fontSize: 15, border: '1px solid var(--border)', borderRadius: 8, outline: 'none', backgroundColor: 'var(--input-bg)', color: 'var(--text-primary)' }}
-          />
-          <input
-            type="password"
-            value={pass}
-            onChange={(e) => setPass(e.target.value)}
-            placeholder="Heslo"
-            style={{ padding: '12px 16px', fontSize: 15, border: '1px solid var(--border)', borderRadius: 8, outline: 'none', backgroundColor: 'var(--input-bg)', color: 'var(--text-primary)' }}
-          />
-          <button type="submit" style={{ padding: '12px', fontSize: 15, fontWeight: 700, color: '#fff', backgroundColor: '#cb1e26', borderRadius: 8, border: 'none', cursor: 'pointer' }}>
-            Prihlásiť sa
-          </button>
-        </form>
-      </div>
-    );
   }
 
   return (
@@ -118,8 +79,7 @@ export default function OdberPage() {
       )}
 
       <p style={{ fontSize: 12, color: 'var(--text-muted)', textAlign: 'center', marginTop: 16, lineHeight: 1.5 }}>
-        Váš email je chránený. Ukladáme iba anonymizovaný hash, nie samotný email.
-        Kedykoľvek sa môžete odhlásiť. Viac v{' '}
+        Váš email je chránený. Kedykoľvek sa môžete odhlásiť. Viac v{' '}
         <a href="/ochrana-sukromia" style={{ color: '#cb1e26' }}>ochrane súkromia</a>.
       </p>
     </div>

@@ -127,17 +127,24 @@ a {
 
 /* Mobile fixes */
 @media (max-width: 639px) {
-  .articles-grid img {
-    border-radius: 12px;
+  .articles-grid {
+    width: 100%;
+    box-sizing: border-box;
   }
   .articles-grid .overflow-hidden.rounded-lg {
-    border-radius: 12px;
+    border-radius: 8px !important;
+    overflow: hidden !important;
   }
   .content-layout,
   .articles-grid,
   .hero-cards {
     max-width: 100%;
     overflow: hidden;
+    box-sizing: border-box;
+  }
+  main {
+    overflow-x: hidden;
+    max-width: 100vw;
   }
 }
 

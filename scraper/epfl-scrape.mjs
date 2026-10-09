@@ -143,19 +143,26 @@ async function main() {
       continue;
     }
 
-    // Check image license - only use CC BY-SA images
+    // Check image license - only use CC-licensed images, never iStock/Getty/©[person]
     let imageUrl = null;
     const imgCredit = article.imageCredit.toLowerCase();
-    const isCCImage = imgCredit.includes('cc by') || imgCredit.includes('cc-by') || imgCredit.includes('epfl') && !imgCredit.includes('istock') && !imgCredit.includes('©');
-    if (article.isCC && article.image && isCCImage) {
+    const isStock = imgCredit.includes('istock') || imgCredit.includes('getty') || imgCredit.includes('shutterstock') || imgCredit.includes('adobe stock');
+    const hasCC = imgCredit.includes('cc by') || imgCredit.includes('cc-by');
+    const isEPFL = imgCredit.includes('epfl') && !isStock;
+
+    if (article.isCC && article.image && !isStock && (hasCC || isEPFL)) {
       imageUrl = article.image;
     }
-    // Also check carousel images for CC ones
+    // Check carousel images for CC ones
     if (!imageUrl && article.carouselImages.length > 0) {
       for (const ci of article.carouselImages) {
         const ciCredit = (ci.description || '').toLowerCase();
-        if (ciCredit.includes('cc by') || (ciCredit.includes('epfl') && !ciCredit.includes('istock') && !ciCredit.includes('©'))) {
-          imageUrl = ci.url ? `https://actu.epfl.ch${ci.url.replace('{options}', '1440x810')}` : null;
+        const ciStock = ciCredit.includes('istock') || ciCredit.includes('getty') || ciCredit.includes('shutterstock');
+        const ciCC = ciCredit.includes('cc by') || ciCredit.includes('cc-by');
+        const ciEPFL = ciCredit.includes('epfl') && !ciStock;
+        if (!ciStock && (ciCC || ciEPFL)) {
+          const ciUrl = ci.url || '';
+          imageUrl = ciUrl.startsWith('http') ? ciUrl.replace('{options}', '1440x810') : ciUrl ? `https://actu.epfl.ch${ciUrl.replace('{options}', '1440x810')}` : null;
           break;
         }
       }

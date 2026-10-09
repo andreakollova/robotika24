@@ -21,6 +21,8 @@ const SLACK_WEBHOOK = process.env.SLACK_WEBHOOK_URL;
 
 const ROBOT_KEYWORDS = ['robot', 'robotic', 'drone', 'humanoid', 'actuator', 'soft robot', 'gripper', 'manipulat', 'locomotion', 'exoskeleton', 'prosthe', 'walking robot', 'flying robot', 'flapping', 'motor'];
 const LIMIT = parseInt(process.argv[2] || '15');
+const USER_AGENT = 'robotika24-bot/1.0 (+https://robotika24.sk; studio@drixton.com)';
+const REQUEST_DELAY = 3000; // 3s between requests - respectful crawling
 
 function slugify(text) {
   return text.toLowerCase().replace(/[^\w\s-]/g, '').replace(/\s+/g, '-').substring(0, 60);
@@ -215,7 +217,7 @@ async function main() {
       console.error(`  Error: ${err.message}`);
     }
 
-    await new Promise(r => setTimeout(r, 1500));
+    await new Promise(r => setTimeout(r, REQUEST_DELAY));
   }
 
   // Slack notification

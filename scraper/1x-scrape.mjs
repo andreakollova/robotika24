@@ -20,6 +20,8 @@ const supabase = createClient('https://odpwfmrllqjdzgbgrxfc.supabase.co', proces
 const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
 const SLACK_WEBHOOK = process.env.SLACK_WEBHOOK_URL;
 const LIMIT = parseInt(process.argv[2] || '10');
+const USER_AGENT = 'robotika24-bot/1.0 (+https://robotika24.sk; studio@drixton.com)';
+const REQUEST_DELAY = 3000;
 
 // Press Gallery photos - use these instead of article images
 const PRESS_PHOTOS = {
@@ -101,7 +103,7 @@ async function main() {
 
   // Fetch stories page
   const res = await fetch('https://www.1x.tech/discover/category/stories', {
-    headers: { 'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36' },
+    headers: { 'User-Agent': USER_AGENT },
   });
   const html = await res.text();
 
@@ -135,7 +137,7 @@ async function main() {
     console.log(`  Fetching: ${story.title.substring(0, 50)}...`);
     try {
       const storyRes = await fetch(story.url, {
-        headers: { 'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36' },
+        headers: { 'User-Agent': USER_AGENT },
       });
       const storyHtml = await storyRes.text();
       const textContent = stripHtml(storyHtml).substring(0, 4000);
@@ -173,7 +175,7 @@ async function main() {
       console.error(`  Error: ${err.message}`);
     }
 
-    await new Promise(r => setTimeout(r, 2000));
+    await new Promise(r => setTimeout(r, REQUEST_DELAY));
   }
 
   // Slack notification

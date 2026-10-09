@@ -3,21 +3,55 @@
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 
+declare global {
+  interface Window {
+    gtag?: (...args: unknown[]) => void;
+  }
+}
+
 export default function CookieBanner() {
   const [visible, setVisible] = useState(false);
 
   useEffect(() => {
     const consent = localStorage.getItem('cookie-consent');
-    if (!consent) setVisible(true);
+    if (!consent) {
+      setVisible(true);
+      // Default: deny all until user consents
+      window.gtag?.('consent', 'default', {
+        ad_storage: 'denied',
+        ad_user_data: 'denied',
+        ad_personalization: 'denied',
+        analytics_storage: 'denied',
+        wait_for_update: 500,
+      });
+    } else if (consent === 'accepted') {
+      grantConsent();
+    }
   }, []);
+
+  function grantConsent() {
+    window.gtag?.('consent', 'update', {
+      ad_storage: 'granted',
+      ad_user_data: 'granted',
+      ad_personalization: 'granted',
+      analytics_storage: 'granted',
+    });
+  }
 
   function accept() {
     localStorage.setItem('cookie-consent', 'accepted');
+    grantConsent();
     setVisible(false);
   }
 
   function decline() {
     localStorage.setItem('cookie-consent', 'declined');
+    window.gtag?.('consent', 'update', {
+      ad_storage: 'denied',
+      ad_user_data: 'denied',
+      ad_personalization: 'denied',
+      analytics_storage: 'granted',
+    });
     setVisible(false);
   }
 
@@ -32,11 +66,11 @@ export default function CookieBanner() {
     }}>
       <div style={{ maxWidth: 900, margin: '0 auto', padding: '0 20px', display: 'flex', alignItems: 'center', gap: 20, flexWrap: 'wrap', justifyContent: 'center' }}>
         <p style={{ fontSize: 14, color: 'var(--text-secondary)', lineHeight: 1.6, flex: 1, minWidth: 280 }}>
-          Táto stránka používa cookies na zabezpečenie funkčnosti webu a zobrazovanie reklám.
-          Viac informácií nájdete v{' '}
-          <Link href="/cookies" style={{ color: '#cb1e26', textDecoration: 'underline' }}>zásadách používania cookies</Link>
-          {' '}a{' '}
-          <Link href="/ochrana-sukromia" style={{ color: '#cb1e26', textDecoration: 'underline' }}>ochrane súkromia</Link>.
+          Táto stránka používa cookies na zabezpečenie funkčnosti webu, analýzu návštevnosti a zobrazovanie personalizovaných reklám.
+          Kliknutím na „Súhlasím" udeľujete súhlas so spracovaním cookies v súlade s nariadením GDPR.{' '}
+          <Link href="/cookies" style={{ color: '#cb1e26', textDecoration: 'underline' }}>Zásady cookies</Link>
+          {' '}|{' '}
+          <Link href="/ochrana-sukromia" style={{ color: '#cb1e26', textDecoration: 'underline' }}>Ochrana súkromia</Link>
         </p>
         <div style={{ display: 'flex', gap: 10, flexShrink: 0 }}>
           <button
@@ -47,7 +81,7 @@ export default function CookieBanner() {
               borderRadius: 24, border: 'none', cursor: 'pointer',
             }}
           >
-            Odmietnuť
+            Len nevyhnutné
           </button>
           <button
             onClick={accept}

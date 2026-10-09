@@ -7,19 +7,24 @@ import Link from 'next/link';
 const categories = [
   { name: 'Novinky', slug: '/', subs: [] },
   {
+    name: 'Humanoidy',
+    slug: '/kategoria/humanoidy',
+    subs: ['Figure', '1X Technologies', 'Boston Dynamics', 'Tesla Optimus', 'Unitree'],
+  },
+  {
+    name: 'Výskum',
+    slug: '/kategoria/vyskum',
+    subs: ['Univerzity', 'Protézy a exoskeletony', 'Bioinšpirácia', 'Mäkká robotika'],
+  },
+  {
     name: 'Technológie',
     slug: '/kategoria/technologie',
-    subs: ['Batérie', 'Kamery a vizuálne systémy', 'Kontroléry', 'Úchopové efektory', 'Mikroprocesory', 'Riadenie pohybu', 'Senzory', 'Mäkká robotika', 'Softvér a simulácia'],
+    subs: ['AI a strojové učenie', 'Senzory a motory', 'Materiály', 'Drony'],
   },
   {
-    name: 'Development',
-    slug: '/kategoria/vyvoj',
-    subs: ['AI a kognícia', 'Haptika', 'Mobilita a navigácia', 'Výskum a vývoj'],
-  },
-  {
-    name: 'Roboty',
-    slug: '/kategoria/roboty',
-    subs: ['AGV', 'AMR', 'Spotrebiteľská robotika', 'Kolaboratívne roboty', 'Drony', 'Humanoidy', 'Priemyselné roboty', 'Autonómne vozidlá'],
+    name: 'Priemysel',
+    slug: '/kategoria/priemysel',
+    subs: ['Automatizácia', 'Logistika', 'Výroba'],
   },
   { name: 'E-shop', slug: '/eshop', subs: [] },
   { name: 'Projekty', slug: '/projekty', subs: [] },
@@ -236,7 +241,7 @@ export default function Header() {
 
           {/* Logo center */}
           <Link href="/" style={{ position: 'absolute', left: '50%', transform: 'translateX(-50%)' }}>
-            <Image src={isDark ? '/logo-dark.png' : '/logo.png'} alt="robotika24" width={180} height={36} style={{ height: 32, width: 'auto' }} priority />
+            <Image src={isDark ? '/logo-dark.png' : '/logo.png'} alt="robotika24" width={200} height={40} style={{ height: 40, width: 'auto' }} priority />
           </Link>
 
           {/* Search right */}
@@ -282,26 +287,42 @@ export default function Header() {
         )}
       </header>
 
-      {/* Sticky dark navbar on scroll */}
+      {/* Sticky navbar on scroll - desktop + mobile */}
       <div style={{
         position: 'fixed', top: 0, left: 0, right: 0, zIndex: 60,
         backgroundColor: '#0c1a26', boxShadow: '0 4px 6px -1px rgba(0,0,0,0.3)',
         transform: scrolled ? 'translateY(0)' : 'translateY(-100%)',
         transition: 'transform 0.3s ease',
       }}>
-        <div style={{ maxWidth: 1280, margin: '0 auto', padding: '0 20px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', height: 80 }}>
+        <div style={{ maxWidth: 1280, margin: '0 auto', padding: '0 20px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', height: 60 }}>
+          {/* Mobile: hamburger */}
+          <button className="md:hidden" style={{ color: '#fff', padding: 6, background: 'none', border: 'none', cursor: 'pointer' }} onClick={() => setMobileOpen(!mobileOpen)}>
+            <svg width="24" height="24" fill="none" stroke="currentColor" strokeWidth="2">
+              {mobileOpen ? <path d="M6 6l12 12M6 18L18 6" /> : <path d="M4 12h16M4 6h16M4 18h16" />}
+            </svg>
+          </button>
+
           <Link href="/" style={{ flexShrink: 0 }}>
-            <Image src="/logo-dark.png" alt="robotika24" width={280} height={56} style={{ height: 56, width: 'auto' }} />
+            <Image src="/logo-dark.png" alt="robotika24" width={280} height={56} className="h-[36px] md:h-[48px] w-auto" />
           </Link>
+
+          {/* Desktop nav */}
           <div className="hidden md:flex" style={{ alignItems: 'center' }}>
             {categories.map((cat) => (
-              <Link key={cat.slug} href={cat.slug} style={{ padding: '8px 14px', fontSize: 13, fontWeight: 700, color: '#d1d5db', textTransform: 'uppercase', letterSpacing: '0.04em', textDecoration: 'none', whiteSpace: 'nowrap' }} className="hover:text-white transition-colors">
+              <Link key={cat.slug} href={cat.slug} style={{ padding: '8px 12px', fontSize: 12, fontWeight: 700, color: '#ffffff', textTransform: 'uppercase', letterSpacing: '0.04em', textDecoration: 'none', whiteSpace: 'nowrap' }} className="hover:text-[#cb1e26] transition-colors">
                 {cat.name}
               </Link>
             ))}
-            <Link href="/odber" style={{ marginLeft: 16, display: 'inline-flex', alignItems: 'center', gap: 6, padding: '9px 22px', fontSize: 13, fontWeight: 700, color: '#fff', backgroundColor: '#cb1e26', borderRadius: 24, textDecoration: 'none' }} className="hover:bg-[#e0242d] transition-colors">
-              <BellIcon /> Odoberať
-            </Link>
+          </div>
+
+          {/* Search + dark mode */}
+          <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+            <button onClick={() => setSearchOpen(!searchOpen)} style={{ color: '#9ca3af', cursor: 'pointer', background: 'none', border: 'none', padding: 4 }} className="hover:text-white transition-colors">
+              <SearchIcon />
+            </button>
+            <button onClick={() => { const next = !isDark; setIsDark(next); document.documentElement.classList.toggle('dark', next); localStorage.setItem('theme', next ? 'dark' : 'light'); }} style={{ color: '#9ca3af', cursor: 'pointer', background: 'none', border: 'none', padding: 4 }} className="hover:text-white transition-colors">
+              {isDark ? <SunIcon /> : <MoonIcon />}
+            </button>
           </div>
         </div>
       </div>

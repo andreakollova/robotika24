@@ -10,7 +10,7 @@ export default function AIModelsWidget() {
     <div style={{ border: '1px solid var(--border)', borderRadius: 8, overflow: 'hidden', marginTop: 20 }}>
       <div style={{ padding: '16px 16px 12px', borderBottom: '1px solid var(--border-light)' }}>
         <span style={{ fontSize: 10, fontWeight: 700, color: '#cb1e26', textTransform: 'uppercase', letterSpacing: '0.08em' }}>AI Modely</span>
-        <p style={{ fontSize: 13, color: 'var(--text-secondary)', margin: '6px 0 0', lineHeight: 1.4 }}>Aktuálne najlepšie modely v daných kategóriách</p>
+        <p style={{ fontSize: 13, color: 'var(--text-secondary)', margin: '6px 0 0', lineHeight: 1.4 }}>Najlepšie AI modely podľa Artificial Analysis</p>
       </div>
       <div>
         {models.map((m) => (
@@ -25,10 +25,11 @@ export default function AIModelsWidget() {
           </div>
         ))}
       </div>
-      <a href="https://artificialanalysis.ai/leaderboards/models" target="_blank" rel="noopener noreferrer"
-        style={{ display: 'block', padding: '8px', fontSize: 10, color: 'var(--text-muted)', textDecoration: 'none', textAlign: 'center' }}>
-        artificialanalysis.ai
-      </a>
+      <div style={{ padding: '8px 14px', fontSize: 10, color: 'var(--text-muted)', lineHeight: 1.5, textAlign: 'center' }}>
+        Zdroj: <a href="https://artificialanalysis.ai/leaderboards/models" target="_blank" rel="noopener noreferrer" style={{ color: 'var(--text-muted)', textDecoration: 'underline' }}>Artificial Analysis</a>.
+        Poradie vychádza z nezávislých benchmarkov.
+        <br />Posledná aktualizácia: 9. 10. 2026.
+      </div>
     </div>
   );
 }

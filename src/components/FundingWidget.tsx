@@ -12,12 +12,9 @@ export default function FundingWidget() {
   return (
     <div style={{ border: '1px solid var(--border)', borderRadius: 8, overflow: 'hidden' }}>
       <div style={{ padding: '16px 16px 12px', borderBottom: '1px solid var(--border-light)' }}>
-        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 6 }}>
-          <span style={{ fontSize: 10, fontWeight: 700, color: '#cb1e26', textTransform: 'uppercase', letterSpacing: '0.08em' }}>Humanoidná robotika</span>
-          <span style={{ fontSize: 11, color: 'var(--text-muted)' }}>2026</span>
-        </div>
-        <p style={{ fontSize: 13, color: 'var(--text-secondary)', margin: 0, lineHeight: 1.4 }}>
-          V súčasnosti tento sektor dosiahol rekordných <strong>$11 mld</strong>
+        <span style={{ fontSize: 10, fontWeight: 700, color: '#cb1e26', textTransform: 'uppercase', letterSpacing: '0.08em' }}>Humanoidná robotika</span>
+        <p style={{ fontSize: 13, color: 'var(--text-secondary)', margin: '6px 0 0', lineHeight: 1.4 }}>
+          Najviac financované spoločnosti v humanoidnej robotike
         </p>
       </div>
       <div>
@@ -31,10 +28,10 @@ export default function FundingWidget() {
           </div>
         ))}
       </div>
-      <a href="https://dealroom.co/resources/humanoid-robotics/" target="_blank" rel="noopener noreferrer"
-        style={{ display: 'block', padding: '8px', fontSize: 10, color: 'var(--text-muted)', textDecoration: 'none', textAlign: 'center' }}>
-        dealroom.co
-      </a>
+      <div style={{ padding: '8px 14px', fontSize: 10, color: 'var(--text-muted)', lineHeight: 1.5, textAlign: 'center' }}>
+        Údaje o financovaní vychádzajú z verejne dostupných oznámení spoločností.
+        <br />Posledná aktualizácia: 9. 10. 2026.
+      </div>
     </div>
   );
 }

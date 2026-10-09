@@ -1,5 +1,6 @@
 import Image from 'next/image';
 import Link from 'next/link';
+import ContactForm from '@/components/ContactForm';
 
 const navLinks = [
   { name: 'Novinky', href: '/' },
@@ -81,6 +82,9 @@ export default function Footer() {
             </div>
           </div>
         </div>
+
+        {/* Contact form */}
+        <ContactForm />
 
         {/* Bottom bar */}
         <div style={{ borderTop: '1px solid #1f2937', marginTop: 40, paddingTop: 24, display: 'flex', flexWrap: 'wrap', alignItems: 'center', justifyContent: 'space-between', gap: 16 }}>

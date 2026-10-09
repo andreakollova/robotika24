@@ -69,7 +69,7 @@ async function translateArticle(title, summary, content, originalAuthor, sourceU
   const prompt = `Prelož nasledujúci článok z angličtiny do slovenčiny. Prepíš ho tak, aby to znelo ako profesionálny slovenský technologický článok.
 
 KRITICKÉ PRAVIDLÁ:
-- NADPIS: Musí byť KRÁTKY a ÚDERNÝ - maximálne 8-10 slov. Musí obsahovať hlavné kľúčové slovo čo najbližšie k začiatku.
+- NADPIS: Informatívny a zaujímavý - 12-15 slov. Musí obsahovať hlavné kľúčové slovo čo najbližšie k začiatku. Plynulá slovenská veta.
 - EXCERPT: 6-8 viet, do 800 znakov. Každá veta musí končiť bodkou. Dôležité slová a názvy (firmy, roboty, technológie, čísla) VŽDY označ **boldom**.
 - CONTENT: Plný preklad s ## nadpismi pre sekcie. Kľúčové pojmy boldni.
 - NIKDY NEPREKLADAJ mená ľudí a názvy firiem/technológií.
@@ -91,7 +91,7 @@ Preklad a úprava: Redakcia robotika24
 Licencia: CC BY-SA 4.0
 
 Vráť odpoveď v JSON formáte (bez markdown blokov):
-{"title": "nadpis max 8-10 slov", "excerpt": "6-8 viet s **boldmi**", "content": "plný preklad s ## nadpismi a zdrojom na konci"}
+{"title": "informatívny nadpis 12-15 slov", "excerpt": "6-8 viet s **boldmi**", "content": "plný preklad s ## nadpismi a zdrojom na konci"}
 
 NADPIS:
 ${title}

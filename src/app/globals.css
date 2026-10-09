@@ -128,7 +128,10 @@ a {
 /* Mobile fixes */
 @media (max-width: 639px) {
   .articles-grid img {
-    border-radius: 8px;
+    border-radius: 12px;
+  }
+  .articles-grid .overflow-hidden.rounded-lg {
+    border-radius: 12px;
   }
   .content-layout,
   .articles-grid,

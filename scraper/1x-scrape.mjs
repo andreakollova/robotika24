@@ -23,13 +23,20 @@ const LIMIT = parseInt(process.argv[2] || '10');
 const USER_AGENT = 'robotika24-bot/1.0 (+https://robotika24.sk; studio@drixton.com)';
 const REQUEST_DELAY = 3000;
 
-// Press Gallery photos - use these instead of article images
-const PRESS_PHOTOS = {
-  neo: 'https://cdn.sanity.io/images/qka6yvsc/production/27d9416b8c38cb79b87d0eddec3c39e501c75a64-3006x1686.jpg?w=1440',
-  neo_gamma: 'https://cdn.sanity.io/images/qka6yvsc/production/32aad1c5c00b8a98d984852682f6e3c04976a78c-1920x1079.png?w=1440',
-  neo_beta: 'https://cdn.sanity.io/images/qka6yvsc/production/20b2f06046b824f97eeb29126876f33e76314a34-3840x2160.png?w=1440',
-  eve: 'https://cdn.sanity.io/images/qka6yvsc/production/efda54ece424abb58c7bd887ea0a263fc730f12c-2480x1460.png?w=1440',
-};
+// Press Gallery photos - rotate through all available
+const PRESS_PHOTOS = [
+  'https://cdn.sanity.io/images/qka6yvsc/production/27d9416b8c38cb79b87d0eddec3c39e501c75a64-3006x1686.jpg?w=1440',
+  'https://cdn.sanity.io/images/qka6yvsc/production/26eef0d398d71914c74f91b4378041ca6a405dfe-1372x772.jpg?w=1440',
+  'https://cdn.sanity.io/images/qka6yvsc/production/062d9d9fa6c099fff2d5fd082af3769475e57285-6570x4380.jpg?w=1440',
+  'https://cdn.sanity.io/images/qka6yvsc/production/32aad1c5c00b8a98d984852682f6e3c04976a78c-1920x1079.png?w=1440',
+  'https://cdn.sanity.io/images/qka6yvsc/production/8ff71509491b88bbce8ca936067a4b7731d8d2c0-4096x2503.png?w=1440',
+  'https://cdn.sanity.io/images/qka6yvsc/production/040aeb1407abb3856aea7f4f90d827826264190d-1920x1080.png?w=1440',
+  'https://cdn.sanity.io/images/qka6yvsc/production/20b2f06046b824f97eeb29126876f33e76314a34-3840x2160.png?w=1440',
+  'https://cdn.sanity.io/images/qka6yvsc/production/a5bcc13e85bcdb106bb68a65747cc2166314bc5a-3840x2160.png?w=1440',
+  'https://cdn.sanity.io/images/qka6yvsc/production/efda54ece424abb58c7bd887ea0a263fc730f12c-2480x1460.png?w=1440',
+  'https://cdn.sanity.io/images/qka6yvsc/production/5f8053806272114ee891bba1091ceddca06c32af-1920x1281.png?w=1440',
+];
+let photoIndex = 0;
 
 function slugify(text) {
   return text.toLowerCase().replace(/[^\w\s-]/g, '').replace(/\s+/g, '-').substring(0, 60);
@@ -44,12 +51,10 @@ async function articleExists(sourceUrl) {
   return data && data.length > 0;
 }
 
-function pickPressPhoto(title, text) {
-  const combined = (title + ' ' + text).toLowerCase();
-  if (combined.includes('neo gamma')) return PRESS_PHOTOS.neo_gamma;
-  if (combined.includes('neo beta')) return PRESS_PHOTOS.neo_beta;
-  if (combined.includes('eve')) return PRESS_PHOTOS.eve;
-  return PRESS_PHOTOS.neo; // default to NEO
+function pickPressPhoto() {
+  const photo = PRESS_PHOTOS[photoIndex % PRESS_PHOTOS.length];
+  photoIndex++;
+  return photo;
 }
 
 async function writeArticle(title, content) {
@@ -142,8 +147,7 @@ async function main() {
       const storyHtml = await storyRes.text();
       const textContent = stripHtml(storyHtml).substring(0, 4000);
 
-      // Pick press gallery photo
-      const imageUrl = pickPressPhoto(story.title, textContent);
+      const imageUrl = pickPressPhoto();
 
       console.log(`  Writing article...`);
       const article = await writeArticle(story.title, textContent);

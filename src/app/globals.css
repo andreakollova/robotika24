@@ -108,15 +108,22 @@ a {
   }
 }
 
-/* Articles grid - 2 cols inside content-layout */
+/* Articles grid - 1 col on mobile, 2 on tablet+ */
 .articles-grid {
   display: grid;
   grid-template-columns: 1fr;
-  gap: 32px 24px;
+  gap: 28px 24px;
 }
 @media (min-width: 640px) {
   .articles-grid {
     grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+/* Mobile: ensure images have rounded corners and padding */
+@media (max-width: 639px) {
+  .articles-grid img {
+    border-radius: 8px;
   }
 }
 

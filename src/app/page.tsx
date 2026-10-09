@@ -59,7 +59,7 @@ export default async function Home() {
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
       <AnnouncementBar articles={announcement} />
 
-      <div style={{ maxWidth: 1280, margin: '0 auto', padding: '24px 20px 0' }}>
+      <div style={{ maxWidth: 1280, margin: '0 auto', padding: '24px 16px 0' }} className="sm:!px-5">
         {/* Hero cards - full width, side by side */}
         {hero && (
           <section style={{ marginBottom: 24 }}>

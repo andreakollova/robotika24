@@ -304,7 +304,7 @@ export default function Header() {
             <button onClick={() => setSearchOpen(!searchOpen)} style={{ color: '#9ca3af', cursor: 'pointer', background: 'none', border: 'none', padding: 4 }} className="hover:text-white transition-colors hidden md:block">
               <SearchIcon />
             </button>
-            <button onClick={() => { const next = !isDark; setIsDark(next); document.documentElement.classList.toggle('dark', next); localStorage.setItem('theme', next ? 'dark' : 'light'); }} style={{ color: '#9ca3af', cursor: 'pointer', background: 'none', border: 'none', padding: 4 }} className="hover:text-white transition-colors">
+            <button onClick={() => { const next = !isDark; setIsDark(next); document.documentElement.classList.toggle('dark', next); localStorage.setItem('theme', next ? 'dark' : 'light'); }} style={{ color: '#ffffff', cursor: 'pointer', background: 'none', border: 'none', padding: 4 }} className="hover:text-[#cb1e26] transition-colors">
               {isDark ? <SunIcon /> : <MoonIcon />}
             </button>
           </div>

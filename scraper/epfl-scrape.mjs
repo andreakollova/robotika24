@@ -161,8 +161,13 @@ async function main() {
       }
     }
 
+    // Skip articles without CC-licensed image
+    if (!imageUrl) {
+      console.log(`  SKIP (no CC image): ${article.title.substring(0, 50)}...`);
+      continue;
+    }
+
     console.log(`  Translating: ${article.title.substring(0, 50)}...`);
-    console.log(`    Image: ${imageUrl ? 'CC BY-SA ✓' : 'No CC image ✗'}`);
 
     try {
       const translated = await translateArticle(

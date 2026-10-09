@@ -8,7 +8,7 @@ function timeAgo(dateStr: string) {
   const hours = Math.floor(mins / 60);
   if (hours < 24) return `pred ${hours} hod`;
   const days = Math.floor(hours / 24);
-  return `pred ${days} ${days === 1 ? 'dnom' : 'dnami'}`;
+  return `pred ${days} ${days === 1 ? 'dňom' : 'dňami'}`;
 }
 
 export default function ArticleCard({

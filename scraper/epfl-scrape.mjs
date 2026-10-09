@@ -51,7 +51,7 @@ async function fetchEPFLRoboticsArticles() {
           url: a.news_url,
           date: a.publish_date,
           author: authorNames,
-          image: a.visual_url ? `https://actu.epfl.ch${a.visual_url.replace('{options}', '1440x810')}` : null,
+          image: a.visual_url ? (a.visual_url.startsWith('http') ? a.visual_url.replace('{options}', '1440x810') : `https://actu.epfl.ch${a.visual_url.replace('{options}', '1440x810')}`) : null,
           imageCredit: a.visual_description || '',
           summary: stripHtml(a.subtitle || a.text || '').substring(0, 500),
           fullText: stripHtml(a.text || '').substring(0, 4000),

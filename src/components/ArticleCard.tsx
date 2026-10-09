@@ -23,8 +23,8 @@ export default function ArticleCard({
   // Hero - big card with overlay like SportNet main article
   if (size === 'hero') {
     return (
-      <Link href={`/clanok/${article.slug}`} className="group block relative h-full">
-        <div className="relative overflow-hidden rounded-lg h-full min-h-[250px] md:min-h-[300px]">
+      <Link href={`/clanok/${article.slug}`} className="group block relative">
+        <div className="relative overflow-hidden rounded-lg aspect-[4/3] md:aspect-[16/10]">
           {article.image_url && (
             <img
               src={article.image_url}

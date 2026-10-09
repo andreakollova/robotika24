@@ -23,20 +23,30 @@ const LIMIT = parseInt(process.argv[2] || '10');
 const USER_AGENT = 'robotika24-bot/1.0 (+https://robotika24.sk; studio@drixton.com)';
 const REQUEST_DELAY = 3000;
 
-// Press Gallery photos - rotate through all available
-const PRESS_PHOTOS = [
-  'https://cdn.sanity.io/images/qka6yvsc/production/27d9416b8c38cb79b87d0eddec3c39e501c75a64-3006x1686.jpg?w=1440',
-  'https://cdn.sanity.io/images/qka6yvsc/production/26eef0d398d71914c74f91b4378041ca6a405dfe-1372x772.jpg?w=1440',
-  'https://cdn.sanity.io/images/qka6yvsc/production/062d9d9fa6c099fff2d5fd082af3769475e57285-6570x4380.jpg?w=1440',
-  'https://cdn.sanity.io/images/qka6yvsc/production/32aad1c5c00b8a98d984852682f6e3c04976a78c-1920x1079.png?w=1440',
-  'https://cdn.sanity.io/images/qka6yvsc/production/8ff71509491b88bbce8ca936067a4b7731d8d2c0-4096x2503.png?w=1440',
-  'https://cdn.sanity.io/images/qka6yvsc/production/040aeb1407abb3856aea7f4f90d827826264190d-1920x1080.png?w=1440',
-  'https://cdn.sanity.io/images/qka6yvsc/production/20b2f06046b824f97eeb29126876f33e76314a34-3840x2160.png?w=1440',
-  'https://cdn.sanity.io/images/qka6yvsc/production/a5bcc13e85bcdb106bb68a65747cc2166314bc5a-3840x2160.png?w=1440',
-  'https://cdn.sanity.io/images/qka6yvsc/production/efda54ece424abb58c7bd887ea0a263fc730f12c-2480x1460.png?w=1440',
-  'https://cdn.sanity.io/images/qka6yvsc/production/5f8053806272114ee891bba1091ceddca06c32af-1920x1281.png?w=1440',
-];
-let photoIndex = 0;
+// Press Gallery photos organized by robot type
+const PRESS_PHOTOS = {
+  neo: [
+    'https://cdn.sanity.io/images/qka6yvsc/production/27d9416b8c38cb79b87d0eddec3c39e501c75a64-3006x1686.jpg?w=1440',
+    'https://cdn.sanity.io/images/qka6yvsc/production/26eef0d398d71914c74f91b4378041ca6a405dfe-1372x772.jpg?w=1440',
+    'https://cdn.sanity.io/images/qka6yvsc/production/062d9d9fa6c099fff2d5fd082af3769475e57285-6570x4380.jpg?w=1440',
+  ],
+  neo_gamma: [
+    'https://cdn.sanity.io/images/qka6yvsc/production/32aad1c5c00b8a98d984852682f6e3c04976a78c-1920x1079.png?w=1440',
+    'https://cdn.sanity.io/images/qka6yvsc/production/8ff71509491b88bbce8ca936067a4b7731d8d2c0-4096x2503.png?w=1440',
+    'https://cdn.sanity.io/images/qka6yvsc/production/040aeb1407abb3856aea7f4f90d827826264190d-1920x1080.png?w=1440',
+  ],
+  neo_beta: [
+    'https://cdn.sanity.io/images/qka6yvsc/production/20b2f06046b824f97eeb29126876f33e76314a34-3840x2160.png?w=1440',
+    'https://cdn.sanity.io/images/qka6yvsc/production/a5bcc13e85bcdb106bb68a65747cc2166314bc5a-3840x2160.png?w=1440',
+    'https://cdn.sanity.io/images/qka6yvsc/production/7cff058520c7616cc6850bb9b8ee79ac72aa7b04-3840x2160.png?w=1440',
+  ],
+  eve: [
+    'https://cdn.sanity.io/images/qka6yvsc/production/efda54ece424abb58c7bd887ea0a263fc730f12c-2480x1460.png?w=1440',
+    'https://cdn.sanity.io/images/qka6yvsc/production/5f8053806272114ee891bba1091ceddca06c32af-1920x1281.png?w=1440',
+    'https://cdn.sanity.io/images/qka6yvsc/production/d40fa251392c260a9a9edb0eccd0130ce8f381f4-2480x1460.png?w=1440',
+  ],
+};
+const usedPhotos = new Set();
 
 function slugify(text) {
   return text.toLowerCase().replace(/[^\w\s-]/g, '').replace(/\s+/g, '-').substring(0, 60);
@@ -51,10 +61,32 @@ async function articleExists(sourceUrl) {
   return data && data.length > 0;
 }
 
-function pickPressPhoto() {
-  const photo = PRESS_PHOTOS[photoIndex % PRESS_PHOTOS.length];
-  photoIndex++;
-  return photo;
+function pickPressPhoto(title, text) {
+  const combined = (title + ' ' + text).toLowerCase();
+
+  let pool;
+  if (combined.includes('neo beta') || combined.includes('digiovanni') || combined.includes('cooking')) {
+    pool = PRESS_PHOTOS.neo_beta;
+  } else if (combined.includes('neo gamma') || combined.includes('nvidia') || combined.includes('gtc')) {
+    pool = PRESS_PHOTOS.neo_gamma;
+  } else if (combined.includes('eve') || combined.includes('industrial')) {
+    pool = PRESS_PHOTOS.eve;
+  } else if (combined.includes('hands') || combined.includes('factory') || combined.includes('neo') || combined.includes('production')) {
+    pool = PRESS_PHOTOS.neo;
+  } else {
+    // General - rotate through all
+    pool = [...PRESS_PHOTOS.neo, ...PRESS_PHOTOS.neo_gamma, ...PRESS_PHOTOS.neo_beta, ...PRESS_PHOTOS.eve];
+  }
+
+  // Pick one not yet used
+  for (const p of pool) {
+    if (!usedPhotos.has(p)) {
+      usedPhotos.add(p);
+      return p;
+    }
+  }
+  // All used - pick random from pool
+  return pool[Math.floor(Math.random() * pool.length)];
 }
 
 async function writeArticle(title, content) {
@@ -147,7 +179,7 @@ async function main() {
       const storyHtml = await storyRes.text();
       const textContent = stripHtml(storyHtml).substring(0, 4000);
 
-      const imageUrl = pickPressPhoto();
+      const imageUrl = pickPressPhoto(story.title, textContent);
 
       console.log(`  Writing article...`);
       const article = await writeArticle(story.title, textContent);

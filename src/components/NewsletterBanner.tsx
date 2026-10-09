@@ -24,7 +24,7 @@ export default function NewsletterBanner() {
   }
 
   return (
-    <section style={{ backgroundColor: '#0c1a26', padding: '48px 20px', marginBottom: 0 }}>
+    <section style={{ backgroundColor: '#0c1a26', padding: '48px 20px', marginBottom: 32 }}>
       <div style={{ maxWidth: 700, margin: '0 auto', textAlign: 'center' }}>
         <img src="/newsletter-owl.png" alt="robotika24" style={{ height: 120, margin: '0 auto 16px', display: 'block' }} />
         <h2 style={{ fontSize: 24, fontWeight: 700, color: '#ffffff', marginBottom: 8 }}>
@@ -43,11 +43,13 @@ export default function NewsletterBanner() {
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               placeholder="vas@email.sk"
+              className="newsletter-input"
               required
               style={{
                 flex: 1, minWidth: 220, padding: '14px 20px', fontSize: 15,
                 border: '1px solid #374151', borderRadius: 24, outline: 'none',
-                backgroundColor: '#1a2028', color: '#ffffff',
+                backgroundColor: '#0c1a26', color: '#ffffff',
+                border: '1px solid #2f3336',
               }}
             />
             <button

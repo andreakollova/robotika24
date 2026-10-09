@@ -76,6 +76,11 @@ img, video, iframe {
   max-width: 100%;
 }
 
+/* Newsletter input placeholder */
+.newsletter-input::placeholder {
+  color: #374151;
+}
+
 /* Protect images from easy copying */
 img {
   -webkit-user-select: none;

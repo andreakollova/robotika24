@@ -88,6 +88,20 @@ export default async function Home() {
         </div>
       </div>
 
+      {/* Newsletter CTA */}
+      <section style={{ maxWidth: 1280, margin: '0 auto', padding: '0 20px 32px' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 20, padding: '24px 28px', border: '1px solid var(--border)', borderRadius: 12, flexWrap: 'wrap' }}>
+          <img src="/mascot-small.png" alt="robotika24" style={{ width: 56, height: 56, flexShrink: 0 }} />
+          <div style={{ flex: 1, minWidth: 200 }}>
+            <p style={{ fontSize: 15, fontWeight: 700, color: 'var(--text-primary)', margin: 0 }}>Odoberajte novinky zo sveta robotiky</p>
+            <p style={{ fontSize: 13, color: 'var(--text-tertiary)', margin: '4px 0 0' }}>Najnovšie správy priamo do vášho e-mailu.</p>
+          </div>
+          <a href="/odber" style={{ padding: '10px 24px', fontSize: 13, fontWeight: 700, color: '#fff', backgroundColor: '#cb1e26', borderRadius: 24, textDecoration: 'none', whiteSpace: 'nowrap' }}>
+            Odoberať
+          </a>
+        </div>
+      </section>
+
       <ProjectsSection />
     </>
   );

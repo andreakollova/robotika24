@@ -45,24 +45,24 @@ export default function ContactForm() {
   }
 
   return (
-    <div style={{ borderTop: '1px solid #1f2937', marginTop: 40, paddingTop: 32 }}>
-      <h3 style={{ color: '#fff', fontSize: 16, fontWeight: 700, marginBottom: 16 }}>Napíšte nám</h3>
+    <div style={{ marginTop: 40, paddingTop: 32, borderTop: '2px solid #cb1e26' }}>
+      <h3 style={{ color: 'var(--text-primary)', fontSize: 20, fontWeight: 700, marginBottom: 16 }}>Napíšte nám</h3>
       {status === 'success' ? (
         <p style={{ color: '#16a34a', fontSize: 14 }}>{feedback}</p>
       ) : (
         <form onSubmit={handleSubmit} style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12 }} className="max-sm:!grid-cols-1">
           <input type="text" value={name} onChange={e => setName(e.target.value)} placeholder="Meno" required
-            style={{ padding: '10px 14px', fontSize: 14, backgroundColor: '#1f2937', border: '1px solid #374151', borderRadius: 6, color: '#fff', outline: 'none' }} />
+            style={{ padding: '10px 14px', fontSize: 14, backgroundColor: 'var(--bg-secondary)', border: '1px solid var(--border)', borderRadius: 24, color: 'var(--text-primary)', outline: 'none' }} />
           <input type="email" value={email} onChange={e => setEmail(e.target.value)} placeholder="E-mail" required
-            style={{ padding: '10px 14px', fontSize: 14, backgroundColor: '#1f2937', border: '1px solid #374151', borderRadius: 6, color: '#fff', outline: 'none' }} />
+            style={{ padding: '10px 14px', fontSize: 14, backgroundColor: 'var(--bg-secondary)', border: '1px solid var(--border)', borderRadius: 24, color: 'var(--text-primary)', outline: 'none' }} />
           <textarea value={message} onChange={e => setMessage(e.target.value)} placeholder="Správa" required rows={3}
-            style={{ padding: '10px 14px', fontSize: 14, backgroundColor: '#1f2937', border: '1px solid #374151', borderRadius: 6, color: '#fff', outline: 'none', gridColumn: '1 / -1', resize: 'vertical' }} />
+            style={{ padding: '10px 14px', fontSize: 14, backgroundColor: 'var(--bg-secondary)', border: '1px solid var(--border)', borderRadius: 24, color: 'var(--text-primary)', outline: 'none', gridColumn: '1 / -1', resize: 'vertical' }} />
           <div style={{ display: 'flex', alignItems: 'center', gap: 8, gridColumn: '1 / -1' }}>
             <span style={{ color: '#9ca3af', fontSize: 13 }}>{captchaQ.a} + {captchaQ.b} =</span>
             <input type="text" value={captchaAnswer} onChange={e => setCaptchaAnswer(e.target.value)} required
-              style={{ width: 60, padding: '8px 12px', fontSize: 14, backgroundColor: '#1f2937', border: '1px solid #374151', borderRadius: 6, color: '#fff', outline: 'none' }} />
+              style={{ width: 60, padding: '8px 12px', fontSize: 14, backgroundColor: 'var(--bg-secondary)', border: '1px solid var(--border)', borderRadius: 24, color: 'var(--text-primary)', outline: 'none' }} />
             <button type="submit" disabled={status === 'loading'}
-              style={{ marginLeft: 'auto', padding: '10px 24px', fontSize: 13, fontWeight: 700, color: '#fff', backgroundColor: '#cb1e26', borderRadius: 6, border: 'none', cursor: 'pointer', opacity: status === 'loading' ? 0.7 : 1 }}>
+              style={{ marginLeft: 'auto', padding: '10px 24px', fontSize: 13, fontWeight: 700, color: '#fff', backgroundColor: '#cb1e26', borderRadius: 24, border: 'none', cursor: 'pointer', opacity: status === 'loading' ? 0.7 : 1 }}>
               {status === 'loading' ? 'Odosiela sa...' : 'Odoslať'}
             </button>
           </div>

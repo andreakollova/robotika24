@@ -1,3 +1,5 @@
+import ContactForm from '@/components/ContactForm';
+
 export const metadata = {
   title: 'O nás',
   description: 'Robotika24 je nezávislý slovenský spravodajský portál zameraný na robotiku, umelú inteligenciu a moderné technológie.',
@@ -62,6 +64,8 @@ export default function AboutPage() {
         <p>E-mail: <a href="mailto:studio@drixton.com" style={{ color: '#cb1e26' }}>studio@drixton.com</a></p>
         <p><a href="https://robotika24.sk" style={{ color: '#cb1e26' }}>robotika24.sk</a> | <a href="https://robotika24.cz" style={{ color: '#cb1e26' }}>robotika24.cz</a></p>
       </div>
+
+      <ContactForm />
     </div>
   );
 }

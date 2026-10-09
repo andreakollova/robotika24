@@ -4,6 +4,8 @@ export const metadata = {
   title: 'Spolupráca',
   description: 'Spolupracujte s Robotika24 - tlačové správy, mediálne partnerstvá, redakčná spolupráca pre technologické spoločnosti, startupy a univerzity.',
   alternates: { canonical: '/spolupraca' },
+  openGraph: { title: 'Spolupráca | robotika24', description: 'Spolupracujte s Robotika24 - tlačové správy, mediálne partnerstvá a redakčná spolupráca.', locale: 'sk_SK', siteName: 'robotika24' },
+  other: { 'geo.region': 'SK', 'content-language': 'sk' },
 };
 
 export default function SpolupracaPage() {

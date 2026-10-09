@@ -4,6 +4,7 @@ import ArticleCard from '@/components/ArticleCard';
 import Sidebar from '@/components/Sidebar';
 import AnnouncementBar from '@/components/AnnouncementBar';
 import ProjectsSection from '@/components/ProjectsSection';
+import AdBlock from '@/components/AdBlock';
 
 export const revalidate = 60;
 
@@ -78,8 +79,15 @@ export default async function Home() {
         {/* Grid + Sidebar */}
         <div className="content-layout">
           <section className="articles-grid">
-            {grid.map((article) => (
-              <ArticleCard key={article.id} article={article} />
+            {grid.map((article, i) => (
+              <div key={article.id}>
+                <ArticleCard article={article} />
+                {(i === 3 || i === 7) && (
+                  <div style={{ marginTop: 24 }}>
+                    <AdBlock format="horizontal" />
+                  </div>
+                )}
+              </div>
             ))}
           </section>
           <aside>

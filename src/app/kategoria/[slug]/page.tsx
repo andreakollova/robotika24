@@ -26,14 +26,17 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   return {
     title,
     description,
-    alternates: { canonical: `/kategoria/${slug}` },
+    keywords: [category.name.toLowerCase(), 'robotika', 'roboty', 'technológie', 'robotika Slovensko'],
+    alternates: { canonical: `/kategoria/${slug}`, languages: { 'sk-SK': `/kategoria/${slug}` } },
     openGraph: {
-      title,
-      description,
+      title, description,
       url: `/kategoria/${slug}`,
       siteName: 'robotika24',
+      locale: 'sk_SK',
       type: 'website',
+      countryName: 'Slovakia',
     },
+    other: { 'geo.region': 'SK', 'content-language': 'sk' },
   };
 }
 

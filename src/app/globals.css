@@ -114,6 +114,13 @@ a {
   display: grid;
   grid-template-columns: 1fr;
   gap: 20px;
+  align-items: stretch;
+}
+.hero-cards > * {
+  height: 100%;
+}
+.hero-cards > * > div:first-child {
+  height: 100%;
 }
 @media (min-width: 768px) {
   .hero-cards {
@@ -127,6 +134,8 @@ a {
   grid-template-columns: 1fr;
   gap: 32px;
   margin-bottom: 48px;
+  overflow: hidden;
+  width: 100%;
 }
 @media (min-width: 1024px) {
   .content-layout {

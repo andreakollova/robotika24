@@ -6,6 +6,7 @@ import ArticleSidebar from '@/components/ArticleSidebar';
 import ShareLinks from '@/components/ShareLinks';
 import AboutAuthor from '@/components/AboutAuthor';
 import type { Metadata } from 'next';
+import AdBlock from '@/components/AdBlock';
 
 export const revalidate = 60;
 
@@ -36,10 +37,16 @@ export async function generateMetadata({
   const canonicalUrl = `${BASE_URL}/clanok/${article.slug}`;
   const description = article.excerpt?.replace(/\*\*/g, '') || '';
 
+  const categoryName = (article as any).categories?.name || 'Robotika';
+
   return {
-    title: `${article.title} | robotika24`,
+    title: article.title,
     description,
     authors: article.author ? [{ name: article.author }] : undefined,
+    keywords: [
+      categoryName.toLowerCase(), 'robotika', 'roboty', 'umelá inteligencia',
+      'robotika Slovensko', 'technológie', article.source_name || '',
+    ].filter(Boolean),
     openGraph: {
       title: article.title,
       description,
@@ -50,15 +57,10 @@ export async function generateMetadata({
       publishedTime: article.published_at,
       modifiedTime: article.updated_at || article.published_at,
       authors: article.author ? [article.author] : undefined,
+      section: categoryName,
+      countryName: 'Slovakia',
       images: article.image_url
-        ? [
-            {
-              url: article.image_url,
-              width: 1200,
-              height: 630,
-              alt: article.title,
-            },
-          ]
+        ? [{ url: article.image_url, width: 1200, height: 630, alt: article.title }]
         : undefined,
     },
     twitter: {
@@ -69,6 +71,15 @@ export async function generateMetadata({
     },
     alternates: {
       canonical: canonicalUrl,
+      languages: { 'sk-SK': canonicalUrl },
+    },
+    other: {
+      'geo.region': 'SK',
+      'geo.placename': 'Slovensko',
+      'content-language': 'sk',
+      'article:section': categoryName,
+      'article:published_time': article.published_at,
+      'article:author': article.author || 'robotika24',
     },
   };
 }
@@ -243,6 +254,10 @@ export default async function ArticlePage({ params }: { params: Promise<{ slug: 
           {!a.content && (
             <p className="text-gray-400 italic">Plný obsah článku bude dostupný čoskoro.</p>
           )}
+
+          <div className="my-8">
+            <AdBlock format="horizontal" />
+          </div>
 
           {a.source_name && a.source_url && (
             <div className="mt-8 p-4 bg-gray-50 rounded-lg border border-gray-200">

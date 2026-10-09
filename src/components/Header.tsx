@@ -287,7 +287,7 @@ export default function Header() {
           </button>
 
           <Link href="/" style={{ flexShrink: 0 }}>
-            <Image src="/logo-dark.png" alt="robotika24" width={280} height={56} className="h-[36px] md:h-[48px] w-auto" />
+            <Image src="/logo-dark.png" alt="robotika24" width={200} height={40} style={{ height: 40, width: 'auto' }} />
           </Link>
 
           {/* Desktop nav */}

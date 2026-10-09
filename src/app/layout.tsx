@@ -132,14 +132,16 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           }}
         />
       </head>
-      <body className="min-h-screen flex flex-col w-full overflow-x-hidden">
+      <body className="min-h-screen flex flex-col">
+        <div id="page-wrapper">
         <Header />
-        <main className="flex-1 w-full overflow-x-hidden">{children}</main>
+        <main className="flex-1">{children}</main>
         <Footer />
         <CookieBanner />
         <CopyProtection />
         <PageTracker />
         <Analytics />
+        </div>
       </body>
     </html>
   );

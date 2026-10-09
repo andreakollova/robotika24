@@ -58,21 +58,22 @@ body {
 
 html {
   overflow-x: hidden;
-  -webkit-overflow-scrolling: touch;
+  width: 100%;
 }
 
 *, *::before, *::after {
   box-sizing: border-box;
 }
 
-/* Prevent ANY element from causing horizontal scroll */
-body > *, main, main > * {
-  max-width: 100%;
+/* Force page width constraint */
+#page-wrapper {
+  width: 100%;
+  overflow-x: hidden;
+  position: relative;
 }
 
 img, video, iframe {
   max-width: 100%;
-  height: auto;
 }
 
 /* Protect images from easy copying */

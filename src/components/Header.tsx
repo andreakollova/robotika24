@@ -6,26 +6,10 @@ import Link from 'next/link';
 
 const categories = [
   { name: 'Novinky', slug: '/', subs: [] },
-  {
-    name: 'Humanoidy',
-    slug: '/kategoria/humanoidy',
-    subs: ['Figure', '1X Technologies', 'Boston Dynamics', 'Tesla Optimus', 'Unitree'],
-  },
-  {
-    name: 'Výskum',
-    slug: '/kategoria/vyskum',
-    subs: ['Univerzity', 'Protézy a exoskeletony', 'Bioinšpirácia', 'Mäkká robotika'],
-  },
-  {
-    name: 'Technológie',
-    slug: '/kategoria/technologie',
-    subs: ['AI a strojové učenie', 'Senzory a motory', 'Materiály', 'Drony'],
-  },
-  {
-    name: 'Priemysel',
-    slug: '/kategoria/priemysel',
-    subs: ['Automatizácia', 'Logistika', 'Výroba'],
-  },
+  { name: 'Humanoidy', slug: '/kategoria/humanoidy', subs: [] },
+  { name: 'Výskum', slug: '/kategoria/vyskum', subs: [] },
+  { name: 'Technológie', slug: '/kategoria/technologie', subs: [] },
+  { name: 'Priemysel', slug: '/kategoria/priemysel', subs: [] },
   { name: 'E-shop', slug: '/eshop', subs: [] },
   { name: 'Projekty', slug: '/projekty', subs: [] },
 ];

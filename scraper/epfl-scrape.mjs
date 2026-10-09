@@ -69,7 +69,7 @@ async function translateArticle(title, summary, content, originalAuthor, sourceU
   const prompt = `Prelož nasledujúci článok z angličtiny do slovenčiny. Prepíš ho tak, aby to znelo ako profesionálny slovenský technologický článok.
 
 KRITICKÉ PRAVIDLÁ:
-- NADPIS: Informatívny a zaujímavý - 12-15 slov. Musí obsahovať hlavné kľúčové slovo čo najbližšie k začiatku. Plynulá slovenská veta.
+- NADPIS: Informatívny, zaujímavý a konkrétny - 12-15 slov. Hlavné kľúčové slovo (názov robota, firmy, technológie) na začiatku. Plynulá slovenská veta. NIKDY nepoužívaj slová "revolúcia", "nová éra", "budúcnosť". Žiadne dvojbodky ani pomlčky. Nadpis musí čitateľovi povedať presne o čom článok je.
 - EXCERPT: 6-8 viet, do 800 znakov. Každá veta musí končiť bodkou. Dôležité slová a názvy (firmy, roboty, technológie, čísla) VŽDY označ **boldom**.
 - CONTENT: Plný preklad s ## nadpismi pre sekcie. Kľúčové pojmy boldni.
 - NIKDY NEPREKLADAJ mená ľudí a názvy firiem/technológií.

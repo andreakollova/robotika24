@@ -120,10 +120,16 @@ a {
   }
 }
 
-/* Mobile: ensure images have rounded corners and padding */
+/* Mobile: ensure images have rounded corners */
 @media (max-width: 639px) {
   .articles-grid img {
     border-radius: 8px;
+  }
+  .articles-grid {
+    padding: 0 4px;
+  }
+  .hero-cards {
+    padding: 0 4px;
   }
 }
 

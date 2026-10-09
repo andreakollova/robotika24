@@ -57,12 +57,12 @@ function LangSelector() {
         <FlagSK />
       </button>
       {open && (
-        <div style={{ position: 'absolute', top: '100%', right: 0, marginTop: 4, background: 'var(--card-bg)', border: '1px solid var(--border)', borderRadius: 0, boxShadow: '0 4px 12px var(--card-shadow)', zIndex: 100, overflow: 'hidden' }}>
-          <div style={{ padding: '10px 14px', display: 'flex', alignItems: 'center', gap: 8, color: 'var(--text-primary)', fontWeight: 600, fontSize: 13, borderBottom: '1px solid var(--border-light)', backgroundColor: 'var(--bg-secondary)' }}>
-            <FlagSK /> Slovensko
+        <div style={{ position: 'absolute', top: '100%', right: 0, marginTop: 4, background: 'var(--card-bg)', border: '1px solid var(--border)', borderRadius: 8, boxShadow: '0 4px 12px var(--card-shadow)', zIndex: 100, overflow: 'hidden', minWidth: 200 }}>
+          <div style={{ padding: '12px 16px', display: 'flex', alignItems: 'center', gap: 10, color: 'var(--text-primary)', fontWeight: 600, fontSize: 13, borderBottom: '1px solid var(--border-light)', backgroundColor: 'var(--bg-secondary)' }}>
+            <FlagSK /> Slovenská verzia
           </div>
-          <a href="https://robotika24.cz" style={{ padding: '10px 14px', display: 'flex', alignItems: 'center', gap: 8, color: '#6b7280', fontSize: 13, textDecoration: 'none' }} className="hover:bg-gray-50">
-            <FlagCZ /> Česko
+          <a href="https://robotika24.cz" style={{ padding: '12px 16px', display: 'flex', alignItems: 'center', gap: 10, color: 'var(--text-tertiary)', fontSize: 13, textDecoration: 'none' }} className="hover:bg-[var(--bg-tertiary)]">
+            <FlagCZ /> Prejsť na českú verziu
           </a>
         </div>
       )}

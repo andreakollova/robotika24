@@ -169,8 +169,8 @@ export default function Header() {
     <>
       {/* Announcement bar */}
       {latestTitle && (
-        <div style={{ padding: '9px 20px', borderBottom: '1px solid var(--border)' }} className="bg-[var(--bg-tertiary)]">
-          <div style={{ maxWidth: 1280, margin: '0 auto', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 10 }}>
+        <div style={{ padding: '9px 20px', borderBottom: '1px solid var(--border)', overflow: 'hidden' }} className="bg-[var(--bg-tertiary)]">
+          <div style={{ maxWidth: 1280, margin: '0 auto', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 10, overflow: 'hidden' }}>
             <PulsingDot />
             <p style={{ color: '#374151', fontSize: 13, fontWeight: 500, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', margin: 0 }}>
               {latestTitle}

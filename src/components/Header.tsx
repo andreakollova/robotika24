@@ -299,9 +299,9 @@ export default function Header() {
             ))}
           </div>
 
-          {/* Search + dark mode */}
+          {/* Desktop: search + dark mode, Mobile: only dark mode */}
           <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-            <button onClick={() => setSearchOpen(!searchOpen)} style={{ color: '#9ca3af', cursor: 'pointer', background: 'none', border: 'none', padding: 4 }} className="hover:text-white transition-colors">
+            <button onClick={() => setSearchOpen(!searchOpen)} style={{ color: '#9ca3af', cursor: 'pointer', background: 'none', border: 'none', padding: 4 }} className="hover:text-white transition-colors hidden md:block">
               <SearchIcon />
             </button>
             <button onClick={() => { const next = !isDark; setIsDark(next); document.documentElement.classList.toggle('dark', next); localStorage.setItem('theme', next ? 'dark' : 'light'); }} style={{ color: '#9ca3af', cursor: 'pointer', background: 'none', border: 'none', padding: 4 }} className="hover:text-white transition-colors">

@@ -1,4 +1,10 @@
-export const metadata = { title: 'Podmienky používania' };
+export const metadata = {
+  title: 'Podmienky používania',
+  description: 'Podmienky používania spravodajského portálu robotika24.sk o robotike a technológiách.',
+  alternates: { canonical: '/podmienky' },
+  openGraph: { title: 'Podmienky používania', description: 'Podmienky používania spravodajského portálu robotika24.sk o robotike a technológiách.', locale: 'sk_SK', siteName: 'robotika24', countryName: 'Slovakia' },
+  other: { 'geo.region': 'SK', 'content-language': 'sk' },
+};
 
 export default function PodmienkyPage() {
   return (

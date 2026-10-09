@@ -4,6 +4,8 @@ export const metadata = {
   title: 'Open Source Robotické Projekty',
   description: 'Prehľad najlepších open source projektov z oblasti robotiky. Hardware, softvér, simulátory a datasety pre robotiku.',
   alternates: { canonical: '/projekty' },
+  openGraph: { title: 'Open Source Robotické Projekty', description: 'Prehľad najlepších open source projektov z oblasti robotiky. Hardware, softvér, simulátory a datasety pre robotiku.', locale: 'sk_SK', siteName: 'robotika24', countryName: 'Slovakia' },
+  other: { 'geo.region': 'SK', 'content-language': 'sk' },
 };
 
 export const revalidate = 60;

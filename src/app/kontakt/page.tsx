@@ -4,6 +4,8 @@ export const metadata = {
   title: 'Kontakt',
   description: 'Kontaktujte redakciu Robotika24. Tip na článok, spolupráca, tlačové správy.',
   alternates: { canonical: '/kontakt' },
+  openGraph: { title: 'Kontakt', description: 'Kontaktujte redakciu Robotika24. Tip na článok, spolupráca, tlačové správy.', locale: 'sk_SK', siteName: 'robotika24', countryName: 'Slovakia' },
+  other: { 'geo.region': 'SK', 'content-language': 'sk' },
 };
 
 export default function KontaktPage() {

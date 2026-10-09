@@ -34,6 +34,11 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { url: `${baseUrl}/o-nas`, lastModified: new Date(), changeFrequency: 'monthly' as const, priority: 0.4 },
     { url: `${baseUrl}/eshop`, lastModified: new Date(), changeFrequency: 'weekly' as const, priority: 0.5 },
     { url: `${baseUrl}/odber`, lastModified: new Date(), changeFrequency: 'monthly' as const, priority: 0.4 },
+    { url: `${baseUrl}/spolupraca`, lastModified: new Date(), changeFrequency: 'monthly' as const, priority: 0.4 },
+    { url: `${baseUrl}/kontakt`, lastModified: new Date(), changeFrequency: 'monthly' as const, priority: 0.3 },
+    { url: `${baseUrl}/ochrana-sukromia`, lastModified: new Date(), changeFrequency: 'yearly' as const, priority: 0.2 },
+    { url: `${baseUrl}/podmienky`, lastModified: new Date(), changeFrequency: 'yearly' as const, priority: 0.2 },
+    { url: `${baseUrl}/cookies`, lastModified: new Date(), changeFrequency: 'yearly' as const, priority: 0.2 },
   ];
 
   return [

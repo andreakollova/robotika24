@@ -1,4 +1,10 @@
-export const metadata = { title: 'Cookies' };
+export const metadata = {
+  title: 'Cookies',
+  description: 'Informácie o používaní cookies na robotika24.sk. Zásady spracovania súborov cookies.',
+  alternates: { canonical: '/cookies' },
+  openGraph: { title: 'Cookies', description: 'Informácie o používaní cookies na robotika24.sk. Zásady spracovania súborov cookies.', locale: 'sk_SK', siteName: 'robotika24', countryName: 'Slovakia' },
+  other: { 'geo.region': 'SK', 'content-language': 'sk' },
+};
 
 export default function CookiesPage() {
   return (

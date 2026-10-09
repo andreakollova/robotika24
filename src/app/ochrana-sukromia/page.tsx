@@ -1,4 +1,10 @@
-export const metadata = { title: 'Ochrana súkromia' };
+export const metadata = {
+  title: 'Ochrana súkromia',
+  description: 'Ochrana súkromia a spracovanie osobných údajov na robotika24.sk v súlade s GDPR.',
+  alternates: { canonical: '/ochrana-sukromia' },
+  openGraph: { title: 'Ochrana súkromia', description: 'Ochrana súkromia a spracovanie osobných údajov na robotika24.sk v súlade s GDPR.', locale: 'sk_SK', siteName: 'robotika24', countryName: 'Slovakia' },
+  other: { 'geo.region': 'SK', 'content-language': 'sk' },
+};
 
 export default function PrivacyPage() {
   return (

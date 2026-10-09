@@ -119,31 +119,34 @@ export default async function ArticlePage({ params }: { params: Promise<{ slug: 
   const categoryName = a.categories?.name;
   const articleUrl = `https://robotika24.sk/clanok/${a.slug}`;
 
-  const jsonLd = {
-    '@context': 'https://schema.org',
-    '@type': 'NewsArticle',
-    headline: a.title,
-    description: a.excerpt?.replace(/\*\*/g, '') || '',
-    image: a.image_url || undefined,
-    datePublished: a.published_at,
-    dateModified: (a as any).updated_at || a.published_at,
-    author: {
-      '@type': 'Person',
-      name: a.author,
-    },
-    publisher: {
-      '@type': 'Organization',
-      name: 'robotika24',
-      logo: {
-        '@type': 'ImageObject',
-        url: `${BASE_URL}/logo.png`,
+  const jsonLd = [
+    {
+      '@context': 'https://schema.org',
+      '@type': 'NewsArticle',
+      headline: a.title,
+      description: a.excerpt?.replace(/\*\*/g, '') || '',
+      image: a.image_url || undefined,
+      datePublished: a.published_at,
+      dateModified: (a as any).updated_at || a.published_at,
+      inLanguage: 'sk',
+      author: { '@type': 'Person', name: a.author },
+      publisher: {
+        '@type': 'Organization',
+        name: 'robotika24',
+        logo: { '@type': 'ImageObject', url: `${BASE_URL}/logo.png` },
       },
+      mainEntityOfPage: { '@type': 'WebPage', '@id': articleUrl },
     },
-    mainEntityOfPage: {
-      '@type': 'WebPage',
-      '@id': articleUrl,
+    {
+      '@context': 'https://schema.org',
+      '@type': 'BreadcrumbList',
+      itemListElement: [
+        { '@type': 'ListItem', position: 1, name: 'Domov', item: BASE_URL },
+        ...(categoryName ? [{ '@type': 'ListItem', position: 2, name: categoryName, item: `${BASE_URL}/kategoria/${a.categories?.slug}` }] : []),
+        { '@type': 'ListItem', position: categoryName ? 3 : 2, name: a.title },
+      ],
     },
-  };
+  ];
 
   return (
     <>

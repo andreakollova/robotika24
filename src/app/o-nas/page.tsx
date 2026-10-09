@@ -4,6 +4,8 @@ export const metadata = {
   title: 'O nás',
   description: 'Robotika24 je nezávislý slovenský spravodajský portál zameraný na robotiku, umelú inteligenciu a moderné technológie.',
   alternates: { canonical: '/o-nas' },
+  openGraph: { title: 'O nás', description: 'Robotika24 je nezávislý slovenský spravodajský portál zameraný na robotiku, umelú inteligenciu a moderné technológie.', locale: 'sk_SK', siteName: 'robotika24', countryName: 'Slovakia' },
+  other: { 'geo.region': 'SK', 'content-language': 'sk' },
 };
 
 export default function AboutPage() {

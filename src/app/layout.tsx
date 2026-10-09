@@ -132,14 +132,12 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         />
       </head>
       <body className="min-h-screen flex flex-col">
-        <AuthGate>
         <Header />
         <main className="flex-1">{children}</main>
         <Footer />
         <CookieBanner />
         <PageTracker />
         <Analytics />
-        </AuthGate>
       </body>
     </html>
   );

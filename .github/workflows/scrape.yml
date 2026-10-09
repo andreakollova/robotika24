@@ -1,10 +1,9 @@
 name: Scrape Articles
 
 on:
-  schedule:
-    # 2x per day: 7:00 CET (5:00 UTC) and 18:00 CET (16:00 UTC)
-    - cron: '0 5 * * *'
-    - cron: '0 16 * * *'
+  # schedule:
+  #   - cron: '0 5 * * *'
+  #   - cron: '0 16 * * *'
   workflow_dispatch:
 
 jobs:

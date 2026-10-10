@@ -149,7 +149,6 @@ export default function Header() {
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
   const [isDark, setIsDark] = useState(false);
-  const [latestTitle, setLatestTitle] = useState('');
   const [searchOpen, setSearchOpen] = useState(false);
 
   useEffect(() => {
@@ -158,33 +157,13 @@ export default function Header() {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  useEffect(() => {
-    try {
-      fetch('/api/latest-title')
-        .then(r => r.json())
-        .then(d => { if (d?.title) setLatestTitle(d.title); })
-        .catch(() => {});
-    } catch {}
-  }, []);
 
   return (
     <>
-      {/* Announcement bar */}
-      {latestTitle && (
-        <div style={{ padding: '9px 20px', borderBottom: '1px solid var(--border)', overflow: 'hidden' }} className="bg-[var(--bg-tertiary)]">
-          <div style={{ maxWidth: 1280, margin: '0 auto', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 10, overflow: 'hidden' }}>
-            <PulsingDot />
-            <p style={{ color: '#374151', fontSize: 13, fontWeight: 500, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', margin: 0 }}>
-              {latestTitle}
-            </p>
-          </div>
-        </div>
-      )}
-
       {/* DESKTOP navbar */}
       <header className="hidden md:block" style={{ backgroundColor: 'var(--bg)', borderBottom: '1px solid var(--border)' }}>
         <div style={{ maxWidth: 1280, margin: '0 auto', padding: '0 20px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', height: 92 }}>
-          <Link href="/" style={{ flexShrink: 0 }}>
+          <Link href="/" style={{ flexShrink: 0, position: 'relative', zIndex: 10 }}>
             <Image src={isDark ? '/logo-dark.png' : '/logo.png'} alt="robotika24" width={280} height={56} style={{ height: 68, width: 'auto' }} priority />
           </Link>
 
@@ -288,7 +267,7 @@ export default function Header() {
             </svg>
           </button>
 
-          <Link href="/" style={{ flexShrink: 0 }}>
+          <Link href="/" style={{ flexShrink: 0, position: 'relative', zIndex: 10 }}>
             <Image src="/logo-dark.png" alt="robotika24" width={200} height={40} style={{ height: 40, width: 'auto' }} />
           </Link>
 

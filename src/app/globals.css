@@ -53,12 +53,15 @@ body {
   margin: 0;
   padding: 0;
   transition: background-color 0.2s, color 0.2s;
-  overflow-x: hidden;
 }
 
 html {
   overflow-x: hidden;
-  width: 100%;
+}
+
+/* Overflow hidden on main content only, not body (allows position:fixed) */
+main {
+  overflow-x: hidden;
 }
 
 *, *::before, *::after {

@@ -159,8 +159,8 @@ export default function Header() {
   }, []);
 
   useEffect(() => {
-    fetch('/api/latest-title')
-      .then(r => r.json())
+    fetch(window.location.origin + '/api/latest-title')
+      .then(r => { if (!r.ok) throw new Error(); return r.json(); })
       .then(d => { if (d.title) setLatestTitle(d.title); })
       .catch(() => {});
   }, []);

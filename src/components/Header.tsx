@@ -254,10 +254,9 @@ export default function Header() {
 
       {/* Sticky navbar on scroll - desktop + mobile */}
       <div style={{
-        position: 'fixed', top: 0, left: 0, right: 0, zIndex: 60,
-        backgroundColor: '#0c1a26', boxShadow: '0 4px 6px -1px rgba(0,0,0,0.3)',
-        transform: scrolled ? 'translateY(0)' : 'translateY(-100%)',
-        transition: 'transform 0.3s ease',
+        position: 'fixed', top: 0, left: 0, right: 0, width: '100%', zIndex: 9999,
+        backgroundColor: '#0c1a26', boxShadow: scrolled ? '0 4px 6px -1px rgba(0,0,0,0.3)' : 'none',
+        display: scrolled ? 'block' : 'none',
       }}>
         <div style={{ maxWidth: 1280, margin: '0 auto', padding: '0 20px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', height: 60 }}>
           {/* Mobile: hamburger */}

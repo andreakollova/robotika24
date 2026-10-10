@@ -30,7 +30,7 @@ export default function NewsletterBanner() {
         <h2 style={{ fontSize: 24, fontWeight: 700, color: '#ffffff', marginBottom: 8 }}>
           Nepremeškajte žiadnu novinku zo sveta robotiky
         </h2>
-        <p style={{ fontSize: 15, color: '#9ca3af', marginBottom: 24, lineHeight: 1.5 }}>
+        <p style={{ fontSize: 15, color: '#ffffff', marginBottom: 24, lineHeight: 1.5, opacity: 0.8 }}>
           Pridajte sa k odberateľom a dostávajte najzaujímavejšie správy o robotoch, AI a technológiách priamo do schránky.
         </p>
 

@@ -75,8 +75,8 @@ img, video, iframe {
   color: #374151;
 }
 
-/* Protect images from easy copying */
-img {
+/* Protect images from easy copying - but not in links */
+img:not(a img) {
   -webkit-user-select: none;
   user-select: none;
   -webkit-touch-callout: none;

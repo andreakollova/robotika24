@@ -163,9 +163,9 @@ export default function Header() {
       {/* DESKTOP navbar */}
       <header className="hidden md:block" style={{ backgroundColor: 'var(--bg)', borderBottom: '1px solid var(--border)' }}>
         <div style={{ maxWidth: 1280, margin: '0 auto', padding: '0 20px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', height: 92 }}>
-          <Link href="/" style={{ flexShrink: 0, position: 'relative', zIndex: 10 }}>
+          <a href="/" style={{ flexShrink: 0, position: 'relative', zIndex: 10 }}>
             <Image src={isDark ? '/logo-dark.png' : '/logo.png'} alt="robotika24" width={280} height={56} style={{ height: 68, width: 'auto' }} priority />
-          </Link>
+          </a>
 
           <div style={{ display: 'flex', alignItems: 'center' }}>
             {categories.map((cat) => (
@@ -205,9 +205,9 @@ export default function Header() {
           </button>
 
           {/* Logo center */}
-          <Link href="/" style={{ position: 'absolute', left: '50%', transform: 'translateX(-50%)', zIndex: 10 }}>
+          <a href="/" style={{ position: 'absolute', left: '50%', transform: 'translateX(-50%)', zIndex: 10 }}>
             <Image src={isDark ? '/logo-dark.png' : '/logo.png'} alt="robotika24" width={200} height={40} style={{ height: 40, width: 'auto' }} priority />
-          </Link>
+          </a>
 
           {/* Search right */}
           <button style={{ color: '#6b7280', padding: 6, background: 'none', border: 'none', cursor: 'pointer' }} onClick={() => setSearchOpen(!searchOpen)}>
@@ -266,9 +266,9 @@ export default function Header() {
             </svg>
           </button>
 
-          <Link href="/" style={{ flexShrink: 0, position: 'relative', zIndex: 10 }}>
+          <a href="/" style={{ flexShrink: 0, position: 'relative', zIndex: 10 }}>
             <Image src="/logo-dark.png" alt="robotika24" width={200} height={40} style={{ height: 40, width: 'auto' }} />
-          </Link>
+          </a>
 
           {/* Desktop nav */}
           <div className="hidden md:flex" style={{ alignItems: 'center' }}>

@@ -6,7 +6,7 @@ import AnnouncementBar from '@/components/AnnouncementBar';
 import ProjectsSection from '@/components/ProjectsSection';
 import NewsletterBanner from '@/components/NewsletterBanner';
 
-export const revalidate = 60;
+export const revalidate = 300;
 
 async function getArticles() {
   const { data: all } = await supabase

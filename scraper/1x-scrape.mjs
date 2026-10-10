@@ -73,7 +73,7 @@ Na konci obsahu VŽDY pridaj:
 
 ## Zdroj
 Zdroj: 1X Technologies
-Ilustračná fotografia: Courtesy of 1X
+Foto: Courtesy of 1X
 Spracovanie: Redakcia robotika24
 
 Vráť JSON (bez markdown blokov):
@@ -149,7 +149,14 @@ async function main() {
       const storyHtml = await storyRes.text();
       const textContent = stripHtml(storyHtml).substring(0, 4000);
 
-      const imageUrl = pickPressPhoto();
+      // Get actual OG image from the article
+      let imageUrl = null;
+      const ogMatch = storyHtml.match(/property="og:image"[^>]*content="([^"]+)"/);
+      if (ogMatch) {
+        imageUrl = ogMatch[1];
+      } else {
+        imageUrl = pickPressPhoto(); // fallback to press gallery
+      }
 
       console.log(`  Writing article...`);
       const article = await writeArticle(story.title, textContent);

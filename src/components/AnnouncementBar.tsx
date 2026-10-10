@@ -19,6 +19,7 @@ export default function AnnouncementBar({ articles }: { articles: Article[] }) {
                 <img
                   src={article.image_url}
                   alt={article.title}
+                  loading="lazy"
                   style={{ width: 56, height: 40, borderRadius: 4, objectFit: 'cover', flexShrink: 0 }}
                 />
               )}

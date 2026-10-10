@@ -5,25 +5,19 @@ import Sidebar from '@/components/Sidebar';
 import ProjectsSection from '@/components/ProjectsSection';
 import NewsletterBanner from '@/components/NewsletterBanner';
 
-export const revalidate = 300;
+export const revalidate = 600;
 
 async function getArticles() {
-  const { data: all } = await supabase
-    .from('articles')
-    .select('*, categories(*)')
-    .eq('is_published', true)
-    .order('published_at', { ascending: false })
-    .limit(30);
+  // Select only needed fields (no content!) and run queries in parallel
+  const fields = 'id, title, slug, excerpt, image_url, author, views, published_at, categories(name, slug)';
 
-  const { data: popularRaw } = await supabase
-    .from('articles')
-    .select('*, categories(*)')
-    .eq('is_published', true)
-    .order('views', { ascending: false })
-    .limit(10);
+  const [{ data: all }, { data: popularRaw }] = await Promise.all([
+    supabase.from('articles').select(fields).eq('is_published', true).order('published_at', { ascending: false }).limit(20),
+    supabase.from('articles').select(fields).eq('is_published', true).order('views', { ascending: false }).limit(5),
+  ]);
 
-  const articles = (all || []) as Article[];
-  const allPopular = (popularRaw || []) as Article[];
+  const articles = (all || []) as unknown as Article[];
+  const allPopular = (popularRaw || []) as unknown as Article[];
 
   const announcement = articles.slice(0, 4);
   const hero = articles[4] || articles[0];

@@ -5,6 +5,7 @@ import Sidebar from '@/components/Sidebar';
 import AnnouncementBar from '@/components/AnnouncementBar';
 import ProjectsSection from '@/components/ProjectsSection';
 import NewsletterBanner from '@/components/NewsletterBanner';
+import WordOfDay from '@/components/WordOfDay';
 
 export const revalidate = 60;
 
@@ -88,6 +89,9 @@ export default async function Home() {
           </aside>
         </div>
       </div>
+
+      {/* Word of Day */}
+      <WordOfDay />
 
       {/* Newsletter CTA */}
       <NewsletterBanner />

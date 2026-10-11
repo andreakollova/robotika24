@@ -64,7 +64,7 @@ async function writeArticle(title, content) {
   const prompt = `Na základe nasledujúcich faktov napíš VLASTNÝ slovenský spravodajský článok. NEPREKLÁDAJ doslovne, napíš to ako novinár.
 
 PRAVIDLÁ:
-- NADPIS: Zaujímavý, konkrétny, novinársky - 10-14 slov. Obsahuje konkrétny fakt alebo číslo. Píš ako novinár denníka SME. Žiadne klišé (revolúcia, budúcnosť). Žiadne dvojbodky.
+- NADPIS: Zaujímavý, konkrétny, novinársky - 10-14 slov. Obsahuje konkrétny fakt alebo číslo. Píš ako novinár denníka SME. Žiadne klišé (revolúcia, budúcnosť). Dvojbodku použi ak je v nadpise názov firmy/produktu a za ním popis.
 - EXCERPT: 6-8 viet, do 800 znakov. Dôležité slová VŽDY **bold**. Správna slovenská diakritika.
 - CONTENT: Vlastný článok s ## nadpismi. Kľúčové pojmy boldni. Píš informatívne a zaujímavo.
 - NIKDY NEPREKLADAJ mená ľudí a názvy firiem/technológií.
@@ -93,7 +93,7 @@ Obsah: ${content}`;
 
   const text = response.choices[0].message.content.trim().replace(/```json\s*/g, '').replace(/```\s*/g, '');
   const parsed = JSON.parse(text);
-  parsed.title = parsed.title.replace(/[—–:]/g, '');
+  parsed.title = parsed.title.replace(/[—–]/g, '-');
   parsed.excerpt = parsed.excerpt.replace(/[—–]/g, '-');
   parsed.content = parsed.content.replace(/[—–]/g, '-');
   return parsed;

@@ -47,7 +47,7 @@ OBSAH: ${(art.content || '').substring(0, 1500)}`;
     });
     const text = res.choices[0].message.content.trim().replace(/```json\s*/g, '').replace(/```\s*/g, '');
     const parsed = JSON.parse(text);
-    parsed.title = parsed.title.replace(/[—–]/g, '-').replace(/:/g, '').replace(/"/g, '');
+    parsed.title = parsed.title.replace(/[—–]/g, '-').replace(/"/g, '');
     parsed.excerpt = parsed.excerpt.replace(/[—–]/g, '-').replace(/\*\*/g, '');
 
     await sb.from('articles').update({ title: parsed.title, excerpt: parsed.excerpt }).eq('id', art.id);

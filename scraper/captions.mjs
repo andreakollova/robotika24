@@ -50,7 +50,7 @@ export function getArticleCaption(index, title, categorySlug) {
   const cat = categoryNames[categorySlug] || 'Technológie';
   const desc = descriptions[index % descriptions.length];
   const tags = hashtags[index % hashtags.length];
-  return `${cat} | ${title}\n\n${desc}\n\n${tags}`;
+  return `${cat} | ${title}\n\n${desc}\n\nZdroj: robotika24.sk\n© robotika24.sk - Všetky práva vyhradené.\n\n${tags}`;
 }
 
 // Glossary post captions

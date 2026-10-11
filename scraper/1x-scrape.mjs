@@ -16,7 +16,8 @@ try {
   });
 } catch {}
 
-const supabase = createClient('https://odpwfmrllqjdzgbgrxfc.supabase.co', process.env.SUPABASE_SERVICE_ROLE_KEY);
+const SUPABASE_URL = 'https://odpwfmrllqjdzgbgrxfc.supabase.co';
+const supabase = createClient(SUPABASE_URL, process.env.SUPABASE_SERVICE_ROLE_KEY);
 const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
 const SLACK_WEBHOOK = process.env.SLACK_WEBHOOK_URL;
 const LIMIT = parseInt(process.argv[2] || '10');
@@ -161,6 +162,26 @@ async function main() {
       console.log(`  Writing article...`);
       const article = await writeArticle(story.title, textContent);
       const articleSlug = slugify(article.title) + '-' + Date.now().toString(36);
+
+      // Upload image to Supabase Storage
+      if (imageUrl) {
+        try {
+          let fetchUrl = imageUrl;
+          if (fetchUrl.includes('cdn.sanity.io')) fetchUrl = fetchUrl.split('?')[0];
+          const imgRes = await fetch(fetchUrl, { redirect: 'follow' });
+          if (imgRes.ok) {
+            const ct = imgRes.headers.get('content-type') || 'image/jpeg';
+            const ext = ct.includes('webp') ? 'webp' : ct.includes('png') ? 'png' : 'jpg';
+            const buf = Buffer.from(await imgRes.arrayBuffer());
+            const storagePath = articleSlug.substring(0, 80) + '.' + ext;
+            const { error: upErr } = await supabase.storage.from('article-images').upload(storagePath, buf, { contentType: ct, upsert: true });
+            if (!upErr) {
+              imageUrl = `${SUPABASE_URL}/storage/v1/object/public/article-images/${storagePath}`;
+              console.log('  Image uploaded to Storage');
+            }
+          }
+        } catch (imgErr) { console.error('  Image upload error:', imgErr.message); }
+      }
 
       const { error } = await supabase.from('articles').insert({
         title: article.title,

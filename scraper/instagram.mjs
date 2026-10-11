@@ -197,7 +197,7 @@ function renderRichLine(wordSegments, x, y, size, color) {
 async function generateArticleExcerptPages(excerpt, theme, category) {
   const templatePath = resolve(__dirname, `templates/${theme}/slide2.png`);
   const textColor = theme === 'modry' ? '#ffffff' : '#0c1a26';
-  const catLabel = category || '';
+  const catLabel = category || 'Robotika';
 
   const fontSize = 54;
   const lineHeight = 70;
@@ -598,7 +598,8 @@ export async function generateCarousel(article, postIndex) {
 
   try {
     const slide1 = await generateArticleSlide1(article.image_url, article.title, theme);
-    const excerptPages = await generateArticleExcerptPages(article.excerpt || article.title, theme, article.category);
+    const categoryLabel = article.categories?.name || 'Robotika';
+    const excerptPages = await generateArticleExcerptPages(article.excerpt || article.title, theme, categoryLabel);
     const lastSlide = generateArticleSlide3(theme);
 
     const slides = [];

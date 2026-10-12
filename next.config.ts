@@ -10,6 +10,7 @@ const nextConfig: NextConfig = {
       { protocol: 'https', hostname: 'www.eurekalert.org' },
       { protocol: 'https', hostname: 'cdn.sanity.io' },
       { protocol: 'https', hostname: '*.microsoft.com' },
+      { protocol: 'https', hostname: 'www.comau.com' },
     ],
   },
   serverExternalPackages: ['sharp'],

@@ -37,7 +37,7 @@ async function getArticles() {
   for (const a of remaining) {
     const catSlug = (a as any).categories?.slug || 'ostatne';
     if (!byCategory[catSlug]) byCategory[catSlug] = [];
-    if (byCategory[catSlug].length < 6) byCategory[catSlug].push(a);
+    if (byCategory[catSlug].length < 8) byCategory[catSlug].push(a);
   }
 
   return { hero, heroSide, grid, popular, latest, byCategory, videoArticles };
@@ -101,7 +101,7 @@ export default async function Home() {
           const name = categoryNames[slug] || slug;
           if (articles.length < 3) return null;
           return (
-            <section key={slug} style={{ marginTop: 40 }}>
+            <section key={slug} style={{ marginTop: 40, marginBottom: 20 }}>
               <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', borderBottom: '2px solid #cb1e26', marginBottom: 16, paddingBottom: 8 }}>
                 <h2 style={{ fontSize: 18, fontWeight: 700, color: 'var(--text-primary)' }}>{name}</h2>
                 <Link href={`/kategoria/${slug}`} style={{ fontSize: 13, fontWeight: 600, color: '#cb1e26', textDecoration: 'none' }}>Zobraziť všetky</Link>

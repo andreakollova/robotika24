@@ -25,7 +25,7 @@ async function getArticles() {
   const heroIds = new Set([hero?.id, heroSide?.id]);
 
   const popular = allPopular.filter(a => !heroIds.has(a.id)).slice(0, 5);
-  const latest = articles.filter(a => !heroIds.has(a.id)).slice(0, 5);
+  const latest = articles.filter(a => !heroIds.has(a.id)).slice(0, 10);
   const grid = articles.filter(a => !heroIds.has(a.id));
 
   return { announcement, hero, heroSide, grid, popular, latest };

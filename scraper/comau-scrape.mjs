@@ -2,7 +2,7 @@
 // Comau is an Italian industrial robotics company - always mention this in articles
 // Permission granted to scrape from https://www.comau.com/en/media-and-news/press-release/
 import { createClient } from '@supabase/supabase-js';
-import OpenAI from 'openai';
+import Anthropic from '@anthropic-ai/sdk';
 import { readFileSync } from 'fs';
 import { resolve, dirname } from 'path';
 import { fileURLToPath } from 'url';
@@ -19,7 +19,7 @@ try {
 
 const SUPABASE_URL = 'https://odpwfmrllqjdzgbgrxfc.supabase.co';
 const supabase = createClient(SUPABASE_URL, process.env.SUPABASE_SERVICE_ROLE_KEY);
-const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
+const anthropic = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY });
 const SLACK_WEBHOOK = process.env.SLACK_WEBHOOK_URL;
 const LIMIT = parseInt(process.argv[2] || '10');
 const USER_AGENT = 'robotika24-bot/1.0 (+https://robotika24.sk; studio@drixton.com)';
@@ -33,9 +33,7 @@ async function articleExists(url) {
 }
 
 async function writeArticle(title, content, sourceUrl) {
-  const res = await openai.chat.completions.create({
-    model: 'gpt-4o',
-    messages: [{ role: 'user', content: `Na základe faktov napíš VLASTNÝ slovenský článok o talianskej robotickej firme Comau.
+  const prompt = `Na základe faktov napíš VLASTNÝ slovenský článok o talianskej robotickej firme Comau.
 
 KRITICKÉ PRAVIDLÁ:
 - VŽDY v texte jasne uveď že Comau je talianska robotická firma (napr. "Talianska robotická spoločnosť Comau..." alebo "Firma Comau so sídlom v Turíne...").
@@ -54,14 +52,18 @@ Zdroj: Comau
 Originál: ${sourceUrl}
 Spracovanie: Redakcia robotika24
 
-Vráť JSON: {"title":"...","excerpt":"...","content":"..."}
+Vráť VÝHRADNE JSON bez iného textu: {"title":"...","excerpt":"...","content":"..."}
 
 Fakty:
 ${title}
-${content}` }],
-    temperature: 0.4, max_tokens: 4000,
+${content}`;
+
+  const res = await anthropic.messages.create({
+    model: 'claude-sonnet-4-6',
+    max_tokens: 4000,
+    messages: [{ role: 'user', content: prompt }],
   });
-  const text = res.choices[0].message.content.trim().replace(/```json\s*/g, '').replace(/```\s*/g, '');
+  const text = res.content[0].text.trim().replace(/```json\s*/g, '').replace(/```\s*/g, '');
   const parsed = JSON.parse(text);
   parsed.title = parsed.title.replace(/[—–]/g, '-');
   parsed.excerpt = parsed.excerpt.replace(/[—–]/g, '-');

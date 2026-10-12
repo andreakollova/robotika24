@@ -12,7 +12,7 @@ async function getArticles() {
   const fields = 'id, title, slug, excerpt, image_url, author, views, published_at, categories(name, slug)';
 
   const [{ data: all }, { data: popularRaw }] = await Promise.all([
-    supabase.from('articles').select(fields).eq('is_published', true).order('published_at', { ascending: false }).limit(20),
+    supabase.from('articles').select(fields).eq('is_published', true).order('published_at', { ascending: false }),
     supabase.from('articles').select(fields).eq('is_published', true).order('views', { ascending: false }).limit(5),
   ]);
 
@@ -26,7 +26,7 @@ async function getArticles() {
 
   const popular = allPopular.filter(a => !heroIds.has(a.id)).slice(0, 5);
   const latest = articles.filter(a => !heroIds.has(a.id)).slice(0, 5);
-  const grid = articles.filter(a => !heroIds.has(a.id)).slice(0, 12);
+  const grid = articles.filter(a => !heroIds.has(a.id));
 
   return { announcement, hero, heroSide, grid, popular, latest };
 }
@@ -80,7 +80,12 @@ export default async function Home() {
         </div>
       </div>
 
-      {/* Word of Day */}
+      {/* Eshop Banner */}
+      <section style={{ maxWidth: 1280, margin: '0 auto', padding: '0 20px 32px' }}>
+        <a href="/eshop" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '20px 24px', borderRadius: 12, backgroundColor: '#cb1e26', color: '#fff', fontSize: 18, fontWeight: 700, textDecoration: 'none', textAlign: 'center', gap: 12 }}>
+          E-shop - Merch pre fanúšikov robotiky
+        </a>
+      </section>
 
       {/* Newsletter CTA */}
       <NewsletterBanner />

@@ -41,14 +41,6 @@ KRITICKÉ PRAVIDLÁ:
 - DIAKRITIKA JE POVINNÁ v KAŽDOM slove.
 - Nikdy nepoužívaj dlhé pomlčky. Vždy iba krátku pomlčku -.
 
-Na konci obsahu VŽDY pridaj:
-
-## Zdroj
-Zdroj článku: Avular - novinky
-Originál: ${sourceUrl}
-Spracovanie: Redakcia robotika24
-Zdroj obrázka: Avular, tlačové materiály.
-
 Vráť VÝHRADNE JSON: {"title":"...","excerpt":"...","content":"..."}
 
 Fakty:

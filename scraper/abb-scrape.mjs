@@ -43,15 +43,6 @@ KRITICKÉ PRAVIDLÁ:
 - DIAKRITIKA JE POVINNÁ v KAŽDOM slove.
 - Nikdy nepoužívaj dlhé pomlčky. Vždy iba krátku pomlčku -.
 
-Na konci obsahu VŽDY pridaj:
-
-## Zdroj
-Zdroj článku: ABB - tlačová správa
-Originál: ${sourceUrl}
-Spracovanie: Redakcia robotika24
-${imageCredit ? 'Zdroj obrázka: ' + imageCredit : ''}
-© ABB. Použité v súlade s podmienkami ABB pre mediálne účely.
-
 Vráť VÝHRADNE JSON: {"title":"...","excerpt":"...","content":"..."}
 
 Fakty:

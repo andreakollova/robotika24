@@ -42,15 +42,6 @@ KRITICKÉ PRAVIDLÁ:
 - DIAKRITIKA JE POVINNÁ v KAŽDOM slove.
 - Nikdy nepoužívaj dlhé pomlčky. Vždy iba krátku pomlčku -.
 
-Na konci obsahu VŽDY pridaj:
-
-## Zdroj
-Zdroj článku: KUKA - tlačová správa
-Originál: ${sourceUrl}
-Spracovanie: Redakcia robotika24
-Zdroj obrázka: KUKA, tlačové materiály.
-© KUKA. Použité na redakčné účely.
-
 Vráť VÝHRADNE JSON: {"title":"...","excerpt":"...","content":"..."}
 
 Fakty:

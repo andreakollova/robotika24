@@ -71,13 +71,6 @@ PRAVIDLÁ:
 - NIKDY NEPREKLADAJ mená ľudí a názvy firiem/technológií.
 - DIAKRITIKA JE POVINNÁ v KAŽDOM slove.
 
-Na konci obsahu VŽDY pridaj:
-
-## Zdroj
-Zdroj: 1X Technologies
-Foto: Courtesy of 1X
-Spracovanie: Redakcia robotika24
-
 Vráť JSON (bez markdown blokov):
 {"title": "nadpis 10-14 slov", "excerpt": "6-8 viet s **boldmi**", "content": "vlastný článok s ## nadpismi a zdrojom"}
 

@@ -46,13 +46,6 @@ KRITICKÉ PRAVIDLÁ:
 - Správne skloňovanie: "robotická ruka" (nie "robotický ruka").
 - Nikdy nepoužívaj dlhé pomlčky (em-dash — ani en-dash –). Vždy iba krátku pomlčku -.
 
-Na konci obsahu VŽDY pridaj:
-
-## Zdroj
-Zdroj: Comau
-Originál: ${sourceUrl}
-Spracovanie: Redakcia robotika24
-
 Vráť VÝHRADNE JSON bez iného textu: {"title":"...","excerpt":"...","content":"..."}
 
 Fakty:

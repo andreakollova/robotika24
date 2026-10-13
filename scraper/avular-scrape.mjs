@@ -34,7 +34,7 @@ async function writeArticle(title, content, sourceUrl) {
 
 KRITICKÉ PRAVIDLÁ:
 - V texte uveď že Avular je holandská robotická spoločnosť z Eindhovenu, špecializujúca sa na autonómne roboty.
-- NADPIS: 10-14 slov, zaujímavý, s konkrétnym faktom. Dvojbodku použi ak je názov firmy/produktu a za ním popis.
+- NADPIS: 10-14 slov, zaujímavý, s konkrétnym faktom. NIKDY nepoužívaj dvojbodku v nadpise. Nadpis musí byť plynulá veta.
 - EXCERPT: 6-8 viet s **bold** na dôležitých slovách (firmy, technológie, čísla). Každá veta musí končiť bodkou.
 - CONTENT: Vlastný článok s ## nadpismi. Kľúčové pojmy boldni. Píš vlastnými slovami.
 - NIKDY NEPREKLADAJ mená ľudí a názvy firiem/technológií.

@@ -600,7 +600,6 @@ async function generateCompanyInfoSlide(sourceName, theme) {
   if (!company) return null;
 
   const templatePath = resolve(__dirname, `templates/${theme}/slide2.png`);
-  const textColor = '#ffffff';
 
   // Download flag
   let flagBuf = null;
@@ -609,31 +608,50 @@ async function generateCompanyInfoSlide(sourceName, theme) {
     if (flagRes.ok) flagBuf = Buffer.from(await flagRes.arrayBuffer());
   } catch {}
 
-  // "O spoločnosti" heading
-  const headingSvg = `<text x="${W / 2}" y="320" font-family="Inter, -apple-system, sans-serif" font-size="24" font-weight="500" fill="${textColor}" text-anchor="middle" opacity="0.6">O spoločnosti</text>`;
+  // "O spoločnosti" label
+  const headingSvg = `<text x="${W / 2}" y="300" font-family="Inter, -apple-system, sans-serif" font-size="24" font-weight="500" fill="#ffffff" text-anchor="middle" opacity="0.5">O spoločnosti</text>`;
 
   // Company name - big
-  const nameSvg = `<text x="${W / 2}" y="420" font-family="Inter, -apple-system, sans-serif" font-size="72" font-weight="800" fill="${textColor}" text-anchor="middle">${escapeXml(company.name)}</text>`;
+  const nameSvg = `<text x="${W / 2}" y="400" font-family="Inter, -apple-system, sans-serif" font-size="72" font-weight="800" fill="#ffffff" text-anchor="middle">${escapeXml(company.name)}</text>`;
 
   // Country
-  const countrySvg = `<text x="${W / 2}" y="480" font-family="Inter, -apple-system, sans-serif" font-size="28" font-weight="500" fill="${textColor}" text-anchor="middle" opacity="0.6">${escapeXml(company.country)}</text>`;
+  const countrySvg = `<text x="${W / 2}" y="460" font-family="Inter, -apple-system, sans-serif" font-size="28" font-weight="500" fill="#ffffff" text-anchor="middle" opacity="0.5">${escapeXml(company.country)}</text>`;
 
-  // Info text - wrapped
-  const infoLines = wrapText(company.info, 38);
-  const lineHeight = 52;
-  const infoStartY = 560;
-  const infoSvg = infoLines.map((line, i) =>
-    `<text x="${W / 2}" y="${infoStartY + i * lineHeight}" font-family="Inter, -apple-system, sans-serif" font-size="38" font-weight="400" fill="${textColor}" text-anchor="middle" opacity="0.85">${escapeXml(line)}</text>`
-  ).join('\n');
+  // Info text - split into sentences, 2 sentences + gap + rest
+  const sentences = company.info.split(/(?<=\.)\s+/);
+  const group1 = sentences.slice(0, 2).join(' ');
+  const group2 = sentences.slice(2).join(' ');
 
-  const svgOverlay = Buffer.from(`<svg width="${W}" height="${H}">${headingSvg}${nameSvg}${countrySvg}${infoSvg}</svg>`);
+  const fontSize = 36;
+  const lineHeight = 48;
+  const sentenceGap = 28;
+  let currentY = 530;
+
+  // Render group 1
+  const g1Lines = wrapText(group1, 44);
+  const g1Svg = g1Lines.map((line) => {
+    currentY += lineHeight;
+    return `<text x="${W / 2}" y="${currentY}" font-family="Inter, -apple-system, sans-serif" font-size="${fontSize}" font-weight="400" fill="#ffffff" text-anchor="middle">${escapeXml(line)}</text>`;
+  }).join('\n');
+
+  // Gap between groups
+  currentY += sentenceGap;
+
+  // Render group 2
+  const g2Lines = group2 ? wrapText(group2, 44) : [];
+  const g2Svg = g2Lines.map((line) => {
+    currentY += lineHeight;
+    return `<text x="${W / 2}" y="${currentY}" font-family="Inter, -apple-system, sans-serif" font-size="${fontSize}" font-weight="400" fill="#ffffff" text-anchor="middle">${escapeXml(line)}</text>`;
+  }).join('\n');
+
+  const svgOverlay = Buffer.from(`<svg width="${W}" height="${H}">${headingSvg}${nameSvg}${countrySvg}${g1Svg}${g2Svg}</svg>`);
 
   const composites = [{ input: svgOverlay, top: 0, left: 0 }];
 
   // Add flag centered above heading
   if (flagBuf) {
     const flag = await sharp(flagBuf).resize(100, 66, { fit: 'contain', background: { r: 0, g: 0, b: 0, alpha: 0 } }).toBuffer();
-    composites.push({ input: flag, top: 200, left: Math.round((W - 100) / 2) });
+    composites.push({ input: flag, top: 185, left: Math.round((W - 100) / 2) });
   }
 
   return sharp(templatePath)

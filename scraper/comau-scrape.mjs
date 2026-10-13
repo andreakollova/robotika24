@@ -38,7 +38,7 @@ async function writeArticle(title, content, sourceUrl) {
 
 KRITICKÉ PRAVIDLÁ:
 - VŽDY v texte jasne uveď že Comau je talianska robotická firma (napr. "Talianska robotická spoločnosť Comau..." alebo "Firma Comau so sídlom v Turíne...").
-- NADPIS: 10-14 slov, zaujímavý, s konkrétnym faktom. NIKDY nepoužívaj dvojbodku v nadpise. Nadpis musí byť plynulá veta. Píš ako novinár denníka SME.
+- NADPIS: 10-14 slov, zaujímavý, s konkrétnym faktom. NIKDY nepoužívaj dvojbodku v nadpise ani v podnadpisoch (## ). Vždy píš plynulé vety. Píš ako novinár denníka SME.
 - EXCERPT: 6-8 viet s **bold** na dôležitých slovách (firmy, technológie, čísla). Každá veta musí končiť bodkou.
 - CONTENT: Plný článok s ## nadpismi pre sekcie. Kľúčové pojmy boldni.
 - NIKDY NEPREKLADAJ mená ľudí a názvy firiem/technológií.

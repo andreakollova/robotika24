@@ -35,7 +35,7 @@ async function writeArticle(title, content, sourceUrl) {
 
 KRITICKÉ PRAVIDLÁ:
 - V texte uveď že KUKA je nemecký výrobca priemyselných robotov a automatizačných riešení so sídlom v Augsburgu.
-- NADPIS: 10-14 slov, zaujímavý, s konkrétnym faktom. NIKDY nepoužívaj dvojbodku v nadpise. Nadpis musí byť plynulá veta.
+- NADPIS: 10-14 slov, zaujímavý, s konkrétnym faktom. NIKDY nepoužívaj dvojbodku v nadpise ani v podnadpisoch (## ). Vždy píš plynulé vety.
 - EXCERPT: 6-8 viet s **bold** na dôležitých slovách (firmy, technológie, čísla). Každá veta musí končiť bodkou.
 - CONTENT: Vlastný článok s ## nadpismi. Kľúčové pojmy boldni. Píš vlastnými slovami.
 - NIKDY NEPREKLADAJ mená ľudí a názvy firiem/technológií.

@@ -583,6 +583,66 @@ export async function generateStory(articleImageUrl, title) {
 }
 
 // ============================================================
+// COMPANY INFO SLIDE (before CTA)
+// ============================================================
+
+const companyData = {
+  'EPFL News': { name: 'EPFL', country: 'Švajčiarsko', countryCode: 'ch', info: 'EPFL je jedna z najlepších technických univerzít v Európe. Sídli v Lausanne vo Švajčiarsku a patrí medzi svetových lídrov vo výskume robotiky a AI. Na EPFL pôsobí viac ako 380 laboratórií.' },
+  '1X Technologies': { name: '1X Technologies', country: 'Nórsko', countryCode: 'no', info: '1X Technologies je nórska spoločnosť vyvíjajúca humanoidného robota NEO pre domácnosti. Podporuje ju OpenAI a Samsung. Prvá séria 10 000 kusov sa vypredala za päť dní.' },
+  'Comau': { name: 'Comau', country: 'Taliansko', countryCode: 'it', info: 'Comau je talianska spoločnosť so sídlom v Turíne špecializujúca sa na priemyselnú automatizáciu a robotiku. Vznikla v roku 1973 a pôsobí vo viac ako 13 krajinách.' },
+  'ABB': { name: 'ABB', country: 'Švajčiarsko / Švédsko', countryCode: 'ch', info: 'ABB je švajčiarsko-švédska korporácia so sídlom v Zürichu. Patrí medzi svetových lídrov v robotike a automatizácii s viac ako 105 000 zamestnancami.' },
+  'KUKA': { name: 'KUKA', country: 'Nemecko', countryCode: 'de', info: 'KUKA je nemecký výrobca priemyselných robotov so sídlom v Augsburgu. Firma bola založená v roku 1898 a patrí medzi najväčších výrobcov robotov na svete.' },
+  'Avular': { name: 'Avular', country: 'Holandsko', countryCode: 'nl', info: 'Avular je holandská robotická spoločnosť z Eindhovenu vyvíjajúca autonómne roboty pre vonkajšie prostredie v stavebníctve, údržbe a poľnohospodárstve.' },
+};
+
+async function generateCompanyInfoSlide(sourceName, theme) {
+  const company = companyData[sourceName];
+  if (!company) return null;
+
+  const templatePath = resolve(__dirname, `templates/${theme}/slide2.png`);
+  const textColor = '#ffffff';
+
+  // Download flag
+  let flagBuf = null;
+  try {
+    const flagRes = await fetch(`https://flagcdn.com/w160/${company.countryCode}.png`);
+    if (flagRes.ok) flagBuf = Buffer.from(await flagRes.arrayBuffer());
+  } catch {}
+
+  // "O spoločnosti" heading
+  const headingSvg = `<text x="${W / 2}" y="320" font-family="Inter, -apple-system, sans-serif" font-size="24" font-weight="500" fill="${textColor}" text-anchor="middle" opacity="0.6">O spoločnosti</text>`;
+
+  // Company name - big
+  const nameSvg = `<text x="${W / 2}" y="420" font-family="Inter, -apple-system, sans-serif" font-size="72" font-weight="800" fill="${textColor}" text-anchor="middle">${escapeXml(company.name)}</text>`;
+
+  // Country
+  const countrySvg = `<text x="${W / 2}" y="480" font-family="Inter, -apple-system, sans-serif" font-size="28" font-weight="500" fill="${textColor}" text-anchor="middle" opacity="0.6">${escapeXml(company.country)}</text>`;
+
+  // Info text - wrapped
+  const infoLines = wrapText(company.info, 38);
+  const lineHeight = 52;
+  const infoStartY = 560;
+  const infoSvg = infoLines.map((line, i) =>
+    `<text x="${W / 2}" y="${infoStartY + i * lineHeight}" font-family="Inter, -apple-system, sans-serif" font-size="38" font-weight="400" fill="${textColor}" text-anchor="middle" opacity="0.85">${escapeXml(line)}</text>`
+  ).join('\n');
+
+  const svgOverlay = Buffer.from(`<svg width="${W}" height="${H}">${headingSvg}${nameSvg}${countrySvg}${infoSvg}</svg>`);
+
+  const composites = [{ input: svgOverlay, top: 0, left: 0 }];
+
+  // Add flag centered above heading
+  if (flagBuf) {
+    const flag = await sharp(flagBuf).resize(100, 66, { fit: 'contain', background: { r: 0, g: 0, b: 0, alpha: 0 } }).toBuffer();
+    composites.push({ input: flag, top: 200, left: Math.round((W - 100) / 2) });
+  }
+
+  return sharp(templatePath)
+    .composite(composites)
+    .png()
+    .toBuffer();
+}
+
+// ============================================================
 // PUBLIC EXPORTS
 // ============================================================
 
@@ -602,6 +662,9 @@ export async function generateCarousel(article, postIndex) {
     const excerptPages = await generateArticleExcerptPages(article.excerpt || article.title, theme, categoryLabel);
     const lastSlide = generateArticleSlide3(theme);
 
+    // Company info slide (if source is a known company)
+    const companySlide = article.source_name ? await generateCompanyInfoSlide(article.source_name, theme) : null;
+
     const slides = [];
     writeFileSync(`${prefix}-1.png`, slide1);
     slides.push(`${prefix}-1.png`);
@@ -611,6 +674,13 @@ export async function generateCarousel(article, postIndex) {
       writeFileSync(path, page);
       slides.push(path);
     });
+
+    // Add company info slide before CTA
+    if (companySlide) {
+      const companyPath = `${prefix}-${slides.length + 1}.png`;
+      writeFileSync(companyPath, companySlide);
+      slides.push(companyPath);
+    }
 
     const lastPath = `${prefix}-${slides.length + 1}.png`;
     writeFileSync(lastPath, lastSlide);

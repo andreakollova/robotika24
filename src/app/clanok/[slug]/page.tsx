@@ -259,23 +259,18 @@ export default async function ArticlePage({ params }: { params: Promise<{ slug: 
             <p className="text-gray-400 italic">Plný obsah článku bude dostupný čoskoro.</p>
           )}
 
+          <CompanyInfo sourceName={a.source_name} />
+
           <div className="my-8">
             <AdBlock format="horizontal" />
           </div>
 
           {a.source_name && a.source_url && (
-            <div className="mt-8 p-4 bg-gray-50 rounded-lg border border-gray-200">
-              <p className="text-sm text-gray-500">
-                Tento článok bol pôvodne publikovaný na{' '}
-                <a
-                  href={a.source_url}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-[#cb1e26] hover:underline font-medium"
-                >
-                  {a.source_name}
-                </a>
-                . Preklad a úprava: {a.author}, robotika24.
+            <div className="mt-6 p-3 rounded-lg" style={{ backgroundColor: 'var(--bg-tertiary)' }}>
+              <p style={{ fontSize: 11, color: 'var(--text-muted)', lineHeight: 1.6, margin: 0 }}>
+                Zdroj: <a href={a.source_url} target="_blank" rel="noopener noreferrer" style={{ color: 'var(--text-tertiary)', textDecoration: 'underline' }}>{a.source_name}</a>
+                {a.original_author && ` - ${a.original_author}`}
+                {' | '}Spracovanie: {a.author}, robotika24
               </p>
             </div>
           )}
@@ -283,8 +278,6 @@ export default async function ArticlePage({ params }: { params: Promise<{ slug: 
           <div className="mt-8">
             <ShareLinks url={articleUrl} title={a.title} />
           </div>
-
-          <CompanyInfo sourceName={a.source_name} />
 
           <AboutAuthor authorName={a.author} />
         </article>

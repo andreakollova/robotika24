@@ -2,8 +2,8 @@ name: Comau Scrape
 
 on:
   schedule:
-    # Every Monday and Thursday at 09:00 CET (07:00 UTC)
-    - cron: '0 7 * * 1,4'
+    - cron: '0 6 * * *'
+    - cron: '0 15 * * *'
   workflow_dispatch:
 
 jobs:

@@ -2,8 +2,8 @@ name: ABB Scrape
 
 on:
   schedule:
-    # Every Tuesday and Friday at 10:00 CET (08:00 UTC)
-    - cron: '0 8 * * 2,5'
+    - cron: '0 7 * * *'
+    - cron: '0 16 * * *'
   workflow_dispatch:
 
 jobs:

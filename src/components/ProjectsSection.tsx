@@ -58,7 +58,7 @@ export default async function ProjectsSection() {
               <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 6 }}>
                 <span style={{ fontSize: 11, fontWeight: 600, color: '#cb1e26', textTransform: 'uppercase', letterSpacing: '0.04em' }}>{project.category}</span>
                 {project.is_new && (
-                  <span style={{ fontSize: 9, fontWeight: 700, color: '#fff', backgroundColor: '#cb1e26', padding: '2px 6px', borderRadius: 3, textTransform: 'uppercase' }}>New</span>
+                  <span style={{ fontSize: 9, fontWeight: 700, color: '#fff', backgroundColor: '#cb1e26', padding: '2px 6px', borderRadius: 3, textTransform: 'uppercase' }}>Novinka</span>
                 )}
               </div>
               <h3 style={{ fontSize: 15, fontWeight: 700, color: 'var(--text-primary)', lineHeight: 1.3, marginBottom: 6 }} className="group-hover:text-[#cb1e26] transition-colors">

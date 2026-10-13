@@ -216,11 +216,17 @@ async function main() {
   // Slack notification
   if (SLACK_WEBHOOK && insertedArticles.length > 0) {
     const siteUrl = process.env.SITE_URL || 'https://robotika24.sk';
+    const igSecret = process.env.IG_PUBLISH_SECRET || 'r24igpub';
     const blocks = [{ type: 'header', text: { type: 'plain_text', text: `Comau - ${inserted} nových článkov` } }, { type: 'divider' }];
     for (const art of insertedArticles) {
-      const url = siteUrl + '/clanok/' + art.slug;
+      const articleUrl = `${siteUrl}/clanok/${art.slug}`;
+      const igUrl = `${siteUrl}/api/ig-publish?slug=${art.slug}&token=${igSecret}`;
       if (art.imageUrl) blocks.push({ type: 'image', image_url: art.imageUrl, alt_text: art.title, title: { type: 'plain_text', text: art.title } });
-      blocks.push({ type: 'section', text: { type: 'mrkdwn', text: `*<${url}|${art.title}>*` } });
+      blocks.push({ type: 'section', text: { type: 'mrkdwn', text: `*<${articleUrl}|${art.title}>*` } });
+      blocks.push({ type: 'actions', elements: [
+        { type: 'button', text: { type: 'plain_text', text: 'Instagram', emoji: true }, url: igUrl, style: 'primary' },
+        { type: 'button', text: { type: 'plain_text', text: 'Otvoriť', emoji: true }, url: articleUrl },
+      ]});
       blocks.push({ type: 'divider' });
     }
     await fetch(SLACK_WEBHOOK, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ blocks }) }).catch(() => {});

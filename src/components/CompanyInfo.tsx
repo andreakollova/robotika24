@@ -29,6 +29,12 @@ const companies: Record<string, { name: string; flag: string; country: string; i
     country: 'Nemecko',
     info: 'KUKA je nemecký výrobca priemyselných robotov a automatizačných systémov so sídlom v Augsburgu. Firma bola založená v roku 1898 a dnes patrí medzi najväčších výrobcov robotov na svete. Od roku 2016 je súčasťou čínskej skupiny Midea. KUKA roboty sa používajú v automobilovom priemysle, elektronike, logistike a medicíne.',
   },
+  'Avular': {
+    name: 'Avular',
+    flag: '🇳🇱',
+    country: 'Holandsko',
+    info: 'Avular je holandská robotická spoločnosť z Eindhovenu, ktorá vyvíja autonómne roboty pre vonkajšie prostredie. Jej roboty sa používajú v stavebníctve, údržbe infraštruktúry a poľnohospodárstve. Firma získala ocenenie Tech Hero Award a spolupracuje s firmami ako Heijmans a SGL.',
+  },
   'The Robot Report': {
     name: 'The Robot Report',
     flag: '🇺🇸',

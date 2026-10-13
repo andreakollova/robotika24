@@ -1,4 +1,5 @@
 import { supabase } from '@/lib/supabase';
+import { createClient } from '@supabase/supabase-js';
 import type { Article } from '@/lib/supabase';
 import ArticleCard from '@/components/ArticleCard';
 import Sidebar from '@/components/Sidebar';
@@ -8,6 +9,8 @@ import Link from 'next/link';
 import StickyAside from '@/components/StickyAside';
 
 export const revalidate = 600;
+
+const inteligencia24 = createClient('https://fxnpgqsztiwqbhvyokgd.supabase.co', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZ4bnBncXN6dGl3cWJodnlva2dkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTE1NDgwMjAsImV4cCI6MjEwNzEyNDAyMH0.rFLYq5g-HPFuNFDK8mGybsiOnU_CjAeWNsF8brXB6O4');
 
 const fields = 'id, title, slug, excerpt, image_url, author, views, published_at, video_url, categories(name, slug)';
 
@@ -42,11 +45,15 @@ async function getArticles() {
     if (byCategory[catSlug].length < 4) byCategory[catSlug].push(a);
   }
 
-  return { hero, heroSide, grid, popular, latest, byCategory, videoArticles };
+  const { data: inteligencia24Articles } = await inteligencia24
+    .from('articles').select('title, slug, image_url, published_at')
+    .eq('is_published', true).order('published_at', { ascending: false }).limit(6);
+
+  return { hero, heroSide, grid, popular, latest, byCategory, videoArticles, crossArticles: (inteligencia24Articles || []) as any[] };
 }
 
 export default async function Home() {
-  const { hero, heroSide, grid, popular, latest, byCategory, videoArticles } = await getArticles();
+  const { hero, heroSide, grid, popular, latest, byCategory, videoArticles, crossArticles } = await getArticles();
 
   const categoryNames: Record<string, string> = {
     humanoidy: 'Humanoidy', vyskum: 'Výskum',
@@ -142,6 +149,30 @@ export default async function Home() {
           </StickyAside>
         </div>
       </div>
+
+      {/* Cross-promotion: inteligencia24 */}
+      {crossArticles.length > 0 && (
+        <div style={{ maxWidth: 1280, margin: '0 auto', padding: '0 20px' }}>
+          <section style={{ marginTop: 32, marginBottom: 20 }}>
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', borderBottom: '2px solid #37b3f2', marginBottom: 16, paddingBottom: 8 }}>
+              <h2 style={{ fontSize: 18, fontWeight: 700, color: 'var(--text-primary)' }}>Najnovšie na inteligencia24.sk</h2>
+              <a href="https://www.inteligencia24.sk" target="_blank" rel="noopener noreferrer" style={{ fontSize: 13, fontWeight: 600, color: '#37b3f2', textDecoration: 'none' }}>Navštíviť</a>
+            </div>
+            <div className="scrollbar-hide" style={{ display: 'flex', gap: 16, overflowX: 'auto', paddingBottom: 8 }}>
+              {crossArticles.map((article: any) => (
+                <a key={article.slug} href={`https://www.inteligencia24.sk/clanok/${article.slug}`} target="_blank" rel="noopener noreferrer" style={{ flexShrink: 0, width: 220, textDecoration: 'none' }}>
+                  <div style={{ borderRadius: 8, overflow: 'hidden', marginBottom: 8, backgroundColor: 'var(--bg-tertiary)', width: 220, height: 138 }}>
+                    {article.image_url && (
+                      <img src={article.image_url} alt={article.title} loading="eager" style={{ width: 220, height: 138, objectFit: 'cover', display: 'block' }} />
+                    )}
+                  </div>
+                  <h3 style={{ fontSize: 13, fontWeight: 700, color: 'var(--text-primary)', lineHeight: 1.35, overflow: 'hidden', display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical' as const }}>{article.title}</h3>
+                </a>
+              ))}
+            </div>
+          </section>
+        </div>
+      )}
 
       <NewsletterBanner />
       <ProjectsSection />

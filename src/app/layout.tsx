@@ -14,16 +14,16 @@ const inter = Inter({ subsets: ["latin", "latin-ext"] });
 
 export const metadata: Metadata = {
   title: {
-    default: 'robotika24.sk - Správy zo sveta robotiky, AI a automatizácie na Slovensku',
+    default: 'robotika24.sk - Správy zo sveta robotiky, humanoidov a automatizácie',
     template: '%s | robotika24.sk',
   },
-  description: 'Najnovšie správy o robotike, umelej inteligencii, humanoidných robotoch a automatizácii v slovenčine. Denne prinášame novinky, analýzy a rozhovory zo sveta robotov, dronov a moderných technológií pre slovenských čitateľov.',
+  description: 'Denne prinášame najnovšie správy o robotike, humanoidných robotoch, priemyselnej automatizácii a umelej inteligencii. Novinky od firiem ako Boston Dynamics, Figure, KUKA, Comau, ABB a ďalších lídrov v robotike.',
   keywords: [
-    'robotika', 'roboty', 'umelá inteligencia', 'AI', 'humanoidné roboty',
-    'automatizácia', 'drony', 'strojové učenie', 'priemyselné roboty',
-    'Boston Dynamics', 'Figure', 'Tesla Optimus', 'robotika Slovensko',
-    'novinky robotika', 'technológie Slovensko', 'AI novinky', 'robotické ramená',
-    'autonomné vozidlá', 'coboty', 'ROS', 'simulácia robotov',
+    'robotika', 'roboty', 'humanoidné roboty', 'umelá inteligencia', 'AI',
+    'automatizácia', 'priemyselné roboty', 'coboty', 'drony',
+    'Boston Dynamics', 'Figure', 'Tesla Optimus', '1X Technologies', 'KUKA', 'Comau', 'ABB',
+    'novinky robotika', 'AI novinky', 'robotické ramená', 'exoskelety',
+    'autonomné vozidlá', 'ROS', 'strojové učenie',
   ],
   authors: [{ name: 'robotika24' }],
   creator: 'robotika24',
@@ -40,15 +40,15 @@ export const metadata: Metadata = {
     locale: 'sk_SK',
     url: 'https://robotika24.sk',
     siteName: 'robotika24',
-    title: 'robotika24.sk - Správy zo sveta robotiky a AI',
-    description: 'Najnovšie správy o robotike, umelej inteligencii a moderných technológiách v slovenčine.',
+    title: 'robotika24.sk - Správy zo sveta robotiky, humanoidov a automatizácie',
+    description: 'Denne prinášame najnovšie správy o robotike, humanoidných robotoch, priemyselnej automatizácii a umelej inteligencii.',
     images: [{ url: '/logo.png', width: 1200, height: 630 }],
     countryName: 'Slovakia',
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'robotika24.sk - Správy zo sveta robotiky a AI',
-    description: 'Najnovšie správy o robotike, umelej inteligencii a moderných technológiách v slovenčine.',
+    title: 'robotika24.sk - Správy zo sveta robotiky, humanoidov a automatizácie',
+    description: 'Denne prinášame najnovšie správy o robotike, humanoidných robotoch, priemyselnej automatizácii a umelej inteligencii.',
   },
   robots: {
     index: true,

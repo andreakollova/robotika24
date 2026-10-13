@@ -211,7 +211,7 @@ async function publishArticlePosts(count = 4) {
     .select('title, slug, excerpt, image_url, category_id, source_name, categories(name, slug)')
     .eq('is_published', true)
     .order('published_at', { ascending: false })
-    .limit(20);
+    .limit(50);
 
   if (!articles || articles.length === 0) {
     console.log('No articles to post.');

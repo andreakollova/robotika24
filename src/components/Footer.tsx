@@ -19,7 +19,7 @@ export default function Footer() {
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 40 }} className="max-md:!grid-cols-1">
           {/* Brand + socials */}
           <div>
-            <Image src="/logo-dark.png" alt="robotika24" width={220} height={44} style={{ height: 40, width: 'auto', marginBottom: 16 }} />
+            <img src="/logo-dark.png" alt="robotika24" style={{ height: 36, width: 'auto', marginBottom: 16 }} />
             <p style={{ color: '#d1d5db', fontSize: 14, lineHeight: 1.7, marginBottom: 20 }}>
               Spravodajský portál o robotike, umelej inteligencii a moderných technológiách.
               Denne prinášame najnovšie správy zo sveta robotov.

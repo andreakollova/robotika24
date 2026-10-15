@@ -35,6 +35,12 @@ const companies: Record<string, { name: string; countryCode: string; country: st
     country: 'Holandsko',
     info: 'Avular je holandská robotická spoločnosť z Eindhovenu, ktorá vyvíja autonómne roboty pre vonkajšie prostredie. Jej roboty sa používajú v stavebníctve, údržbe infraštruktúry a poľnohospodárstve. Firma získala ocenenie Tech Hero Award a spolupracuje s firmami ako Heijmans a SGL.',
   },
+  'Agility Robotics': {
+    name: 'Agility Robotics',
+    countryCode: 'us',
+    country: 'USA',
+    info: 'Agility Robotics je americká spoločnosť z Oregonu, ktorá vyvinula humanoidného robota Digit. Medzi jej zákazníkov patria Amazon, GXO Logistics a Mercado Libre. Digit v sklade GXO premiestnil viac ako 100 000 prepraviek. Firma sa chystá vstúpiť na burzu.',
+  },
   'The Robot Report': {
     name: 'The Robot Report',
     countryCode: 'us',

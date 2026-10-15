@@ -593,6 +593,7 @@ const companyData = {
   'ABB': { name: 'ABB', country: 'Švajčiarsko / Švédsko', countryCode: 'ch', info: 'ABB je švajčiarsko-švédska korporácia so sídlom v Zürichu. Patrí medzi svetových lídrov v robotike a automatizácii s viac ako 105 000 zamestnancami.' },
   'KUKA': { name: 'KUKA', country: 'Nemecko', countryCode: 'de', info: 'KUKA je nemecký výrobca priemyselných robotov so sídlom v Augsburgu. Firma bola založená v roku 1898 a patrí medzi najväčších výrobcov robotov na svete.' },
   'Avular': { name: 'Avular', country: 'Holandsko', countryCode: 'nl', info: 'Avular je holandská robotická spoločnosť z Eindhovenu vyvíjajúca autonómne roboty pre vonkajšie prostredie v stavebníctve, údržbe a poľnohospodárstve.' },
+  'Agility Robotics': { name: 'Agility', country: 'USA', countryCode: 'us', info: 'Agility Robotics je americká spoločnosť z Oregonu, ktorá vyvinula humanoidného robota Digit. Medzi jej zákazníkov patria Amazon, GXO Logistics a Mercado Libre. Digit premiestnil viac ako 100 000 prepraviek.' },
 };
 
 async function generateCompanyInfoSlide(sourceName, theme) {

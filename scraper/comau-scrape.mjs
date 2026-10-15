@@ -166,7 +166,7 @@ async function main() {
 
     if (!imageUrl) { console.log('  SKIP (no image)'); continue; }
 
-    await new Promise(r => setTimeout(r, 3000));
+    await new Promise(r => setTimeout(r, 3000 + Math.random() * 4000));
 
     // Write article
     console.log(`  Writing article...`);
@@ -203,7 +203,7 @@ async function main() {
       insertedArticles.push({ title: article.title, slug, imageUrl });
       inserted++;
     } catch (err) { console.error(`  Error: ${err.message}`); }
-    await new Promise(r => setTimeout(r, 3000));
+    await new Promise(r => setTimeout(r, 3000 + Math.random() * 4000));
   }
 
   // Slack notification

@@ -43,6 +43,7 @@ KRITICKÉ PRAVIDLÁ:
 - NIKDY NEPREKLADAJ mená ľudí a názvy firiem/technológií.
 - DIAKRITIKA JE POVINNÁ v KAŽDOM slove.
 - Nikdy nepoužívaj dlhé pomlčky. Vždy iba krátku pomlčku -.
+- NIKDY nepoužívaj slovo "kontrola" ani "kontrolovať". Použi "riadenie", "správa", "vlastníctvo" alebo "dohľad".
 
 Vráť VÝHRADNE JSON: {"title":"...","excerpt":"...","content":"..."}
 
@@ -144,7 +145,7 @@ async function main() {
     let imageUrl = page.imageUrl;
     if (!imageUrl) { console.log('  SKIP (no image)'); continue; }
 
-    await new Promise(r => setTimeout(r, 3000));
+    await new Promise(r => setTimeout(r, 3000 + Math.random() * 4000));
 
     console.log(`  Writing article...`);
     try {
@@ -177,7 +178,7 @@ async function main() {
       insertedArticles.push({ title: article.title, slug, imageUrl });
       inserted++;
     } catch (err) { console.error(`  Error: ${err.message}`); }
-    await new Promise(r => setTimeout(r, 3000));
+    await new Promise(r => setTimeout(r, 3000 + Math.random() * 4000));
   }
 
   if (SLACK_WEBHOOK && insertedArticles.length > 0) {

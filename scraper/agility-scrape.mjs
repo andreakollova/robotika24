@@ -82,7 +82,7 @@ async function scrapeArticlePage(url) {
   });
 
   // Check if image is the generic gray Agility logo - use fallback instead
-  if (imageUrl && (imageUrl.includes('agility-logo') || imageUrl.includes('og-image'))) {
+  if (imageUrl && (imageUrl.includes('agility-logo') || imageUrl.includes('og-image') || imageUrl.includes('Agility_OG') || imageUrl.includes('social-share'))) {
     imageUrl = null;
   }
 
@@ -143,18 +143,23 @@ async function main() {
       const article = await writeArticle(page.title || item.title, page.content || page.desc, item.link);
       const slug = slugify(article.title) + '-' + Date.now().toString(36);
 
-      // Upload image if not fallback
+      // Upload image - detect logo placeholder by small file size and use press kit fallback
       if (imageUrl !== FALLBACK_IMAGE) {
         try {
           const imgRes = await fetch(imageUrl, { redirect: 'follow' });
           if (imgRes.ok) {
             const rawBuf = Buffer.from(await imgRes.arrayBuffer());
-            const buf = await sharp(rawBuf).resize(800, 500, { fit: 'inside', withoutEnlargement: true }).jpeg({ quality: 70 }).toBuffer();
-            const storagePath = slug.substring(0, 80) + '.jpg';
-            const { error: upErr } = await supabase.storage.from('article-images').upload(storagePath, buf, { contentType: 'image/jpeg', upsert: true });
-            if (!upErr) {
-              imageUrl = `${SUPABASE_URL}/storage/v1/object/public/article-images/${storagePath}`;
-              console.log('  Image uploaded (' + Math.round(buf.length / 1024) + 'KB)');
+            if (rawBuf.length < 20000) {
+              console.log('  Logo detected (' + rawBuf.length + ' bytes), using press kit photo');
+              imageUrl = FALLBACK_IMAGE;
+            } else {
+              const buf = await sharp(rawBuf).resize(800, 500, { fit: 'inside', withoutEnlargement: true }).jpeg({ quality: 70 }).toBuffer();
+              const storagePath = slug.substring(0, 80) + '.jpg';
+              const { error: upErr } = await supabase.storage.from('article-images').upload(storagePath, buf, { contentType: 'image/jpeg', upsert: true });
+              if (!upErr) {
+                imageUrl = `${SUPABASE_URL}/storage/v1/object/public/article-images/${storagePath}`;
+                console.log('  Image uploaded (' + Math.round(buf.length / 1024) + 'KB)');
+              }
             }
           }
         } catch (imgErr) { console.error('  Image error:', imgErr.message); }

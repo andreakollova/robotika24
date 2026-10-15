@@ -21,7 +21,9 @@ const SUPABASE_URL = 'https://odpwfmrllqjdzgbgrxfc.supabase.co';
 const supabase = createClient(SUPABASE_URL, process.env.SUPABASE_SERVICE_ROLE_KEY);
 const anthropic = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY });
 const SLACK_WEBHOOK = process.env.SLACK_WEBHOOK_URL;
-const FALLBACK_IMAGE = `${SUPABASE_URL}/storage/v1/object/public/article-images/agility-fallback.jpg`;
+const FALLBACK_IMAGES = [1,2,3,4,5].map(n => `${SUPABASE_URL}/storage/v1/object/public/article-images/agility-fallback-${n}.jpg`);
+let fallbackIdx = 0;
+function nextFallback() { return FALLBACK_IMAGES[fallbackIdx++ % FALLBACK_IMAGES.length]; }
 
 function slugify(t) { return t.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '').substring(0, 60); }
 
@@ -135,7 +137,7 @@ async function main() {
     const page = await scrapeArticlePage(item.link);
     if (!page || (!page.content && !page.desc)) { console.log('  SKIP (no content)'); continue; }
 
-    let imageUrl = page.imageUrl || FALLBACK_IMAGE;
+    let imageUrl = page.imageUrl || nextFallback();
 
     await new Promise(r => setTimeout(r, 3000 + Math.random() * 4000));
 
@@ -145,14 +147,14 @@ async function main() {
       const slug = slugify(article.title) + '-' + Date.now().toString(36);
 
       // Upload image - detect logo placeholder by small file size and use press kit fallback
-      if (imageUrl !== FALLBACK_IMAGE) {
+      if (!FALLBACK_IMAGES.includes(imageUrl)) {
         try {
           const imgRes = await fetch(imageUrl, { redirect: 'follow' });
           if (imgRes.ok) {
             const rawBuf = Buffer.from(await imgRes.arrayBuffer());
             if (rawBuf.length < 20000) {
               console.log('  Logo detected (' + rawBuf.length + ' bytes), using press kit photo');
-              imageUrl = FALLBACK_IMAGE;
+              imageUrl = nextFallback();
             } else {
               const buf = await sharp(rawBuf).resize(800, 500, { fit: 'inside', withoutEnlargement: true }).jpeg({ quality: 70 }).toBuffer();
               const storagePath = slug.substring(0, 80) + '.jpg';

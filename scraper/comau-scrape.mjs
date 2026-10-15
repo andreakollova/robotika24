@@ -34,10 +34,10 @@ async function articleExists(url) {
 }
 
 async function writeArticle(title, content, sourceUrl) {
-  const prompt = `Na základe faktov napíš VLASTNÝ slovenský článok o talianskej robotickej firme Comau.
+  const prompt = `Na základe faktov napíš VLASTNÝ slovenský spravodajský článok.
 
 KRITICKÉ PRAVIDLÁ:
-- VŽDY v texte jasne uveď že Comau je talianska robotická firma (napr. "Talianska robotická spoločnosť Comau..." alebo "Firma Comau so sídlom v Turíne...").
+- V EXCERPTE raz krátko spomeni pôvod firmy (napr. "talianska firma Comau"). V nadpise ani v texte článku krajinu neopakuj - čitateľ ju uvidí v sekcii O spoločnosti.
 - NADPIS: 10-14 slov, zaujímavý, s konkrétnym faktom. NIKDY nepoužívaj dvojbodku v nadpise ani v podnadpisoch (## ). Vždy píš plynulé vety. Píš ako novinár denníka SME.
 - EXCERPT: 6-8 viet s **bold** na dôležitých slovách (firmy, technológie, čísla). Každá veta musí končiť bodkou.
 - CONTENT: Plný článok s ## nadpismi pre sekcie. Kľúčové pojmy boldni.

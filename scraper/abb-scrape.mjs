@@ -35,7 +35,7 @@ async function writeArticle(title, content, sourceUrl, imageCredit) {
   const prompt = `Na základe faktov napíš VLASTNÝ slovenský spravodajský článok. NIKDY nekopíruj ani neprekladaj pôvodný text.
 
 KRITICKÉ PRAVIDLÁ:
-- V texte uveď že ABB je švajčiarsko-švédska nadnárodná spoločnosť špecializujúca sa na robotiku a automatizáciu.
+- V EXCERPTE raz krátko spomeni pôvod firmy. V nadpise ani v texte článku krajinu neopakuj.
 - NADPIS: 10-14 slov, zaujímavý, s konkrétnym faktom. NIKDY nepoužívaj dvojbodku v nadpise ani v podnadpisoch (## ). Vždy píš plynulé vety.
 - EXCERPT: 6-8 viet s **bold** na dôležitých slovách (firmy, technológie, čísla). Každá veta musí končiť bodkou.
 - CONTENT: Vlastný článok s ## nadpismi. Kľúčové pojmy boldni. Píš vlastnými slovami.

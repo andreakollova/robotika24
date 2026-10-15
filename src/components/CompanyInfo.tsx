@@ -35,6 +35,12 @@ const companies: Record<string, { name: string; countryCode: string; country: st
     country: 'Holandsko',
     info: 'Avular je holandská robotická spoločnosť z Eindhovenu, ktorá vyvíja autonómne roboty pre vonkajšie prostredie. Jej roboty sa používajú v stavebníctve, údržbe infraštruktúry a poľnohospodárstve. Firma získala ocenenie Tech Hero Award a spolupracuje s firmami ako Heijmans a SGL.',
   },
+  'NEURA Robotics': {
+    name: 'NEURA Robotics',
+    countryCode: 'de',
+    country: 'Nemecko',
+    info: 'NEURA Robotics je nemecká spoločnosť z Metzingenu, ktorá vyvíja kognitívne roboty s umelou inteligenciou. Jej humanoid 4NE1 dokáže manipulovať s predmetmi do 100 kg bez programovania. Firma získala investíciu 1,7 miliardy dolárov a spolupracuje s platformou NVIDIA GR00T.',
+  },
   'Agility Robotics': {
     name: 'Agility Robotics',
     countryCode: 'us',

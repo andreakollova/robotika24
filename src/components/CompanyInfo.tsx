@@ -35,6 +35,12 @@ const companies: Record<string, { name: string; countryCode: string; country: st
     country: 'Holandsko',
     info: 'Avular je holandská robotická spoločnosť z Eindhovenu, ktorá vyvíja autonómne roboty pre vonkajšie prostredie. Jej roboty sa používajú v stavebníctve, údržbe infraštruktúry a poľnohospodárstve. Firma získala ocenenie Tech Hero Award a spolupracuje s firmami ako Heijmans a SGL.',
   },
+  'AutoStore': {
+    name: 'AutoStore',
+    countryCode: 'no',
+    country: 'Nórsko',
+    info: 'AutoStore je nórska spoločnosť z Nedre Vats, svetový líder v automatizovaných skladových systémoch. Jej kubická mriežka s robotmi umožňuje 4-násobne vyššiu hustotu skladovania. AutoStore má viac ako 1 550 inštalácií v 54 krajinách a obsluhuje zákazníkov ako PUMA, Gucci či XXL.',
+  },
   'NEURA Robotics': {
     name: 'NEURA Robotics',
     countryCode: 'de',

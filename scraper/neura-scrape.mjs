@@ -1,3 +1,4 @@
+import { saveArticleImage } from './save-image.mjs';
 // NEURA Robotics news scraper for robotika24
 // NEURA Robotics is a German cognitive robotics company from Metzingen
 import { createClient } from '@supabase/supabase-js';
@@ -134,20 +135,9 @@ async function main() {
       const article = await writeArticle(page.title || item.title, page.content || item.desc, item.link);
       const slug = slugify(article.title) + '-' + Date.now().toString(36);
 
-      // Upload and optimize image
-      try {
-        const imgRes = await fetch(imageUrl, { redirect: 'follow' });
-        if (imgRes.ok) {
-          const rawBuf = Buffer.from(await imgRes.arrayBuffer());
-          const buf = await sharp(rawBuf).resize(800, 500, { fit: 'inside', withoutEnlargement: true }).jpeg({ quality: 70 }).toBuffer();
-          const storagePath = slug.substring(0, 80) + '.jpg';
-          const { error: upErr } = await supabase.storage.from('article-images').upload(storagePath, buf, { contentType: 'image/jpeg', upsert: true });
-          if (!upErr) {
-            imageUrl = `${SUPABASE_URL}/storage/v1/object/public/article-images/${storagePath}`;
-            console.log('  Image uploaded (' + Math.round(buf.length / 1024) + 'KB)');
-          }
-        }
-      } catch (imgErr) { console.error('  Image error:', imgErr.message); }
+      // Save image locally (served by Vercel CDN)
+      const savedUrl = await saveArticleImage(imageUrl, slug);
+      if (savedUrl) imageUrl = savedUrl;
 
       await supabase.from('articles').insert({
         title: article.title, slug, excerpt: article.excerpt, content: article.content,

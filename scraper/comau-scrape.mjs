@@ -1,3 +1,4 @@
+import { saveArticleImage } from './save-image.mjs';
 // Comau press release scraper for robotika24
 // Comau is an Italian industrial robotics company - always mention this in articles
 // Permission granted to scrape from https://www.comau.com/en/media-and-news/press-release/
@@ -174,22 +175,9 @@ async function main() {
       const article = await writeArticle(item.title, textContent, item.link);
       const slug = slugify(article.title) + '-' + Date.now().toString(36);
 
-      // Upload image to Supabase Storage
-      try {
-        const imgRes = await fetch(imageUrl, { redirect: 'follow' });
-        if (imgRes.ok) {
-          const ct = imgRes.headers.get('content-type') || 'image/jpeg';
-          const ext = ct.includes('webp') ? 'webp' : ct.includes('png') ? 'png' : 'jpg';
-          const rawBuf = Buffer.from(await imgRes.arrayBuffer());
-          const buf = await sharp(rawBuf).resize(800, 500, { fit: "inside", withoutEnlargement: true }).jpeg({ quality: 70 }).toBuffer();
-          const storagePath = slug.substring(0, 80) + '.' + ext;
-          const { error: upErr } = await supabase.storage.from('article-images').upload(storagePath, buf, { contentType: ct, upsert: true });
-          if (!upErr) {
-            imageUrl = `${SUPABASE_URL}/storage/v1/object/public/article-images/${storagePath}`;
-            console.log('  Image uploaded to Storage');
-          }
-        }
-      } catch (imgErr) { console.error('  Image upload error:', imgErr.message); }
+      // Save image locally (served by Vercel CDN)
+      const savedUrl = await saveArticleImage(imageUrl, slug);
+      if (savedUrl) imageUrl = savedUrl;
 
       await supabase.from('articles').insert({
         title: article.title, slug, excerpt: article.excerpt, content: article.content,

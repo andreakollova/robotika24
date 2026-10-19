@@ -146,7 +146,7 @@ async function main() {
       const article = await writeArticle(page.title || item.title, page.content || page.desc, item.link);
       const slug = slugify(article.title) + '-' + Date.now().toString(36);
 
-      // Upload image - detect logo placeholder by small file size and use press kit fallback
+      // Check if image is logo placeholder, use press kit fallback
       if (!FALLBACK_IMAGES.includes(imageUrl)) {
         try {
           const imgRes = await fetch(imageUrl, { redirect: 'follow' });
@@ -156,13 +156,8 @@ async function main() {
               console.log('  Logo detected (' + rawBuf.length + ' bytes), using press kit photo');
               imageUrl = nextFallback();
             } else {
-              const buf = await sharp(rawBuf).resize(800, 500, { fit: 'inside', withoutEnlargement: true }).jpeg({ quality: 70 }).toBuffer();
-              const storagePath = slug.substring(0, 80) + '.jpg';
-              const { error: upErr } = await supabase.storage.from('article-images').upload(storagePath, buf, { contentType: 'image/jpeg', upsert: true });
-              if (!upErr) {
-                imageUrl = `${SUPABASE_URL}/storage/v1/object/public/article-images/${storagePath}`;
-                console.log('  Image uploaded (' + Math.round(buf.length / 1024) + 'KB)');
-              }
+              const savedUrl = await saveArticleImage(imageUrl, slug);
+              if (savedUrl) imageUrl = savedUrl;
             }
           }
         } catch (imgErr) { console.error('  Image error:', imgErr.message); }

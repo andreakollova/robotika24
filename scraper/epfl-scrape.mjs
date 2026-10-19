@@ -1,3 +1,4 @@
+import { saveArticleImage } from './save-image.mjs';
 // EPFL News robotics scraper
 // Respects CC BY-SA 4.0 license - proper attribution required
 import { createClient } from '@supabase/supabase-js';
@@ -191,22 +192,9 @@ async function main() {
 
       const articleSlug = slugify(translated.title) + '-' + Date.now().toString(36);
 
-      // Upload image to Supabase Storage (full quality)
-      try {
-        const imgRes = await fetch(imageUrl, { redirect: 'follow' });
-        if (imgRes.ok) {
-          const ct = imgRes.headers.get('content-type') || 'image/jpeg';
-          const ext = ct.includes('webp') ? 'webp' : ct.includes('png') ? 'png' : 'jpg';
-          const rawBuf = Buffer.from(await imgRes.arrayBuffer());
-          const buf = await sharp(rawBuf).resize(800, 500, { fit: "inside", withoutEnlargement: true }).jpeg({ quality: 70 }).toBuffer();
-          const storagePath = articleSlug.substring(0, 80) + '.' + ext;
-          const { error: upErr } = await supabase.storage.from('article-images').upload(storagePath, buf, { contentType: ct, upsert: true });
-          if (!upErr) {
-            imageUrl = `${SUPABASE_URL}/storage/v1/object/public/article-images/${storagePath}`;
-            console.log('  Image uploaded to Storage');
-          }
-        }
-      } catch (imgErr) { console.error('  Image upload error:', imgErr.message); }
+      // Save image locally (served by Vercel CDN)
+      const savedUrl = await saveArticleImage(imageUrl, slug);
+      if (savedUrl) imageUrl = savedUrl;
 
       const { error } = await supabase.from('articles').insert({
         title: translated.title,

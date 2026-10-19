@@ -1,3 +1,4 @@
+import { saveArticleImage } from './save-image.mjs';
 // ABB press release scraper for robotika24
 // ABB is a Swiss-Swedish multinational robotics and automation company
 // Copyright notice required per ABB terms
@@ -167,20 +168,9 @@ async function main() {
       );
       const slug = slugify(article.title) + '-' + Date.now().toString(36);
 
-      // Upload image to Supabase Storage
-      try {
-        const imgRes = await fetch(imageUrl, { redirect: 'follow' });
-        if (imgRes.ok) {
-          const rawBuf = Buffer.from(await imgRes.arrayBuffer());
-          const buf = await sharp(rawBuf).resize(800, 500, { fit: 'inside', withoutEnlargement: true }).jpeg({ quality: 70 }).toBuffer();
-          const storagePath = slug.substring(0, 80) + '.jpg';
-          const { error: upErr } = await supabase.storage.from('article-images').upload(storagePath, buf, { contentType: 'image/jpeg', upsert: true });
-          if (!upErr) {
-            imageUrl = `${SUPABASE_URL}/storage/v1/object/public/article-images/${storagePath}`;
-            console.log('  Image uploaded to Storage');
-          }
-        }
-      } catch (imgErr) { console.error('  Image upload error:', imgErr.message); }
+      // Save image locally (served by Vercel CDN)
+      const savedUrl = await saveArticleImage(imageUrl, slug);
+      if (savedUrl) imageUrl = savedUrl;
 
       await supabase.from('articles').insert({
         title: article.title, slug, excerpt: article.excerpt, content: article.content,

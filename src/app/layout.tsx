@@ -138,7 +138,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <CopyProtection />
         <PageTracker />
         <Analytics />
-        <script dangerouslySetInnerHTML={{ __html: `setTimeout(function(){var s=document.createElement('script');s.src='https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1548129646460327';s.async=true;s.crossOrigin='anonymous';document.body.appendChild(s)},3000)` }} />
+{/* AdSense removed - slowing down site */}
       </body>
     </html>
   );

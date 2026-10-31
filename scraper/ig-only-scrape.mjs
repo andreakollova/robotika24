@@ -178,7 +178,7 @@ async function main() {
   console.log(`New: ${newItems.length}`);
 
   let published = 0;
-  const limit = 3;
+  const limit = 1; // Max 1 post per run (3 runs/day = 3 posts with 2h+ gaps)
 
   for (const item of newItems) {
     if (published >= limit) break;

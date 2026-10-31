@@ -71,18 +71,23 @@ async function generateArticleSlide1(articleImageUrl, title, theme) {
   const textColor = theme === 'modry' ? '#ffffff' : '#0c1a26';
   const bgColor = theme === 'modry' ? '#0c1a26' : '#ffffff';
 
-  // Download article image
+  // Load article image (local path or URL)
   let articleImg = null;
   try {
-    const imgRes = await fetch(articleImageUrl, {
-      headers: { 'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36' },
-    });
-    if (imgRes.ok && imgRes.headers.get('content-type')?.startsWith('image')) {
-      const imgBuf = Buffer.from(await imgRes.arrayBuffer());
-      // Full size - covers entire canvas
-      articleImg = await sharp(imgBuf)
-        .resize(W, H, { fit: 'cover', position: 'center' })
-        .toBuffer();
+    let imgBuf;
+    if (articleImageUrl?.startsWith('/images/')) {
+      const localPath = resolve(__dirname, '..', 'public', articleImageUrl.substring(1));
+      if (existsSync(localPath)) imgBuf = readFileSync(localPath);
+    } else if (articleImageUrl) {
+      const imgRes = await fetch(articleImageUrl, {
+        headers: { 'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36' },
+      });
+      if (imgRes.ok && imgRes.headers.get('content-type')?.startsWith('image')) {
+        imgBuf = Buffer.from(await imgRes.arrayBuffer());
+      }
+    }
+    if (imgBuf) {
+      articleImg = await sharp(imgBuf).resize(W, H, { fit: 'cover', position: 'center' }).toBuffer();
     }
   } catch {}
 
@@ -199,39 +204,26 @@ async function generateArticleExcerptPages(excerpt, theme, category) {
   const textColor = theme === 'modry' ? '#ffffff' : '#0c1a26';
   const catLabel = category || 'Robotika';
 
-  const fontSize = 54;
-  const lineHeight = 70;
-  const sentenceGap = 40;
+  const fontSize = 48;
+  const lineHeight = 64;
+  const sentenceGap = 36;
   const maxContentHeight = H - 350;
   const contentStartY = 130;
 
-  // Split into sentences, wrap each with bold preservation - wider lines
+  // Split into sentences, shorter lines for readability
   const sentences = excerpt.split(/(?<=\.)\s+/).filter(s => s.trim());
+  const sentenceGroups = sentences.map(s => wrapTextWithBold(s, 26));
 
-  // Each sentence group = array of lines, each line = array of {text, bold} segments
-  const sentenceGroups = sentences.map(s => wrapTextWithBold(s, 34));
-
-  // Category label - to the right of red bar (bar at x:85-99, y:89-174, center y:132)
+  // Category label
   const catSvg = catLabel
     ? `<text x="115" y="132" font-family="Inter, -apple-system, sans-serif" font-size="26" font-weight="700" fill="#cb1e26" dominant-baseline="central">${escapeXml(catLabel)}</text>`
     : '';
 
-  // Calculate total height of all content
-  const totalContentHeight = sentenceGroups.reduce((h, group, i) => {
-    return h + group.length * lineHeight + (i > 0 ? sentenceGap : 0);
-  }, 0);
-
-  // Always split across 3 pages
+  // Split across pages - max 2 sentences per page for readability
   const totalSentences = sentenceGroups.length;
   const pageGroupsList = [];
-  if (totalSentences >= 3) {
-    const t1 = Math.ceil(totalSentences / 3);
-    const t2 = Math.ceil((totalSentences * 2) / 3);
-    pageGroupsList.push(sentenceGroups.slice(0, t1), sentenceGroups.slice(t1, t2), sentenceGroups.slice(t2));
-  } else if (totalSentences >= 2) {
-    pageGroupsList.push(sentenceGroups.slice(0, 1), sentenceGroups.slice(1));
-  } else {
-    pageGroupsList.push(sentenceGroups);
+  for (let i = 0; i < totalSentences; i += 2) {
+    pageGroupsList.push(sentenceGroups.slice(i, i + 2));
   }
 
   const pages = pageGroupsList.map(groups => {
@@ -669,7 +661,7 @@ async function generateCompanyInfoSlide(sourceName, theme) {
 
 // Generate article carousel (3 slides: image+title, excerpt, CTA)
 export async function generateCarousel(article, postIndex) {
-  const theme = postIndex % 2 === 0 ? 'modry' : 'biely';
+  const theme = 'modry';
   const outputDir = getOutputDir();
 
   const slug = article.slug || 'post';

@@ -208,26 +208,26 @@ async function generateArticleExcerptPages(excerpt, theme, category) {
   const textColor = theme === 'modry' ? '#ffffff' : '#0c1a26';
   const catLabel = category || 'Robotika';
 
-  const fontSize = 48;
-  const lineHeight = 64;
-  const sentenceGap = 36;
+  const fontSize = 50;
+  const lineHeight = 66;
+  const sentenceGap = 32;
   const maxContentHeight = H - 350;
   const contentStartY = 130;
 
-  // Split into sentences, shorter lines for readability
+  // Split into sentences
   const sentences = excerpt.split(/(?<=\.)\s+/).filter(s => s.trim());
-  const sentenceGroups = sentences.map(s => wrapTextWithBold(s, 26));
+  const sentenceGroups = sentences.map(s => wrapTextWithBold(s, 32));
 
   // Category label
   const catSvg = catLabel
     ? `<text x="115" y="132" font-family="Inter, -apple-system, sans-serif" font-size="26" font-weight="700" fill="#cb1e26" dominant-baseline="central">${escapeXml(catLabel)}</text>`
     : '';
 
-  // Split across pages - max 2 sentences per page for readability
+  // Split across pages - max 3 sentences per page
   const totalSentences = sentenceGroups.length;
   const pageGroupsList = [];
-  for (let i = 0; i < totalSentences; i += 2) {
-    pageGroupsList.push(sentenceGroups.slice(i, i + 2));
+  for (let i = 0; i < totalSentences; i += 3) {
+    pageGroupsList.push(sentenceGroups.slice(i, i + 3));
   }
 
   const pages = pageGroupsList.map(groups => {

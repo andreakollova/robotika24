@@ -206,7 +206,7 @@ async function main() {
         const imgRes = await fetch(imageUrl, { redirect: 'follow' });
         if (imgRes.ok) {
           const rawBuf = Buffer.from(await imgRes.arrayBuffer());
-          const buf = await sharp(rawBuf).resize(1600, 1000, { fit: 'inside', withoutEnlargement: true }).jpeg({ quality: 90 }).toBuffer();
+          const buf = await sharp(rawBuf).resize(2000, 1400, { fit: 'inside', withoutEnlargement: true }).jpeg({ quality: 95 }).toBuffer();
           const filename = slug.substring(0, 80) + '.jpg';
           const { mkdirSync, writeFileSync, existsSync } = await import('fs');
           const imgDir = resolve(__dirname, '../public/ig-images');

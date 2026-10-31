@@ -42,3 +42,4 @@ next-env.d.ts
 
 # Generated Instagram carousels
 /public/ig/
+public/ig-images/

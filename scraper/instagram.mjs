@@ -76,8 +76,11 @@ async function generateArticleSlide1(articleImageUrl, title, theme) {
   try {
     let imgBuf;
     if (articleImageUrl?.startsWith('/images/')) {
+      // Prefer high-quality IG version
+      const igPath = resolve(__dirname, '..', 'public', 'ig-images', articleImageUrl.replace('/images/', ''));
       const localPath = resolve(__dirname, '..', 'public', articleImageUrl.substring(1));
-      if (existsSync(localPath)) imgBuf = readFileSync(localPath);
+      if (existsSync(igPath)) imgBuf = readFileSync(igPath);
+      else if (existsSync(localPath)) imgBuf = readFileSync(localPath);
     } else if (articleImageUrl) {
       const imgRes = await fetch(articleImageUrl, {
         headers: { 'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36' },

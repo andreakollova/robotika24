@@ -91,13 +91,11 @@ async function generateArticleSlide1(articleImageUrl, title, theme) {
       }
     }
     if (imgBuf) {
-      // Place image in top portion, not stretched to full height
+      // Full height cover, centered - but skip upscaling tiny images
       const meta = await sharp(imgBuf).metadata();
-      const imgW = meta.width || 800;
-      const imgH = meta.height || 500;
-      // Resize to fill width, keep aspect ratio, max 60% of canvas height
-      const maxImgH = Math.round(H * 0.6);
-      articleImg = await sharp(imgBuf).resize(W, maxImgH, { fit: 'cover', position: 'top' }).toBuffer();
+      if (meta.width >= 400) {
+        articleImg = await sharp(imgBuf).resize(W, H, { fit: 'cover', position: 'centre' }).toBuffer();
+      }
     }
   } catch {}
 

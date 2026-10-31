@@ -91,18 +91,30 @@ async function generateArticleSlide1(articleImageUrl, title, theme) {
       }
     }
     if (imgBuf) {
-      articleImg = await sharp(imgBuf).resize(W, H, { fit: 'cover', position: 'center' }).toBuffer();
+      // Place image in top portion, not stretched to full height
+      const meta = await sharp(imgBuf).metadata();
+      const imgW = meta.width || 800;
+      const imgH = meta.height || 500;
+      // Resize to fill width, keep aspect ratio, max 60% of canvas height
+      const maxImgH = Math.round(H * 0.6);
+      articleImg = await sharp(imgBuf).resize(W, maxImgH, { fit: 'cover', position: 'top' }).toBuffer();
     }
   } catch {}
 
-  // Title - big, left-aligned with red bar (~x:45), lower third
-  const titleLines = wrapText(title, 20);
-  const lineHeight = 88;
+  // Title - auto-scale font based on length
+  const titleLen = title.length;
+  let fontSize = 80;
+  let charsPerLine = 20;
+  if (titleLen > 60) { fontSize = 64; charsPerLine = 24; }
+  if (titleLen > 80) { fontSize = 56; charsPerLine = 28; }
+
+  const titleLines = wrapText(title, charsPerLine);
+  const lineHeight = Math.round(fontSize * 1.1);
   const titleBlockHeight = titleLines.length * lineHeight;
-  const titleStartY = H - 240 - titleBlockHeight;
+  const titleStartY = H - 220 - titleBlockHeight;
 
   const titleSvg = titleLines.map((line, i) =>
-    `<text x="85" y="${titleStartY + i * lineHeight + 78}" font-family="Inter, -apple-system, sans-serif" font-size="80" font-weight="800" fill="${textColor}">${escapeXml(line)}</text>`
+    `<text x="85" y="${titleStartY + i * lineHeight + fontSize}" font-family="Inter, -apple-system, sans-serif" font-size="${fontSize}" font-weight="800" fill="${textColor}">${escapeXml(line)}</text>`
   ).join('\n');
 
   // Gradient from bottom going up - under the template graphic, over the photo
@@ -223,11 +235,11 @@ async function generateArticleExcerptPages(excerpt, theme, category) {
     ? `<text x="115" y="132" font-family="Inter, -apple-system, sans-serif" font-size="26" font-weight="700" fill="#cb1e26" dominant-baseline="central">${escapeXml(catLabel)}</text>`
     : '';
 
-  // Split across pages - max 3 sentences per page
+  // Split across pages - max 2 sentences per page (prevents logo overlap)
   const totalSentences = sentenceGroups.length;
   const pageGroupsList = [];
-  for (let i = 0; i < totalSentences; i += 3) {
-    pageGroupsList.push(sentenceGroups.slice(i, i + 3));
+  for (let i = 0; i < totalSentences; i += 2) {
+    pageGroupsList.push(sentenceGroups.slice(i, i + 2));
   }
 
   const pages = pageGroupsList.map(groups => {

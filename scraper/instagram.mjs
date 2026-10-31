@@ -547,16 +547,25 @@ const SH = 1920;
 export async function generateStory(articleImageUrl, title) {
   const templatePath = resolve(__dirname, 'templates/story/template.png');
 
-  // Download article image as full background
+  // Load article image as full background
   let bgBuf;
   try {
-    const imgRes = await fetch(articleImageUrl, {
-      headers: { 'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36' },
-    });
-    if (imgRes.ok && imgRes.headers.get('content-type')?.startsWith('image')) {
-      const raw = Buffer.from(await imgRes.arrayBuffer());
-      bgBuf = await sharp(raw).resize(SW, SH, { fit: 'cover', position: 'center' }).toBuffer();
+    let raw;
+    if (articleImageUrl?.startsWith('/images/') || articleImageUrl?.startsWith('/ig-images/')) {
+      const filename = articleImageUrl.split('/').pop();
+      const igPath = resolve(__dirname, '..', 'public', 'ig-images', filename);
+      const localPath = resolve(__dirname, '..', 'public', 'images', filename);
+      if (existsSync(igPath)) raw = readFileSync(igPath);
+      else if (existsSync(localPath)) raw = readFileSync(localPath);
+    } else if (articleImageUrl) {
+      const imgRes = await fetch(articleImageUrl, {
+        headers: { 'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36' },
+      });
+      if (imgRes.ok && imgRes.headers.get('content-type')?.startsWith('image')) {
+        raw = Buffer.from(await imgRes.arrayBuffer());
+      }
     }
+    if (raw) bgBuf = await sharp(raw).resize(SW, SH, { fit: 'cover', position: 'centre' }).toBuffer();
   } catch {}
 
   // If no image, use solid dark bg

@@ -2,7 +2,7 @@
 // Scrapes articles, generates IG carousel, publishes to Instagram, then deletes from DB
 import { createClient } from '@supabase/supabase-js';
 import Anthropic from '@anthropic-ai/sdk';
-import { saveArticleImage } from './save-image.mjs';
+import sharp from 'sharp';
 import { generateCarousel } from './instagram.mjs';
 import { getArticleCaption } from './captions.mjs';
 import { readFileSync, writeFileSync, existsSync, unlinkSync } from 'fs';
@@ -200,7 +200,22 @@ async function main() {
       const slug = slugify(article.title) + '-' + Date.now().toString(36);
 
       // Save image locally for IG carousel
-      const savedUrl = await saveArticleImage(imageUrl, slug);
+      // Save full quality image for IG (not for web - gets deleted after publish)
+      let savedUrl = null;
+      try {
+        const imgRes = await fetch(imageUrl, { redirect: 'follow' });
+        if (imgRes.ok) {
+          const rawBuf = Buffer.from(await imgRes.arrayBuffer());
+          const buf = await sharp(rawBuf).resize(1600, 1000, { fit: 'inside', withoutEnlargement: true }).jpeg({ quality: 90 }).toBuffer();
+          const filename = slug.substring(0, 80) + '.jpg';
+          const { mkdirSync, writeFileSync, existsSync } = await import('fs');
+          const imgDir = resolve(__dirname, '../public/ig-images');
+          if (!existsSync(imgDir)) mkdirSync(imgDir, { recursive: true });
+          writeFileSync(resolve(imgDir, filename), buf);
+          savedUrl = `/ig-images/${filename}`;
+          console.log(`  IG image saved (${Math.round(buf.length / 1024)}KB)`);
+        }
+      } catch (e) { console.error('  Image error:', e.message); }
 
       // Temporarily insert into DB for carousel generation (is_published: false!)
       await supabase.from('articles').insert({

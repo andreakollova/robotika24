@@ -75,10 +75,11 @@ async function generateArticleSlide1(articleImageUrl, title, theme) {
   let articleImg = null;
   try {
     let imgBuf;
-    if (articleImageUrl?.startsWith('/images/')) {
-      // Prefer high-quality IG version
-      const igPath = resolve(__dirname, '..', 'public', 'ig-images', articleImageUrl.replace('/images/', ''));
-      const localPath = resolve(__dirname, '..', 'public', articleImageUrl.substring(1));
+    if (articleImageUrl?.startsWith('/images/') || articleImageUrl?.startsWith('/ig-images/')) {
+      // Load local file - check ig-images first for high quality
+      const filename = articleImageUrl.split('/').pop();
+      const igPath = resolve(__dirname, '..', 'public', 'ig-images', filename);
+      const localPath = resolve(__dirname, '..', 'public', 'images', filename);
       if (existsSync(igPath)) imgBuf = readFileSync(igPath);
       else if (existsSync(localPath)) imgBuf = readFileSync(localPath);
     } else if (articleImageUrl) {

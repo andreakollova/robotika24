@@ -103,10 +103,11 @@ async function generateArticleSlide1(articleImageUrl, title, theme) {
 
   // Title - auto-scale font based on length
   const titleLen = title.length;
-  let fontSize = 80;
-  let charsPerLine = 20;
-  if (titleLen > 60) { fontSize = 64; charsPerLine = 24; }
-  if (titleLen > 80) { fontSize = 56; charsPerLine = 28; }
+  let fontSize = 92;
+  let charsPerLine = 18;
+  if (titleLen > 50) { fontSize = 80; charsPerLine = 20; }
+  if (titleLen > 70) { fontSize = 68; charsPerLine = 24; }
+  if (titleLen > 90) { fontSize = 60; charsPerLine = 28; }
 
   const titleLines = wrapText(title, charsPerLine);
   const lineHeight = Math.round(fontSize * 1.1);

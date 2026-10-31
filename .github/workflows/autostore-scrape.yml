@@ -26,3 +26,11 @@ jobs:
           SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
           SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
         run: node scraper/autostore-scrape.mjs 5
+
+      - name: Commit and push new images
+        run: |
+          git config user.name "robotika24-bot"
+          git config user.email "studio@drixton.com"
+          git add public/images/ || true
+          git diff --cached --quiet || git commit -m "Add new article images [bot]"
+          git push || true

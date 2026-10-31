@@ -94,11 +94,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           gtag('set', 'ads_data_redaction', true);
           gtag('set', 'url_passthrough', true);
         `}} />
-        <script
-          async
-          src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1548129646460327"
-          crossOrigin="anonymous"
-        />
+{/* AdSense loaded lazily at end of body */}
         <link rel="sitemap" href="/sitemap.xml" />
         <script dangerouslySetInnerHTML={{ __html: `(function(){try{var t=localStorage.getItem('theme');if(t==='dark'){document.documentElement.classList.add('dark')}}catch(e){}})()` }} />
         <meta name="geo.region" content="SK" />
@@ -142,6 +138,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <CopyProtection />
         <PageTracker />
         <Analytics />
+        <script dangerouslySetInnerHTML={{ __html: `setTimeout(function(){var s=document.createElement('script');s.src='https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1548129646460327';s.async=true;s.crossOrigin='anonymous';document.body.appendChild(s)},3000)` }} />
       </body>
     </html>
   );

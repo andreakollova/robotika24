@@ -31,20 +31,22 @@ const USER_AGENT = 'robotika24-bot/1.0 (+https://robotika24.sk; studio@drixton.c
 function slugify(t) { return t.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '').substring(0, 60); }
 function stripHtml(h) { return (h || '').replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim(); }
 
-// Track posted source URLs in Supabase to persist across GH Actions runs
-async function loadPosted() {
-  // Check articles table for any source_url from our sources (even deleted ones stay as is_published=false ghost records)
-  // Instead, we insert a hidden record that stays
-  const { data } = await supabase.from('articles').select('source_url').eq('source_name', 'IG-ONLY-POSTED');
-  return { posted: (data || []).map(a => a.source_url) };
+// Track last posted URL in Supabase - just ONE record, updated each time
+async function getLastPosted() {
+  const { data } = await supabase.from('articles').select('source_url').eq('slug', 'ig-last-posted').single();
+  return data?.source_url || '';
 }
-async function markPosted(url) {
-  await supabase.from('articles').insert({
-    title: 'IG-POSTED', slug: 'ig-posted-' + Date.now().toString(36),
-    source_url: url, source_name: 'IG-ONLY-POSTED',
-    is_published: false, published_at: new Date().toISOString(),
-    author: 'bot', image_url: null, excerpt: null, content: null,
-  });
+async function setLastPosted(url) {
+  const { data } = await supabase.from('articles').select('id').eq('slug', 'ig-last-posted').single();
+  if (data) {
+    await supabase.from('articles').update({ source_url: url }).eq('slug', 'ig-last-posted');
+  } else {
+    await supabase.from('articles').insert({
+      title: 'IG-LAST', slug: 'ig-last-posted', source_url: url, source_name: 'system',
+      is_published: false, published_at: new Date().toISOString(),
+      author: 'bot', image_url: null, excerpt: null, content: null,
+    });
+  }
 }
 
 async function writeArticle(title, content) {
@@ -134,7 +136,8 @@ async function main() {
   console.log(`Time: ${new Date().toISOString()}`);
   console.log(`Mode: ${IG_ENABLED ? 'LIVE' : 'DRY RUN'}`);
 
-  const state = await loadPosted();
+  const lastPostedUrl = await getLastPosted();
+  console.log('Last posted:', lastPostedUrl?.substring(0, 60) || 'none');
 
   // Fetch from both sources
   const items = [];
@@ -181,8 +184,8 @@ async function main() {
 
   console.log(`Total: ${items.length} items`);
 
-  // Filter already posted
-  const newItems = items.filter(i => !state.posted.includes(i.link));
+  // Take only the newest item that's different from last posted
+  const newItems = items.filter(i => i.link !== lastPostedUrl);
   console.log(`New: ${newItems.length}`);
 
   let published = 0;
@@ -259,7 +262,7 @@ async function main() {
       if (result?.storyPath) { try { unlinkSync(result.storyPath); } catch {} }
 
       // Mark as posted
-      await markPosted(item.link);
+      await setLastPosted(item.link);
 
       published++;
     } catch (err) {

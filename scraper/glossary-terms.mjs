@@ -1,18 +1,6 @@
 // Glossary terms for Instagram posts
-// ALREADY POSTED: RaaS, Mocap, Sim-to-Real Gap, OTA, Fleet Learning, Pinkie, Wizard
+// ALREADY POSTED: RaaS, Mocap, Sim-to-Real Gap, OTA, Fleet Learning, Pinkie, Wizard, WAM, Spoof
 export const glossaryTerms = [
-  {
-    en: "WAM",
-    sk: "Model sveta a akcie",
-    explanation: "Najnovší typ umelej inteligencie, ktorý si dokáže predstaviť, ako bude svet vyzerať o chvíľu, a zároveň rozhodnúť, aký pohyb má robot urobiť. Spája tak **predstavivosť** modelov, ktoré generujú videá, s ovládaním robotického tela. Firma **Runway**, známa nástrojmi na tvorbu videí, predstavila svoj model **Praxis-1** určený pre robotiku.",
-    slug: "wam",
-  },
-  {
-    en: "Spoof",
-    sk: "Podvrhnutie vstupu",
-    explanation: "Útok, pri ktorom niekto robotovi podstrčí **falošné údaje**, napríklad oklame jeho kameru, **lidar** alebo **GPS**. Robot potom môže dodržiavať všetky svoje bezpečnostné pravidlá, a napriek tomu konať na základe zmanipulovaných informácií. S tým, ako roboty prichádzajú medzi ľudí, sa ochrana ich zmyslov stáva rovnako dôležitou ako ochrana počítačov pred hackermi.",
-    slug: "spoof",
-  },
   {
     en: "Forward Kinematics",
     sk: "Priama kinematika",

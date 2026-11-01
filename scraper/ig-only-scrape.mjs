@@ -31,13 +31,21 @@ const USER_AGENT = 'robotika24-bot/1.0 (+https://robotika24.sk; studio@drixton.c
 function slugify(t) { return t.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '').substring(0, 60); }
 function stripHtml(h) { return (h || '').replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim(); }
 
-// Track posted source URLs to avoid duplicates
-const STATE_FILE = resolve(__dirname, '../.ig-only-state.json');
-function loadPosted() {
-  try { return JSON.parse(readFileSync(STATE_FILE, 'utf8')); }
-  catch { return { posted: [] }; }
+// Track posted source URLs in Supabase to persist across GH Actions runs
+async function loadPosted() {
+  // Check articles table for any source_url from our sources (even deleted ones stay as is_published=false ghost records)
+  // Instead, we insert a hidden record that stays
+  const { data } = await supabase.from('articles').select('source_url').eq('source_name', 'IG-ONLY-POSTED');
+  return { posted: (data || []).map(a => a.source_url) };
 }
-function savePosted(state) { writeFileSync(STATE_FILE, JSON.stringify(state, null, 2)); }
+async function markPosted(url) {
+  await supabase.from('articles').insert({
+    title: 'IG-POSTED', slug: 'ig-posted-' + Date.now().toString(36),
+    source_url: url, source_name: 'IG-ONLY-POSTED',
+    is_published: false, published_at: new Date().toISOString(),
+    author: 'bot', image_url: null, excerpt: null, content: null,
+  });
+}
 
 async function writeArticle(title, content) {
   const prompt = `Na základe faktov napíš VLASTNÝ slovenský spravodajský článok VLASTNÝMI SLOVAMI.
@@ -126,7 +134,7 @@ async function main() {
   console.log(`Time: ${new Date().toISOString()}`);
   console.log(`Mode: ${IG_ENABLED ? 'LIVE' : 'DRY RUN'}`);
 
-  const state = loadPosted();
+  const state = await loadPosted();
 
   // Fetch from both sources
   const items = [];
@@ -251,8 +259,7 @@ async function main() {
       if (result?.storyPath) { try { unlinkSync(result.storyPath); } catch {} }
 
       // Mark as posted
-      state.posted.push(item.link);
-      savePosted(state);
+      await markPosted(item.link);
 
       published++;
     } catch (err) {
@@ -260,9 +267,7 @@ async function main() {
     }
   }
 
-  // Keep state file manageable (last 200 links)
-  if (state.posted.length > 200) state.posted = state.posted.slice(-200);
-  savePosted(state);
+  // Posted URLs tracked in Supabase (no local state file needed)
 
   // Slack notification
   if (SLACK_WEBHOOK && published > 0) {

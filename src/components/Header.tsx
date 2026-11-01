@@ -104,9 +104,7 @@ function ThemeToggle({ onToggle }: { onToggle?: (dark: boolean) => void }) {
 function PulsingDot() {
   return (
     <span style={{ position: 'relative', display: 'inline-flex', width: 7, height: 7, flexShrink: 0 }}>
-      <span style={{ position: 'absolute', inset: 0, borderRadius: '50%', backgroundColor: '#22c55e', opacity: 0.75, animation: 'ping 1.5s cubic-bezier(0,0,0.2,1) infinite' }} />
       <span style={{ position: 'relative', display: 'inline-flex', width: 7, height: 7, borderRadius: '50%', backgroundColor: '#22c55e' }} />
-      <style>{`@keyframes ping{75%,100%{transform:scale(2);opacity:0}}`}</style>
     </span>
   );
 }
@@ -152,8 +150,16 @@ export default function Header() {
   const [searchOpen, setSearchOpen] = useState(false);
 
   useEffect(() => {
-    const handleScroll = () => setScrolled(window.scrollY > 160);
-    window.addEventListener('scroll', handleScroll);
+    let ticking = false;
+    const handleScroll = () => {
+      if (ticking) return;
+      ticking = true;
+      requestAnimationFrame(() => {
+        setScrolled(window.scrollY > 160);
+        ticking = false;
+      });
+    };
+    window.addEventListener('scroll', handleScroll, { passive: true });
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 

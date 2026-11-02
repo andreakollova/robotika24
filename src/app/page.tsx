@@ -107,6 +107,7 @@ export default async function Home() {
             {Object.entries(byCategory).map(([slug, articles]) => {
               const name = categoryNames[slug] || slug;
               if (articles.length < 3) return null;
+              const visibleArticles = articles.slice(0, 6);
               return (
                 <section key={slug} style={{ marginTop: 40, marginBottom: 20 }}>
                   <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', borderBottom: '2px solid #cb1e26', marginBottom: 16, paddingBottom: 8 }}>
@@ -114,7 +115,7 @@ export default async function Home() {
                     <Link href={`/kategoria/${slug}`} style={{ fontSize: 13, fontWeight: 600, color: '#cb1e26', textDecoration: 'none' }}>Zobraziť všetky</Link>
                   </div>
                   <div className="scrollbar-hide" style={{ display: 'flex', gap: 16, overflowX: 'auto', paddingBottom: 8 }}>
-                    {articles.map((article) => (
+                    {visibleArticles.map((article) => (
                       <Link key={article.id} href={`/clanok/${article.slug}`} className="group" style={{ flexShrink: 0, width: 220, textDecoration: 'none' }}>
                         <div style={{ borderRadius: 8, overflow: 'hidden', marginBottom: 8, backgroundColor: 'var(--bg-tertiary)', width: 220, height: 138 }}>
                           {article.image_url && (

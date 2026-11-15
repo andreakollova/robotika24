@@ -6,6 +6,7 @@ import ArticleSidebar from '@/components/ArticleSidebar';
 import ShareLinks from '@/components/ShareLinks';
 import AboutAuthor from '@/components/AboutAuthor';
 import type { Metadata } from 'next';
+import Image from 'next/image';
 import AdBlock from '@/components/AdBlock';
 import CompanyInfo from '@/components/CompanyInfo';
 
@@ -186,8 +187,8 @@ export default async function ArticlePage({ params }: { params: Promise<{ slug: 
           <ShareLinks url={articleUrl} title={a.title} />
 
           {a.image_url && (
-            <div className="rounded-lg overflow-hidden mb-2">
-              <img src={a.image_url} alt={a.title} className="w-full aspect-video object-cover" />
+            <div className="rounded-lg overflow-hidden mb-2 relative" style={{ aspectRatio: '16/9' }}>
+              <Image src={a.image_url} alt={a.title} fill sizes="(max-width: 1024px) 100vw, 66vw" style={{ objectFit: 'cover' }} priority unoptimized={a.image_url.startsWith('http')} />
               {a.source_name && (
                 <p style={{ fontSize: 10, color: 'var(--text-muted)', marginTop: 4 }}>
                   Foto: {a.source_name}, tlačové materiály.

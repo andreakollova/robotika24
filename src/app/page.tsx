@@ -7,6 +7,7 @@ import ProjectsSection from '@/components/ProjectsSection';
 import NewsletterBanner from '@/components/NewsletterBanner';
 import Link from 'next/link';
 import StickyAside from '@/components/StickyAside';
+import CrossArticleImage from '@/components/CrossArticleImage';
 
 export const revalidate = 600;
 
@@ -16,7 +17,7 @@ const fields = 'id, title, slug, excerpt, image_url, author, views, published_at
 
 async function getArticles() {
   const [{ data: all }, { data: popularRaw }, { data: videoRaw }] = await Promise.all([
-    supabase.from('articles').select(fields).eq('is_published', true).order('published_at', { ascending: false }),
+    supabase.from('articles').select(fields).eq('is_published', true).order('published_at', { ascending: false }).limit(50),
     supabase.from('articles').select(fields).eq('is_published', true).order('views', { ascending: false }).limit(10),
     supabase.from('articles').select(fields).eq('is_published', true).not('video_url', 'is', null).order('published_at', { ascending: false }).limit(6),
   ]);
@@ -47,9 +48,31 @@ async function getArticles() {
 
   const { data: inteligencia24Articles } = await inteligencia24
     .from('articles').select('title, slug, image_url, published_at')
-    .eq('is_published', true).order('published_at', { ascending: false }).limit(6);
+    .eq('is_published', true).order('published_at', { ascending: false }).limit(12);
 
-  return { hero, heroSide, grid, popular, latest, byCategory, videoArticles, crossArticles: (inteligencia24Articles || []) as any[] };
+  const crossRaw = (inteligencia24Articles || []).map((a: any) => ({
+    ...a,
+    image_url: a.image_url?.startsWith('/') ? `https://www.inteligencia24.sk${a.image_url}` : a.image_url,
+  }));
+
+  // Check which images are actually reachable (with short timeout)
+  const checked = await Promise.all(
+    crossRaw.map(async (a: any) => {
+      if (!a.image_url) return { ...a, image_ok: false };
+      try {
+        const res = await fetch(a.image_url, { method: 'HEAD', signal: AbortSignal.timeout(3000) });
+        return { ...a, image_ok: res.ok };
+      } catch {
+        return { ...a, image_ok: false };
+      }
+    })
+  );
+  // Prefer articles with working images, take up to 6
+  const withImg = checked.filter((a: any) => a.image_ok);
+  const withoutImg = checked.filter((a: any) => !a.image_ok);
+  const crossArticles = [...withImg, ...withoutImg].slice(0, 6);
+
+  return { hero, heroSide, grid, popular, latest, byCategory, videoArticles, crossArticles };
 }
 
 export default async function Home() {
@@ -119,7 +142,7 @@ export default async function Home() {
                       <Link key={article.id} href={`/clanok/${article.slug}`} className="group" style={{ flexShrink: 0, width: 220, textDecoration: 'none' }}>
                         <div style={{ borderRadius: 8, overflow: 'hidden', marginBottom: 8, backgroundColor: 'var(--bg-tertiary)', width: 220, height: 138 }}>
                           {article.image_url && (
-                            <img src={article.image_url} alt={article.title} loading="eager" style={{ width: 220, height: 138, objectFit: 'cover', display: 'block' }} />
+                            <img src={article.image_url} alt={article.title} loading="lazy" style={{ width: 220, height: 138, objectFit: 'cover', display: 'block' }} />
                           )}
                         </div>
                         <h3 style={{ fontSize: 13, fontWeight: 700, color: 'var(--text-primary)', lineHeight: 1.35, overflow: 'hidden', display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical' as const }} className="group-hover:text-[#cb1e26] transition-colors">{article.title}</h3>
@@ -167,7 +190,7 @@ export default async function Home() {
                 <a key={article.slug} href={`https://www.inteligencia24.sk/clanok/${article.slug}`} target="_blank" rel="noopener noreferrer" style={{ flexShrink: 0, width: 220, textDecoration: 'none' }}>
                   <div style={{ borderRadius: 8, overflow: 'hidden', marginBottom: 8, backgroundColor: 'var(--bg-tertiary)', width: 220, height: 138 }}>
                     {article.image_url && (
-                      <img src={article.image_url} alt={article.title} loading="eager" style={{ width: 220, height: 138, objectFit: 'cover', display: 'block' }} />
+                      <CrossArticleImage src={article.image_url} alt={article.title} />
                     )}
                   </div>
                   <h3 style={{ fontSize: 13, fontWeight: 700, color: 'var(--text-primary)', lineHeight: 1.35, overflow: 'hidden', display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical' as const }}>{article.title}</h3>

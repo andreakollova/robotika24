@@ -33,4 +33,5 @@ jobs:
           git config user.email "studio@drixton.com"
           git add public/images/ || true
           git diff --cached --quiet || git commit -m "Add new article images [bot]"
-          git push || true
+          git pull --rebase || true
+          git push

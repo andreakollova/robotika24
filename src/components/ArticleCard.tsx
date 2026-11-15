@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import Image from 'next/image';
 import type { Article } from '@/lib/supabase';
 
 function timeAgo(dateStr: string) {
@@ -9,6 +10,10 @@ function timeAgo(dateStr: string) {
   if (hours < 24) return `pred ${hours} hod`;
   const days = Math.floor(hours / 24);
   return `pred ${days} ${days === 1 ? 'dňom' : 'dňami'}`;
+}
+
+function isExternal(url: string) {
+  return url.startsWith('http');
 }
 
 export default function ArticleCard({
@@ -28,12 +33,15 @@ export default function ArticleCard({
       <Link href={`/clanok/${article.slug}`} className="group block relative">
         <div className="relative overflow-hidden rounded-lg" style={{ backgroundColor: 'var(--bg-tertiary)', paddingBottom: '62.5%' }}>
           {article.image_url && (
-            <img
+            <Image
               src={article.image_url}
               alt={article.title}
-              loading={priority ? "eager" : "lazy"}
-              style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', objectFit: 'cover' }}
+              fill
+              sizes="(max-width: 768px) 100vw, 50vw"
+              priority={priority}
+              style={{ objectFit: 'cover' }}
               className="group-hover:scale-105 transition-transform duration-500"
+              unoptimized={isExternal(article.image_url)}
             />
           )}
           <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent" />
@@ -62,12 +70,14 @@ export default function ArticleCard({
     return (
       <Link href={`/clanok/${article.slug}`} className="group flex gap-3 items-start py-3 border-b border-gray-100 last:border-0">
         {article.image_url && (
-          <img
+          <Image
             src={article.image_url}
             alt={article.title}
-            loading="lazy"
-            style={{ width: 100, height: 66, objectFit: 'cover', borderRadius: 6, flexShrink: 0 }}
+            width={100}
+            height={66}
+            style={{ objectFit: 'cover', borderRadius: 6, flexShrink: 0 }}
             className="group-hover:opacity-80 transition-opacity"
+            unoptimized={isExternal(article.image_url)}
           />
         )}
         <div className="min-w-0 flex-1">
@@ -85,12 +95,14 @@ export default function ArticleCard({
     <Link href={`/clanok/${article.slug}`} className="group block">
       <div className="overflow-hidden rounded-lg mb-3 relative" style={{ backgroundColor: 'var(--bg-tertiary)', paddingBottom: '62.5%' }}>
         {article.image_url && (
-          <img
+          <Image
             src={article.image_url}
             alt={article.title}
-            loading="lazy"
-            style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', objectFit: 'cover' }}
+            fill
+            sizes="(max-width: 640px) 100vw, 50vw"
+            style={{ objectFit: 'cover' }}
             className="group-hover:scale-105 transition-transform duration-500"
+            unoptimized={isExternal(article.image_url)}
           />
         )}
       </div>

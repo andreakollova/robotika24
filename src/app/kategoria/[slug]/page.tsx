@@ -56,7 +56,8 @@ export default async function CategoryPage({ params }: { params: Promise<{ slug:
     .select('*, categories(*)')
     .eq('category_id', category.id)
     .eq('is_published', true)
-    .order('published_at', { ascending: false });
+    .order('published_at', { ascending: false })
+    .limit(50);
 
   // Most read in this category
   const { data: popular } = await supabase

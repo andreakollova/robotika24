@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import Image from 'next/image';
 import type { Article } from '@/lib/supabase';
 import AdBlock from '@/components/AdBlock';
 
@@ -34,7 +35,7 @@ export default function ArticleSidebar({ articles }: { articles: Article[] }) {
               style={{ display: 'flex', gap: 12, alignItems: 'flex-start', padding: '12px 0', borderBottom: i < articles.length - 1 ? '1px solid var(--border-light)' : 'none', textDecoration: 'none' }}
             >
               {article.image_url && (
-                <img src={article.image_url} alt={article.title} style={{ width: 80, height: 56, borderRadius: 4, objectFit: 'cover', flexShrink: 0 }} />
+                <Image src={article.image_url} alt={article.title} width={80} height={56} style={{ borderRadius: 4, objectFit: 'cover', flexShrink: 0 }} unoptimized={article.image_url.startsWith('http')} />
               )}
               <div style={{ minWidth: 0, flex: 1 }}>
                 <h4 style={{ fontSize: 13, fontWeight: 700, color: 'var(--text-primary)', lineHeight: 1.35, overflow: 'hidden', display: '-webkit-box', WebkitLineClamp: 3, WebkitBoxOrient: 'vertical' as const }} className="group-hover:text-[#cb1e26] transition-colors">

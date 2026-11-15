@@ -11,6 +11,8 @@ const nextConfig: NextConfig = {
       { protocol: 'https', hostname: 'cdn.sanity.io' },
       { protocol: 'https', hostname: '*.microsoft.com' },
       { protocol: 'https', hostname: 'www.comau.com' },
+      { protocol: 'https', hostname: 'cdn.prod.website-files.com' },
+      { protocol: 'https', hostname: 'www.inteligencia24.sk' },
     ],
   },
   serverExternalPackages: ['sharp'],
